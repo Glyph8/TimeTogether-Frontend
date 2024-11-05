@@ -1,8 +1,8 @@
-# React + Vite
+구현 예정 목록
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+feat: 문자열 파싱해서 시간표 채우기
 
-Currently, two official plugins are available:
+refactor: 컴포넌트들 정리하기
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+style: 디자인 구현률 높히기
+
