@@ -21,15 +21,21 @@
 
 /* 로고 스타일 */
 .landing-logo {
-  font-size: 5rem;
+  /* font-size: 5rem;
   margin-top: -7rem;
-  margin-bottom: 2rem;
+  margin-bottom: 2rem; */
+  width: 50px;
+  margin-left: 10px;
+}
+.lw {
+  display: flex;
+  flex-direction: row;
 }
 
 /* 메인 텍스트와 초기 상태에서 Together */
+.landing-logo,
 .main-text,
-.animated-text,
-.landing-logo {
+.animated-text {
   font-family: "KCC-Hanbit";
   font-size: 3rem;
   font-weight: bold;

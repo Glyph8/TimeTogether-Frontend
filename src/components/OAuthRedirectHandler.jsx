@@ -2,34 +2,26 @@
 import React, { useEffect } from "react";
 import { useHistory } from "react-router-dom";
 
-// 로컬 스토리지에 저장하는 예시
+// 로컬 스토리지에 저장하는 함수
 function saveTokenToLocalStorage(accessToken, refreshToken) {
   localStorage.setItem("accessToken", accessToken);
   localStorage.setItem("refreshToken", refreshToken);
-}
-
-// 쿠키에 저장하는 예시
-function saveTokenToCookie(accessToken, refreshToken) {
-  document.cookie = `accessToken=${accessToken}; path=/; max-age=3600; Secure; SameSite=Strict`;
-  document.cookie = `refreshToken=${refreshToken}; path=/; max-age=86400; Secure; SameSite=Strict`;
 }
 
 function OAuthRedirectHandler() {
   const history = useHistory();
 
   useEffect(() => {
+    // URL 파라미터에서 토큰 추출
     const urlParams = new URLSearchParams(window.location.search);
     const accessToken = urlParams.get("accessToken");
     const refreshToken = urlParams.get("refreshToken");
 
     if (accessToken && refreshToken) {
-      // 로컬 스토리지에 저장할 경우
+      // 로컬 스토리지에 토큰 저장
       saveTokenToLocalStorage(accessToken, refreshToken);
 
-      // 쿠키에 저장할 경우
-      // saveTokenToCookie(accessToken, refreshToken);
-
-      // 로그인 후 메인 페이지로 이동
+      // 메인 페이지로 리다이렉트
       history.push("/");
     } else {
       console.error("토큰이 없습니다.");

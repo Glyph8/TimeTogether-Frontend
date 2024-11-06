@@ -16,6 +16,7 @@ import MeetingsPage from "./pages/MeetingsPage"; // 장소 페이지
 import CreateGroup from "./components/CreateGroup"; // 그룹생성 페이지
 import NavigationBar from "./components/NavigationBar"; // 네비게이션 바
 import AddPlaceModal from "./components/AddPlaceModal";
+// import OAuthRedirectHandler from "./components/OAuthRedirectHandler";
 
 function App() {
   const location = useLocation(); // 현재 경로를 가져옵니다.
