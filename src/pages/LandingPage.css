@@ -1,3 +1,11 @@
+@font-face {
+  font-family: "KCC-Hanbit";
+  src: url("https://fastly.jsdelivr.net/gh/projectnoonnu/2403-2@1.0/KCC-Hanbit.woff2")
+    format("woff2");
+  font-weight: normal;
+  font-style: normal;
+}
+
 .landing-container {
   width: 600px;
   /* width: 800px; */
@@ -7,8 +15,8 @@
   justify-content: center;
   align-items: center;
   color: white;
-  text-align: center;
-  background: linear-gradient(to bottom right, #a26af0, #731aef);
+  text-align: left;
+  background: linear-gradient(to bottom, #a26af0, #731aef);
 }
 
 /* 로고 스타일 */
@@ -18,26 +26,32 @@
   margin-bottom: 2rem;
 }
 
-/* 메인 텍스트 스타일 */
-.main-text {
+/* 메인 텍스트와 초기 상태에서 Together */
+.main-text,
+.animated-text,
+.landing-logo {
+  font-family: "KCC-Hanbit";
   font-size: 3rem;
   font-weight: bold;
-  margin-bottom: 0.5rem;
+  transition: opacity 1.5s ease-out;
+  opacity: 0; /* 초기 상태에서 투명 */
+  text-align: left;
 }
 
-/* 애니메이션 텍스트 기본 상태 */
-.animated-text {
-  font-size: 3rem;
-  font-weight: bold;
-  transition: all 1s ease-in-out;
-  word-spacing: 0.25rem; /* 기본 공백 간격 */
+/* 초기 페이드 인 상태 */
+.fade-in {
   opacity: 1;
-  /* font-family: "Amarante";
-  font-family: "Poppins"; */
 }
 
-/* 전환된 상태 */
-.swap {
-  word-spacing: 0.7rem; /* 공백 간격 확대 */
-  opacity: 1; /* 페이드 인 효과 */
+/* Together 페이드 아웃 */
+.fade-out {
+  opacity: 0;
+  transition: opacity 1s ease-in-out;
+}
+
+/* to gather가 간격을 두고 서서히 나타나는 상태 */
+.fade-in-swap {
+  opacity: 1;
+  word-spacing: 0.7rem; /* 간격 확대 */
+  transition: opacity 1s ease-in-out, word-spacing 1s ease-in-out;
 }

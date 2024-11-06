@@ -2,14 +2,15 @@ import React, { useState, useEffect, useRef } from "react";
 import "./GroupCard.css";
 import { FaTrash, FaShare } from "react-icons/fa";
 import SharePopover from "./SharePopover";
-import {useNavigate} from "react-router-dom"; // SharePopover 컴포넌트 import
+import { useNavigate } from "react-router-dom";
 
 const GroupCard = ({ group, onDelete }) => {
   const [isPopoverOpen, setIsPopoverOpen] = useState(false);
   const popoverRef = useRef(null); // Popover와 공유 아이콘을 감지하기 위한 ref
   const navigate = useNavigate();
 
-  const togglePopover = () => {
+  const togglePopover = (e) => {
+    e.stopPropagation(); // 이벤트 전파를 중단하여 카드의 onClick이 실행되지 않도록 함
     setIsPopoverOpen((prev) => !prev);
   };
 
@@ -34,9 +35,12 @@ const GroupCard = ({ group, onDelete }) => {
   }, []);
 
   return (
-    <div className="group-card" onClick={()=>{
-      navigate(`/meetings/${group.id}`);
-    }}>
+    <div
+      className="group-card"
+      onClick={() => {
+        navigate(`/meetings/${group.id}`);
+      }}
+    >
       <img src={group.image} alt="Group" className="group-image" />
       <div className="group-info">
         <h3>{group.name}</h3>
@@ -44,13 +48,17 @@ const GroupCard = ({ group, onDelete }) => {
         <p className="group-members">{group.members.join(", ")}</p>
       </div>
       <div className="group-actions">
+        {/* 삭제 아이콘 클릭 시 카드 이동 이벤트 방지 */}
         <FaTrash
           className="icon delete-icon"
           title="Delete"
-          onClick={onDelete}
+          onClick={(e) => {
+            e.stopPropagation(); // 이벤트 전파 중단
+            onDelete();
+          }}
         />
 
-        {/* Popover를 여닫는 버튼 */}
+        {/* 공유 아이콘 클릭 시 Popover 표시 */}
         <div
           className="share-icon-wrapper"
           onClick={togglePopover}

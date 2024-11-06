@@ -15,21 +15,30 @@
   align-items: center;
   border-radius: 10px;
   font-size: 1.2rem;
-  margin-bottom: 2rem;
-  width: 250px;
+  margin-bottom: 1.5rem;
+  width: 100px;
 }
 
 /* 앱 이름 스타일 */
 .login-title {
-  font-family: "Amarante";
-  font-size: 1.5rem;
-  margin-bottom: 0.8rem;
+  font-family: "KCC-Hanbit";
+  font-size: 2.2rem;
+  margin-bottom: 1rem;
+  background: linear-gradient(
+    to bottom,
+    #a26af0,
+    #731aef
+  ); /* #731AEF에서 #A26AF0으로 그라데이션 */
+  line-height: 1.2;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent; /* 텍스트 내부를 투명하게 */
 }
 
 /* 앱 설명 텍스트 */
 .login-description {
   font-size: 1rem;
-  color: #444;
+  color: #999999;
+  font-family: "KCC-Hanbit";
   text-align: center;
   margin-bottom: 7rem;
   line-height: 1.5;
@@ -37,15 +46,16 @@
 
 /* 소셜 로그인 타이틀 */
 .social-login-title {
-  font-size: 0.9rem;
-  color: black;
-  margin-left: -150px;
+  font-size: 1rem;
+  color: #999999;
+  margin-left: -280px;
   margin-bottom: 1.2rem;
 }
 
 /* 소셜 버튼 공통 스타일 */
 .social-button {
-  width: 280px;
+  width: 400px;
+  margin: 0 auto;
   display: block;
   border: none;
   border-radius: 8px;
@@ -53,6 +63,12 @@
   font-size: 1rem;
   cursor: pointer;
   transition: background-color 0.3s ease;
+}
+@media (max-width: 767px) {
+  /*모바일 화면 컨텐츠 패딩조절*/
+}
+@media (max-width: 375px) {
+  /*더 작은 모바일 화면 컨텐츠 패딩조절*/
 }
 
 /* 소셜 버튼 hover 효과 */

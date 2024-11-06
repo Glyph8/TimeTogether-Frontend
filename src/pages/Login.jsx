@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import "./Login.css"; // css파일 import
-import logo from "../img/logo_white.png"; // 이미지 가져오기
+import logo from "../img/logo.png"; // 이미지 가져오기
 import logo2 from "../img/logo_purple.png";
 import kakao from "../img/kakao.png";
 import naver from "../img/naver.png";
@@ -12,7 +12,7 @@ function Login() {
     <div className="login-container">
       {/* 로고 */}
       <Link to="/group">
-        <img className="login-logo" src={logo2} alt="로고"></img>
+        <img className="login-logo" src={logo} alt="로고"></img>
       </Link>
       {/* 앱 이름 */}
       <h1 className="login-title">타임투게더</h1>
@@ -23,10 +23,15 @@ function Login() {
       {/* 소셜 로그인 */}
       <div className="social-login-container">
         <p className="social-login-title">소셜 로그인</p>
-        <img className="social-button" src={google} alt="구글로 시작"></img>
-        <img className="social-button" src={kakao} alt="카카오로 시작"></img>
-
-        <img className="social-button" src={naver} alt="네이버로 시작"></img>
+        <a href="/oauth2/authorization/naver">
+          <img className="social-button" src={naver} alt="네이버로 시작"></img>
+        </a>
+        <a href="/oauth2/authorization/kakao">
+          <img className="social-button" src={kakao} alt="카카오로 시작"></img>
+        </a>
+        <a href="/oauth2/authorization/google">
+          <img className="social-button" src={google} alt="구글로 시작"></img>
+        </a>
       </div>
     </div>
   );

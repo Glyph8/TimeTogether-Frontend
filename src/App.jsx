@@ -37,6 +37,7 @@ function App() {
           <Route path="/mypage" element={<MyPage />} />
           <Route path="/create-group" element={<CreateGroup />} />
           <Route path="/meetings/:id" element={<MeetingsPage />} />
+          {/* <Route path="/oauth2/redirect" element={<OAuthRedirectHandler />} /> */}
         </Routes>
         {/* 조건부로 NavigationBar 렌더링 */}
         {showNavigationBar && <NavigationBar />}

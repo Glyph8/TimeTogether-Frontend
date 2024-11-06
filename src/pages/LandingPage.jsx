@@ -1,32 +1,45 @@
-// src/pages/LandingPage.jsx
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "./LandingPage.css"; // css파일 import
+import "./LandingPage.css";
+import logo from "../img/kakao.png"; // 이미지 가져오기
 
 function LandingPage() {
-  const [isSwapped, setIsSwapped] = useState(false); // 전환 여부
+  const [isSwapped, setIsSwapped] = useState(false); // "Together"에서 "to gather"로 전환 여부
+  const [isInitialFadeIn, setIsInitialFadeIn] = useState(false); // 초기 페이드 인 여부
   const navigate = useNavigate();
 
   useEffect(() => {
+    // 초기 페이드 인 애니메이션 시작
+    const initialFadeTimeout = setTimeout(() => {
+      setIsInitialFadeIn(true); // "Time Together"를 페이드 인
+    }, 500);
+
     // 1초 후 전환 애니메이션 시작
     const swapTimeout = setTimeout(() => {
-      setIsSwapped(true); // 상태 전환
-    }, 1100);
+      setIsSwapped(true); // "Together"에서 "to gather"로 전환
+    }, 2000);
 
     const navigateTimeout = setTimeout(() => {
       navigate("/login");
-    }, 2000);
+    }, 4000); // 페이지 전환 시간
 
-    return () => clearTimeout(swapTimeout); // 타이머 정리
+    return () => {
+      clearTimeout(initialFadeTimeout);
+      clearTimeout(swapTimeout);
+      clearTimeout(navigateTimeout);
+    };
   }, []);
 
   return (
     <div className="landing-container">
-      {/* <img className="landing-logo" width="100px" src={logo2} alt="로고"></img> */}
-      {/* 로고 */}
-      <p className="main-text">Time</p> {/* 고정된 텍스트 */}
-      {/* 전체 텍스트 애니메이션 */}
-      <p className={`animated-text ${isSwapped ? "swap" : ""}`}>
+      {/* <img className="landing-logo" src={logo} alt="로고"></img> */}
+      <p className={`main-text ${isInitialFadeIn ? "fade-in" : ""}`}>Time</p>
+      {/* "Together"는 초기 페이드 인 후 페이드 아웃되고, "to gather"는 간격을 두고 나타남 */}
+      <p
+        className={`animated-text ${
+          isInitialFadeIn ? (isSwapped ? "fade-in-swap" : "fade-in") : ""
+        } ${isSwapped ? "fade-out" : ""}`}
+      >
         {isSwapped ? "to gather" : "Together"}
       </p>
     </div>
