@@ -33,7 +33,7 @@
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent; /* 텍스트 내부를 투명하게 */
 }
-
+/**/
 /* 앱 설명 텍스트 */
 .login-description {
   font-size: 1rem;
