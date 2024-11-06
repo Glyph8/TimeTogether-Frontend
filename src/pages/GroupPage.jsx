@@ -28,7 +28,7 @@ function GroupPage() {
 
   //   fetchGroups();
   // }, []);
-  // 예시 데이터를 설정하는 함수
+  // 예시 데이터를 설정
 
   useEffect(() => {
     // 예시 데이터
