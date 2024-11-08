@@ -25,7 +25,7 @@
   margin-top: -7rem;
   margin-bottom: 2rem; */
   width: 50px;
-  margin-left: 10px;
+  margin-left: 15px;
 }
 .lw {
   display: flex;
@@ -39,7 +39,7 @@
   font-family: "KCC-Hanbit";
   font-size: 3rem;
   font-weight: bold;
-  transition: opacity 1.5s ease-out;
+  transition: opacity 1s ease-out;
   opacity: 0; /* 초기 상태에서 투명 */
   text-align: left;
 }
@@ -52,12 +52,12 @@
 /* Together 페이드 아웃 */
 .fade-out {
   opacity: 0;
-  transition: opacity 1s ease-in-out;
+  transition: opacity 3s ease-in;
 }
 
 /* to gather가 간격을 두고 서서히 나타나는 상태 */
 .fade-in-swap {
   opacity: 1;
   word-spacing: 0.7rem; /* 간격 확대 */
-  transition: opacity 1s ease-in-out, word-spacing 1s ease-in-out;
+  transition: opacity 0.5s ease-in-out, word-spacing 0.5s ease-in-out;
 }

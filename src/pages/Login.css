@@ -44,17 +44,21 @@
   line-height: 1.5;
 }
 
+.social-login-container {
+  width: 70%;
+}
+
 /* 소셜 로그인 타이틀 */
 .social-login-title {
   font-size: 1rem;
   color: #999999;
-  margin-left: -280px;
+  margin-left: -50%;
   margin-bottom: 1.2rem;
 }
 
 /* 소셜 버튼 공통 스타일 */
 .social-button {
-  width: 400px;
+  width: 80%;
   margin: 0 auto;
   display: block;
   border: none;
@@ -64,11 +68,12 @@
   cursor: pointer;
   transition: background-color 0.3s ease;
 }
-@media (max-width: 767px) {
+
+@media (min-width: 400px) {
   /*모바일 화면 컨텐츠 패딩조절*/
-}
-@media (max-width: 375px) {
-  /*더 작은 모바일 화면 컨텐츠 패딩조절*/
+  .social-login-container {
+    width: 80%;
+  }
 }
 
 /* 소셜 버튼 hover 효과 */

@@ -43,6 +43,7 @@ body {
 @media (min-width: 350px) {
   .app-container,
   .group-page,
+  .calendar-page,
   .bottom-nav,
   .create-group-container {
     min-width: 390px;
@@ -52,6 +53,7 @@ body {
 @media (min-width: 768px) {
   .app-container,
   .group-page,
+  .calendar-page,
   .bottom-nav,
   .create-group-container {
     min-width: 600px; /* 태블릿에서는 600px */
@@ -62,6 +64,7 @@ body {
 @media (min-width: 1024px) {
   .app-container,
   .group-page,
+  .calendar-page,
   .bottom-nav,
   .create-group-container {
     min-width: 600px; /* 데스크탑에서는 최대 800px */

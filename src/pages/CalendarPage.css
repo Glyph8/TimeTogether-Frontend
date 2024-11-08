@@ -1,0 +1,156 @@
+.calendar-page {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: #fafafa;
+  padding-bottom: 60px; /* 네비게이션 바 공간 확보 */
+  width: 100%;
+  margin: 0 auto; /* 화면 중앙 정렬 */
+  overflow: hidden; /* 페이지에서 스크롤을 숨김 */
+}
+@media (min-width: 400px) {
+  .calendar-page {
+    width: 430px;
+  }
+}
+.calendar {
+  overflow-y: auto; /* 그룹 목록만 세로 스크롤 가능 */
+  margin-top: 10px;
+  padding: 0 15px;
+  padding-bottom: 40px;
+}
+/* Webkit 기반 브라우저에서 스크롤바 숨기기 */
+.calendar::-webkit-scrollbar {
+  display: none;
+}
+.calendar-header {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  width: 100%;
+  height: 7%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0px 4px 10px 0px #0000000a;
+  background-color: #ffffff;
+  color: black;
+}
+.calendar-header h2 {
+  cursor: pointer;
+}
+
+.prev-month,
+.next-month {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+.prev-month:focus,
+.next-month:focus {
+  outline: none;
+}
+
+.year-month-selector {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: white;
+  border: 1px solid #ccc;
+  padding: 10px;
+  display: flex;
+  gap: 10px;
+  z-index: 1;
+}
+
+.calendar-days {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  width: 100%;
+  text-align: center;
+  padding: 10px 0;
+  /* border-bottom: 1px solid #ddd; */
+}
+
+.calendar-day-header {
+  font-weight: bold;
+  color: #666;
+}
+
+.calendar-day-header:nth-child(1) {
+  color: #ff4d4d; /* 일요일 색상 */
+}
+
+.calendar-day-header:nth-child(7) {
+  color: #4d4dff; /* 토요일 색상 */
+}
+
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 0;
+  border: 1px solid #ddd;
+  /* border-top: none; */
+  border-radius: 10px;
+  background-color: white;
+}
+
+.calendar-row {
+  display: contents;
+}
+
+.calendar-day {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding: 10px;
+  height: 15.5vh; /* 높이 고정 */
+  font-size: 0.9rem;
+  position: relative;
+  border-bottom: 1px solid #ddd;
+  border-right: 1px solid #ddd;
+  cursor: pointer;
+}
+
+.calendar-day:nth-child(7n + 1) .day-number:not(.disabled) {
+  color: #ff4d4d; /* 일요일 색상 */
+}
+
+.calendar-day:nth-child(7n) .day-number:not(.disabled) {
+  color: #4d4dff; /* 토요일 색상 */
+}
+
+.calendar-day:last-child {
+  border-right: none;
+}
+
+.calendar-row:last-child .calendar-day {
+  border-bottom: none;
+}
+
+.day-number {
+  font-weight: bold;
+  margin-top: 5px;
+  margin-left: 5px;
+}
+
+.disabled .day-number {
+  color: #ccc !important; /* disabled는 회색 계열 */
+}
+
+.today .day-number {
+  background-color: #ffecb3;
+  color: black;
+  padding: 3px 6px;
+  border-radius: 50%;
+}
+
+.selected .day-number {
+  background-color: #a3c6ff;
+  color: black;
+  padding: 3px 6px;
+  border-radius: 50%;
+}

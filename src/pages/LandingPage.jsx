@@ -12,7 +12,7 @@ function LandingPage() {
     // 초기 페이드 인 애니메이션 시작
     const initialFadeTimeout = setTimeout(() => {
       setIsInitialFadeIn(true); // "Time Together"를 페이드 인
-    }, 500);
+    }, 100);
 
     // 1초 후 전환 애니메이션 시작
     const swapTimeout = setTimeout(() => {
@@ -21,7 +21,7 @@ function LandingPage() {
 
     const navigateTimeout = setTimeout(() => {
       navigate("/login");
-    }, 3300); // 페이지 전환 시간
+    }, 3000); // 페이지 전환 시간
 
     return () => {
       clearTimeout(initialFadeTimeout);
