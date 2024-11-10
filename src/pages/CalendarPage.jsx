@@ -46,7 +46,14 @@ function CalendarPage() {
   };
 
   const handleDateClick = (day) => {
-    setSelectedDate(day); // 클릭한 날짜를 선택한 날짜로 설정
+    // 현재 월과 클릭한 날짜의 월이 다른 경우 (disabled 클래스가 적용된 날짜)
+    if (format(currentDate, "M") !== format(day, "M")) {
+      // 클릭한 날짜의 월로 이동하고 해당 날짜를 선택
+      setCurrentDate(startOfMonth(day));
+    }
+    // 클릭한 날짜를 선택한 날짜로 설정 (CSS 적용을 위해)
+    setSelectedDate(day);
+    // setSelectedDate(day); // 클릭한 날짜를 selectedDate로 설정
   };
 
   // 외부 클릭 시 연도/월 선택기 닫기
@@ -79,7 +86,7 @@ function CalendarPage() {
             value={format(currentDate, "yyyy")}
             onChange={handleYearChange}
           >
-            {Array.from({ length: 20 }, (_, i) => 2010 + i).map((year) => (
+            {Array.from({ length: 20 }, (_, i) => 2015 + i).map((year) => (
               <option key={year} value={year}>
                 {year}년
               </option>
@@ -108,37 +115,35 @@ function CalendarPage() {
 
   const renderCells = () => {
     const rows = [];
-    let days = [];
-    let day = startDate;
-    let formattedDate = "";
+    const totalDays = 35; // 5주(7일 * 5줄)로 그리드를 구성
 
-    while (day <= endDate) {
-      for (let i = 0; i < 7; i++) {
-        formattedDate = format(day, "d");
-        const isToday = isSameDay(day, new Date());
-        const isSelected = isSameDay(day, selectedDate);
+    for (let i = 0; i < totalDays; i++) {
+      const day = addDays(startDate, i); // 각 셀이 고유한 날짜를 갖도록 설정
+      const formattedDate = format(day, "d");
+      const isToday = isSameDay(day, new Date());
+      const isSelected = isSameDay(day, selectedDate);
 
-        days.push(
-          <div
-            className={`calendar-day ${
-              format(currentDate, "M") !== format(day, "M") ? "disabled" : ""
-            } ${isToday ? "today" : ""} ${isSelected ? "selected" : ""}`}
-            key={day.getTime()} // 각 날짜 셀에 고유한 key를 부여
-            onClick={() => handleDateClick(day)}
-          >
-            <span className="day-number">{formattedDate}</span>
-          </div>
-        );
-        day = addDays(day, 1);
-      }
       rows.push(
-        <div className="calendar-row" key={day}>
-          {days}
+        <div
+          className={`calendar-day ${
+            format(currentDate, "M") !== format(day, "M") ? "disabled" : ""
+          } ${isToday ? "today" : ""} ${isSelected ? "selected" : ""}`}
+          key={day.getTime()}
+          onClick={() => {
+            console.log(day, "click"); // 선택된 날짜 출력
+            handleDateClick(day); // 클릭한 날짜를 selectedDate로 설정
+          }}
+        >
+          <span className="day-number">{formattedDate}</span>
         </div>
       );
-      days = [];
     }
-    return <div className="calendar-grid">{rows}</div>;
+
+    return (
+      <div className="calendar-grid">
+        <div className="calendar-row">{rows}</div>
+      </div>
+    );
   };
 
   return (

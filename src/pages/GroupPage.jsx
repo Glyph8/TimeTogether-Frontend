@@ -45,7 +45,8 @@ function GroupPage() {
         name: "졸프 팀",
         description: "졸업을 위하여...",
         members: ["김00", "이00", "최00", "박00"],
-        image: "https://via.placeholder.com/70", // 예시 이미지 URL
+        image:
+          "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTL0mWBDKPR964fHPZTXR6e1Ul5QzsFpyPrBA&s", // 예시 이미지 URL
       },
       {
         id: 3,

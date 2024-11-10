@@ -2,7 +2,7 @@ import TimeGrid from '././TimeGrid.jsx';
 import {useState} from "react";
 import ColorBar from "./ColorBar.jsx";
 
-const GroupTimetable = ({days, dayLabels}) => {
+const GroupTimetable = ({days, timeRange}) => {
 
     // const days = ['10/7', '10/8', '10/9', '10/10', '10/11', '10/12', '10/13'];
     // const dayLabels = ['월', '화', '수', '목', '금', '토', '일'];
@@ -27,7 +27,7 @@ const GroupTimetable = ({days, dayLabels}) => {
                 </div>
             </div>
 
-            <TimeGrid days={days} dayLabels={dayLabels}/>
+            <TimeGrid days={days} timeRange={timeRange}/>
         </div>
     );
 };

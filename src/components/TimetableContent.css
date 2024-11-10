@@ -100,12 +100,31 @@
 }
 
 .add-personal-timeBtn{
+    width: 180px;
+    height: 40px;
     background-color: #731aef;
     color: white;
     padding: 5px;
     margin: 10px;
     border-radius: 4px;
     border-color: #731aef;
+}
 
+.calender-priority-btn{
+    margin-top: 10px;
+    padding : 5px;
+}
+
+.load-calender-btn,
+.select-priority{
+    font-weight: bold;
+    width: 180px;
+    height: 40px;
+    background-color: #ffffff;
+    color: #731aef;
+    padding: 5px;
+    margin: 10px;
+    border-radius: 4px;
+    border-color: #731aef;
 }
 
