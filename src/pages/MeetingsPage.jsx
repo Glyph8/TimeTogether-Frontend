@@ -10,11 +10,14 @@ import AddPlaceButton from "../components/AddPlaceButton";
 import AddPlaceModal from "../components/AddPlaceModal";
 import SelectPlaceButton from "../components/SelectPlaceButton";
 import TimetableContent from "../components/TimetableContent.jsx";
+import ConfirmLocationButton from "../components/ConfirmLocationButton.jsx";
+import LocationSimpleItemList from "../components/LocationSimpleItemList.jsx";
 
 function MeetingsPage() {
   const { id } = useParams();
   const [activeTab, setActiveTab] = useState("언제");
   const [locations, setLocations] = useState([]);
+  const [confirmLocationId, setConfirmLocationId] = useState(null);
   const [selectedLocationIds, setSelectedLocationIds] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isHost, setIsHost] = useState(true); // 방장 여부 상태 추가
@@ -56,6 +59,10 @@ function MeetingsPage() {
         return [...prevSelected, locationId];
       }
     });
+  };
+
+  const handleConfirmLocation = (locationId) => {
+    setConfirmLocationId(locationId); // Confirm ID 설정
   };
 
   // 장소 삭제 함수
@@ -109,9 +116,7 @@ function MeetingsPage() {
         onSelect={(option) => setActiveTab(option)}
       />
       <div className="tab-content">
-        {activeTab === "언제" && (
-            <TimetableContent activeTab={activeTab}/>
-        )}
+        {activeTab === "언제" && <TimetableContent activeTab={activeTab} />}
         {activeTab === "어디서" && (
           <>
             {!isPlaceConfirmed ? (
@@ -127,8 +132,12 @@ function MeetingsPage() {
               </>
             ) : (
               <>
-                <h3>선택한 장소:</h3>
-                <p>모임 장소가 확정되었습니다.</p>
+                <ConfirmLocationButton onConfrimPlace={() => {}} />
+                <LocationSimpleItemList
+                  locations={locations}
+                  selectedLocationIds={confirmLocationId}
+                  onSelectLocation={handleConfirmLocation}
+                />
               </>
             )}
           </>

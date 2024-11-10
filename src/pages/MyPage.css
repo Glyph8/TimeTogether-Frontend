@@ -1,0 +1,9 @@
+.group-page {
+  width: 600px;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: rgb(246, 246, 246);
+  text-align: center;
+}
