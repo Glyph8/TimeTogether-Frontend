@@ -59,11 +59,14 @@ function Login() {
         <p className="social-login-title">소셜 로그인</p>
 
         {/* 카카오 로그인 버튼 */}
-        <a
+        {/* <a
           href="http://172.20.10.9:8080/oauth2/authorization/kakao"
           target="_self"
           rel="noopener noreferrer"
         >
+          <img className="social-button" src={kakao} alt="카카오로 시작" />
+        </a> */}
+        <a href={KAKAO_AUTH_URL} target="_self" rel="noopener noreferrer">
           <img className="social-button" src={kakao} alt="카카오로 시작" />
         </a>
 

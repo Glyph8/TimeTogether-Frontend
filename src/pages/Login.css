@@ -23,13 +23,14 @@
 .login-title {
   font-family: "KCC-Hanbit";
   font-size: 2.2rem;
+  font-weight: 500;
   margin-bottom: 1rem;
   background: linear-gradient(
     to bottom,
     #a26af0,
     #731aef
   ); /* #731AEF에서 #A26AF0으로 그라데이션 */
-  line-height: 1.2;
+  line-height: 1.5;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent; /* 텍스트 내부를 투명하게 */
 }

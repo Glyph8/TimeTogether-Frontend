@@ -38,7 +38,7 @@
 .animated-text {
   font-family: "KCC-Hanbit";
   font-size: 3rem;
-  font-weight: bold;
+  /* font-weight: bold; */
   transition: opacity 1s ease-out;
   opacity: 0; /* 초기 상태에서 투명 */
   text-align: left;

@@ -47,6 +47,11 @@
   padding: 8px 16px;
   border-radius: 4px;
   color: #404040;
+  cursor: pointer;
+  background-color: white;
+}
+.in-group-button:hover {
+  border-color: #646cff;
 }
 .in-group-button:focus {
   outline: none;
