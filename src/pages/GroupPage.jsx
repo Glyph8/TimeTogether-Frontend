@@ -31,41 +31,48 @@ function GroupPage() {
   // 예시 데이터를 설정를 설정하는 함수.
 
   useEffect(() => {
-    // 예시 데이터
-    const exampleGroups = [
-      {
-        id: 1,
-        name: "팀 1",
-        description: "2024-2학기 소프트웨어공학 팀플",
-        members: ["김00", "이00", "최00", "박00"],
-        image: "https://via.placeholder.com/70", // 예시 이미지 URL
-      },
-      {
-        id: 2,
-        name: "졸프 팀",
-        description: "졸업을 위하여...",
-        members: ["김00", "이00", "최00", "박00"],
-        image:
-          "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTL0mWBDKPR964fHPZTXR6e1Ul5QzsFpyPrBA&s", // 예시 이미지 URL
-      },
-      {
-        id: 3,
-        name: "밴드 소모임",
-        description: "밴드를 합시다~",
-        members: ["김00", "이00", "최00", "박00"],
-        image: "https://via.placeholder.com/70", // 예시 이미지 URL
-      },
-      {
-        id: 4,
-        name: "팀 4",
-        description: "2024-2학기 소프트웨어공학 팀플",
-        members: ["김00", "이00", "최00", "박00"],
-        image: "https://via.placeholder.com/70", // 예시 이미지 URL
-      },
-    ];
+    // 새로운 배열 형식의 더미 응답 데이터
+    const exampleResponse = {
+      message: "요청에 성공했습니다.",
+      httpStatus: "OK",
+      data: [
+        {
+          groupId: 2,
+          groupName: "hello-world",
+          groupTitle: "헬로우 월드",
+          groupImg: "https://hello.com/helloworld/dy.jpg",
+          groupMembers: "101622476764454775716,100682045992698191363,123123132",
+          groupMgrId: "118042957275397174302",
+        },
+        {
+          groupId: 3,
+          groupName: "미야옹",
+          groupTitle: "미야옹 월드",
+          groupImg: "https://미야옹.com/helloworld/dy.jpg",
+          groupMembers: null,
+          groupMgrId: "100682045992698191363",
+        },
+        {
+          groupId: 4,
+          groupName: "미야옹",
+          groupTitle: "미야옹 월드",
+          groupImg: "https://미야옹.com/helloworld/dy.jpg",
+          groupMembers: "118042957275397174302,104544948724000293825",
+          groupMgrId: "100682045992698191363",
+        },
+        {
+          groupId: 5,
+          groupName: "강아지",
+          groupTitle: "강아지 월드",
+          groupImg: "https://강아지.com/helloworld/dy.jpg",
+          groupMembers: null,
+          groupMgrId: "100682045992698191363",
+        },
+      ],
+    };
 
-    // 예시 데이터를 상태에 설정
-    setGroups(exampleGroups);
+    // 더미 데이터를 상태에 설정
+    setGroups(exampleResponse.data);
   }, []);
 
   const openInviteModal = () => setIsInviteModalOpen(true);
@@ -88,7 +95,9 @@ function GroupPage() {
 
   const handleDeleteConfirm = () => {
     // 그룹 삭제 처리 로직
-    setGroups(groups.filter((group) => group.id !== selectedGroup.id)); // 선택된 그룹 삭제
+    setGroups(
+      groups.filter((group) => group.groupId !== selectedGroup.groupId)
+    ); // 선택된 그룹 삭제
     closeDeleteModal();
   };
 
@@ -113,7 +122,7 @@ function GroupPage() {
           ) : (
             groups.map((group) => (
               <GroupCard
-                key={group.id}
+                key={group.groupId}
                 group={group}
                 onDelete={() => openDeleteModal(group)} // 삭제 버튼 클릭 시 삭제 모달 열기
               />

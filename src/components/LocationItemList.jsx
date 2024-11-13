@@ -7,6 +7,7 @@ const LocationItemList = ({
   selectedLocationIds,
   onSelectLocation,
   onDeleteLocation,
+  totalMembers,
 }) => {
   return (
     <ul className="location-list">
@@ -16,8 +17,8 @@ const LocationItemList = ({
           locationId={location.locationId}
           locationName={location.locationName}
           url={location.locationUrl}
-          attendanceCount={4} // 서버에서 받아오는 데이터
-          totalMembers={5} // 그룹의 총 인원 수
+          attendanceCount={location.count} // 서버에서 받아오는 데이터
+          totalMembers={totalMembers} // 그룹의 총 인원 수
           isSelected={selectedLocationIds.includes(location.locationId)}
           onSelect={() => onSelectLocation(location.locationId)}
           onDelete={() => onDeleteLocation(location.locationId)}

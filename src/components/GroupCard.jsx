@@ -34,18 +34,22 @@ const GroupCard = ({ group, onDelete }) => {
     };
   }, []);
 
+  const totalNumber = group.groupMembers
+    ? group.groupMembers.split(",").length + 1
+    : 1;
+
   return (
     <div
       className="group-card"
       onClick={() => {
-        navigate(`/meetings/${group.id}`);
+        navigate(`/meetings/${group.groupId}?totalNumber=${totalNumber}`);
       }}
     >
-      <img src={group.image} alt="Group" className="group-image" />
+      <img src={group.groupImg} alt="Group" className="group-image" />
       <div className="group-info">
-        <h3>{group.name}</h3>
-        <p className="group-description">{group.description}</p>
-        <p className="group-members">{group.members.join(", ")}</p>
+        <h3>{group.groupName}</h3>
+        <p className="group-description">{group.groupTitle}</p>
+        <p className="group-members">{group.groupMembers}</p>
       </div>
       <div className="group-actions">
         {/* 삭제 아이콘 클릭 시 카드 이동 이벤트 방지 */}
