@@ -2,19 +2,20 @@ import {useEffect, useState} from "react";
 import './TimeGrid.css';
 import PropTypes from 'prop-types';
 
-const TimeGrid = ({ days, timeRange}) => {
-    //const hourCount = 16; // 총 16시간에 대해 타임테이블 작성
-    const dayCount = days.length;
+const TimeGrid = ({ days, timeRange, isEditable}) => {
+    const [hourCount, setHourCount] = useState(16); //총 16시간에 대해 타임테이블 작성이 기본값
+    const [startHour, setStartHour] = useState(9);  //시작 시간 09:00이 기본 값
 
-    const [hourCount, setHourCount] = useState(16);
-    const [startHour, setStartHour] = useState(9);
-    const daySet = daySets(days);
+    const [daySet, setDaySet] = useState(daySets(days));
+
     const dayLabel = dayLabelSet(days);
+    const times = timeSet(days);
 
     useEffect(() => {
         setHourCount(getTimeRange(timeRange));
         setStartHour(getStartHour(timeRange));
-    });
+
+    }, [timeRange]);
 
     return (
         <div className="time-grid" style={{ backgroundColor: '#f4f4f4' }}>
@@ -30,9 +31,11 @@ const TimeGrid = ({ days, timeRange}) => {
             <div className="grid-content">
                 <TimeScale hourCount={hourCount} startHour={startHour}/>
                 <GridCells
-                    days = {days}
+                    days = {days} //굳이 days를 통으로 줄 필요가 없는 듯
+                    timeSet={times}
                     hourCount={hourCount}
-                    startHour={startHour}
+                    isEditable={isEditable}
+                    daySet = {daySet}
                 />
             </div>
         </div>
@@ -53,14 +56,14 @@ const TimeScale = ({ hourCount , startHour }) => {
     );
 };
 
-const GridCells = ({ days, hourCount}) => {
-
-    let cellColor = '#ffffff';
-    let cellCounter = 0;
-    const [personalTableColor, setPersonalTableColor] = useState("#ffffff");
+const GridCells = ({ days, hourCount, isEditable, timeSet}) => {
+    const [times, setTimes] = useState([]);
 
     const daySet = daySets(days);
-    const times = timeSet(days);
+
+    useEffect(() => {
+        setTimes(timeSet);
+    }, [timeSet]);
 
     return (
         <div className="grid-cells" style={{
@@ -76,7 +79,8 @@ const GridCells = ({ days, hourCount}) => {
                 Array.from({ length: hourCount * 2 }).map((_, hourIndex) => {
                     const cellName = `grid-cell-${daySet[dayIndex]}-${hourIndex}`
                     let cellColor = "#ffffff";
-                    const checked = times[dayIndex].at(hourIndex);
+                    // const checked = times[dayIndex].at(hourIndex);
+                    const checked = times[dayIndex][hourIndex];
 
                     if(checked === "1"){
                         cellColor = "#FFC553";
@@ -86,9 +90,22 @@ const GridCells = ({ days, hourCount}) => {
                         key={`${dayIndex}-${hourIndex}`}
                         className={cellName}
                         style={{ backgroundColor: cellColor, border:'1px dotted #c6c6c6'}}
-                        onClick={() => {
-                            //setPersonalTableColor(`#c0c0c0`);
-                            // setSelectTime(1);
+                        onMouseUp={() => {
+                        // onClick={() => {
+                            let newTimes = [...times];
+                            //console.log(newTimes);
+                            if(checked==="1" && isEditable){
+                                console.log(1,newTimes[dayIndex][hourIndex]);
+                                newTimes[dayIndex] = newTimes[dayIndex].substring(0, hourIndex) + '0' + newTimes[dayIndex].substring(hourIndex + 1);
+                                console.log(2, newTimes[dayIndex][hourIndex]);
+                            }
+                            if(checked==="0" && isEditable) {
+                                console.log(1,newTimes[dayIndex][hourIndex]);
+                                newTimes[dayIndex] = newTimes[dayIndex].substring(0, hourIndex) + '1' + newTimes[dayIndex].substring(hourIndex + 1);
+                                console.log(2,newTimes[dayIndex][hourIndex]);
+                            }
+                            console.log(newTimes);
+                            setTimes(newTimes);
                         }}
                     >
 
@@ -99,6 +116,7 @@ const GridCells = ({ days, hourCount}) => {
         </div>
     );
 };
+
 
 function daySets(daysData){
     let daySet = new Array(0);
@@ -138,6 +156,7 @@ function getStartHour(timeRange){
     const startHour = Number.parseInt(timeRange.slice(0, 4));
     return (startHour / 100);
 }
+
 
 TimeGrid.propTypes = {
     days: PropTypes.arrayOf(PropTypes.object).isRequired,

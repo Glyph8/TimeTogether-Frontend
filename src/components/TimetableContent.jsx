@@ -7,6 +7,7 @@ import {useEffect, useState} from "react";
 
 const TimetableContent = ({activeTab}) => {
     const [days, setDays] = useState([]);
+    const [groupDays, setGroupDays] = useState([]);
     const [timeRange, setTimeRange] = useState("");
 
     useEffect(() => {

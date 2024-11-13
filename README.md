@@ -1,8 +1,21 @@
-# React + Vite
+# 계획
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+### 그룹 생성 시 캘린더로 날짜 범위 설정하기(최대 연속 7일)
 
-Currently, two official plugins are available:
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+### fix: PersonalTimeTble.jsx :  초기 상태, empty 그룹시간표 + 내 시간표 추가하기 버튼.
+
+### fix: PersonalTimeTble.jsx :  원래 그룹시간표 only, 내 시간표 추가하기 누르면 아래에 personalTimeTable출력, 수정가능해야. 페이지가 호출되어야함.
+
+
+
+### 그룹 시간표 포맷대로 출력하기 
+
+### 내 시간표 저장하기 누르면 데이터 형식으로 추출하기
+
+### 우선순위 버튼 누르면 우선순위 설정 탭 나타나고, 다르게 입력할 수 있도록하기.
+
+### 내 시간표 설정시 드래그로 선택할 수 있게 하기.
+##### 시간대 클릭시 가로 전체, 요일 클릭시 세로 전체 선택되게 하기
+
+
