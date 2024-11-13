@@ -38,7 +38,10 @@ function App() {
           <Route path="/mypage" element={<MyPage />} />
           <Route path="/create-group" element={<CreateGroup />} />
           <Route path="/meetings/:id" element={<MeetingsPage />} />
-          <Route path="/oauth2/redirect" element={<OAuthRedirectHandler />} />
+          <Route
+            path="login/oauth2/redirect"
+            element={<OAuthRedirectHandler />}
+          />
           {/* 백엔드가 /oauth2/redirect로 리다이렉트 해주면 OAuthRedirectHandler.jsx실행 */}
         </Routes>
         {/* 조건부로 NavigationBar 렌더링 */}

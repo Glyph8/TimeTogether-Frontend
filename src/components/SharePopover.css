@@ -1,11 +1,14 @@
 .share-popover {
   position: absolute;
   top: 30px; /* 아이콘 아래에 배치 */
-  right: -20px;
+  right: -40px;
   width: 22rem;
-  background-color: #fff;
+  /* background-color: #a26af0; */
+  /* background-color: rgb(59, 59, 59); */
+  background-color: white;
   padding: 10px;
   border: 1px solid #404040;
+  /* border: gray; */
   border-radius: 8px;
   z-index: 1000;
 }
@@ -13,6 +16,7 @@
 .invite-code-text {
   font-size: 1rem;
   color: #404040;
+  /* color: white; */
   margin-left: 0.4rem;
   margin-bottom: 8px;
   font-weight: bold;
@@ -24,6 +28,8 @@
   padding: 6px 8px;
   background-color: #e6e6e6;
   color: rgb(160, 160, 160);
+  /* background-color: white;
+  color: rgb(59, 59, 59); */
   border: none;
   border-radius: 8px;
   cursor: pointer;

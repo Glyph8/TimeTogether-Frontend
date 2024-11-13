@@ -4,20 +4,33 @@
   min-height: 100vh;
   background-color: #fafafa;
   padding-bottom: 60px; /* 네비게이션 바 공간 확보 */
+  max-width: 600px;
   width: 100%;
   margin: 0 auto; /* 화면 중앙 정렬 */
   overflow: hidden; /* 페이지에서 스크롤을 숨김 */
 }
-@media (min-width: 400px) {
+@media (min-width: 340px) {
   .calendar-page {
-    width: 430px;
+    min-width: 340px;
   }
 }
+@media (min-width: 390px) {
+  .calendar-page {
+    min-width: 390px;
+  }
+}
+@media (min-width: 400px) {
+  .calendar-page {
+    min-width: 430px;
+  }
+}
+
 .calendar {
   overflow-y: auto; /* 그룹 목록만 세로 스크롤 가능 */
   margin-top: 10px;
   padding: 0 15px;
   padding-bottom: 20px;
+  width: 100%;
 }
 /* Webkit 기반 브라우저에서 스크롤바 숨기기 */
 .calendar::-webkit-scrollbar {
@@ -108,15 +121,18 @@
 
 .calendar-day {
   display: flex;
+  flex-direction: column;
   align-items: flex-start;
   justify-content: flex-start;
-  padding: 0;
+  padding: 1px 2px 0 2px;
   height: 15.5vh; /* 높이 고정 */
   font-size: 1rem;
   position: relative;
   border-bottom: 1px solid #e4e4e4;
   border-right: 1px solid #e4e4e4;
-  /* cursor: pointer; */
+  width: 100%;
+  box-sizing: border-box; /* 패딩 포함 셀 크기 조정 */
+  overflow: hidden; /* 셀을 벗어나는 내용 숨기기 */
 }
 
 .calendar-day:nth-child(7n + 1) .day-number:not(.disabled) {
@@ -227,4 +243,24 @@
 }
 .year-month-selector select:focus {
   outline: none;
+}
+
+/* 날짜 안에 들어가는 할일 디자인 */
+.event {
+  /* margin-top: 4px; */
+  margin: 4px auto 0 auto;
+  padding: 2px 4px;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  color: white;
+
+  overflow: hidden; /* 넘치는 텍스트 숨김 */
+  white-space: nowrap; /* 텍스트 줄바꿈 방지 */
+  text-overflow: ellipsis; /* 말줄임표 (...) 표시 */
+  max-width: 100%; /* 셀 너비를 넘지 않도록 설정 */
+  box-sizing: border-box; /* 패딩 포함 셀 크기 조정 */
+  width: 100%; /* 부모 요소인 날짜 셀의 너비를 채우도록 설정 */
+  max-width: 100%; /* 너비가 날짜 셀을 넘지 않도록 고정 */
+  text-align: left;
+  cursor: pointer;
 }

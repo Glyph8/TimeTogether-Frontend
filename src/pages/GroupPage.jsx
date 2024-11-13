@@ -6,74 +6,96 @@ import CreateGroup from "../components/CreateGroup";
 import GroupCard from "../components/GroupCard";
 import InviteModal from "../components/InviteModal";
 import DeleteModal from "../components/DeleteModal"; // DeleteModal import
+import axios from "axios";
 
 function GroupPage() {
+  // 로컬 스토리지에서 토큰 가져오기
+  const accessToken = localStorage.getItem("accessToken");
+  const refreshToken = localStorage.getItem("refreshToken");
+
   const [groups, setGroups] = useState([]);
   const [isInviteModalOpen, setIsInviteModalOpen] = useState(false); // 초대 모달 열림 상태
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false); // 삭제 모달 열림 상태
   const [selectedGroup, setSelectedGroup] = useState(null); // 삭제할 그룹 정보
 
-  // 백엔드에서 그룹 데이터를 가져오는 함수 (예시)
-  // useEffect(() => {
-  //   // 여기에 실제 API 호출 코드 작성
-  //   const fetchGroups = async () => {
-  //     try {
-  //       const response = await fetch("YOUR_API_ENDPOINT");
-  //       const data = await response.json();
-  //       setGroups(data); // 받아온 데이터를 상태에 저장
-  //     } catch (error) {
-  //       console.error("그룹 데이터를 가져오는 중 오류 발생:", error);
-  //     }
-  //   };
-
-  //   fetchGroups();
-  // }, []);
-  // 예시 데이터를 설정를 설정하는 함수.
-
   useEffect(() => {
-    // 새로운 배열 형식의 더미 응답 데이터
-    const exampleResponse = {
-      message: "요청에 성공했습니다.",
-      httpStatus: "OK",
-      data: [
-        {
-          groupId: 2,
-          groupName: "hello-world",
-          groupTitle: "헬로우 월드",
-          groupImg: "https://hello.com/helloworld/dy.jpg",
-          groupMembers: "101622476764454775716,100682045992698191363,123123132",
-          groupMgrId: "118042957275397174302",
-        },
-        {
-          groupId: 3,
-          groupName: "미야옹",
-          groupTitle: "미야옹 월드",
-          groupImg: "https://미야옹.com/helloworld/dy.jpg",
-          groupMembers: null,
-          groupMgrId: "100682045992698191363",
-        },
-        {
-          groupId: 4,
-          groupName: "미야옹",
-          groupTitle: "미야옹 월드",
-          groupImg: "https://미야옹.com/helloworld/dy.jpg",
-          groupMembers: "118042957275397174302,104544948724000293825",
-          groupMgrId: "100682045992698191363",
-        },
-        {
-          groupId: 5,
-          groupName: "강아지",
-          groupTitle: "강아지 월드",
-          groupImg: "https://강아지.com/helloworld/dy.jpg",
-          groupMembers: null,
-          groupMgrId: "100682045992698191363",
-        },
-      ],
+    const fetchGroups = async () => {
+      console.log(groups);
+      console.log("액세스 토큰: ", { accessToken });
+      console.log("fetchGroups 함수 호출됨");
+      try {
+        const response = await axios.get(
+          "http://192.168.233.218:8080/group/groups/view",
+          {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
+          }
+        );
+        if (response.data.httpStatus === "OK") {
+          console.log(response.data);
+          const formattedData = response.data.data.map((group) => ({
+            id: group.groupId,
+            name: group.groupName,
+            description: group.groupTitle,
+            image: group.groupImg,
+            members: group.groupMembers ? group.groupMembers.split(",") : [],
+            manager: group.groupMgrId,
+          }));
+          setGroups(formattedData);
+        }
+      } catch (error) {
+        console.error("그룹 데이터를 가져오는 중 오류 발생:", error);
+      }
     };
 
-    // 더미 데이터를 상태에 설정
-    setGroups(exampleResponse.data);
+    fetchGroups();
   }, []);
+
+  // useEffect(() => {
+  //   // 새로운 배열 형식의 더미 응답 데이터
+  //   const exampleResponse = {
+  //     message: "요청에 성공했습니다.",
+  //     httpStatus: "OK",
+  //     data: [
+  //       {
+  //         groupId: 2,
+  //         groupName: "hello-world",
+  //         groupTitle: "헬로우 월드",
+  //         groupImg: "https://hello.com/helloworld/dy.jpg",
+  //         groupMembers: "101622476764454775716,100682045992698191363,123123132",
+  //         groupMgrId: "118042957275397174302",
+  //       },
+  //       {
+  //         groupId: 3,
+  //         groupName: "미야옹",
+  //         groupTitle: "미야옹 월드",
+  //         groupImg: "https://미야옹.com/helloworld/dy.jpg",
+  //         groupMembers: null,
+  //         groupMgrId: "100682045992698191363",
+  //       },
+  //       {
+  //         groupId: 4,
+  //         groupName: "미야옹",
+  //         groupTitle: "미야옹 월드",
+  //         groupImg: "https://미야옹.com/helloworld/dy.jpg",
+  //         groupMembers: "118042957275397174302,104544948724000293825",
+  //         groupMgrId: "100682045992698191363",
+  //       },
+  //       {
+  //         groupId: 5,
+  //         groupName: "강아지",
+  //         groupTitle: "강아지 월드",
+  //         groupImg: "https://강아지.com/helloworld/dy.jpg",
+  //         groupMembers: null,
+  //         groupMgrId: "100682045992698191363",
+  //       },
+  //     ],
+  //   };
+
+  //   // 더미 데이터를 상태에 설정
+  //   setGroups(exampleResponse.data);
+  // }, []);
 
   const openInviteModal = () => setIsInviteModalOpen(true);
   const closeInviteModal = () => setIsInviteModalOpen(false);
