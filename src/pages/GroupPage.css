@@ -6,6 +6,7 @@
   background-color: #fafafa;
   padding-bottom: 60px; /* 네비게이션 바 공간 확보 */
   width: 100%;
+  max-width: 600px;
   margin: 0 auto; /* 화면 중앙 정렬 */
   overflow: hidden; /* 페이지에서 스크롤을 숨김 */
 }
@@ -115,6 +116,19 @@
 /* Webkit 기반 브라우저에서 스크롤바 숨기기 */
 .group-content::-webkit-scrollbar {
   display: none;
+}
+
+@media (max-width: 767px) {
+  /*모바일 화면 컨텐츠 패딩조절*/
+  .group-content {
+    padding: 0 110px;
+  }
+}
+@media (max-width: 375px) {
+  /*더 작은 모바일 화면 컨텐츠 패딩조절*/
+  .group-content {
+    padding: 0 125px;
+  }
 }
 
 .no-group-text {
