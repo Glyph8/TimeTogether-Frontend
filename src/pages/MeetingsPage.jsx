@@ -25,9 +25,10 @@ function MeetingsPage() {
   const navigate = useNavigate();
 
   const searchParams = new URLSearchParams(location.search);
-  const totalNumber = searchParams.get("totalNumber");
+  const totalNumber = searchParams.get("totalNumber") || 1;
 
   useEffect(() => {
+    console.log(totalNumber);
     const response = {
       code: 200,
       message: "요청에 성공하였습니다.",
