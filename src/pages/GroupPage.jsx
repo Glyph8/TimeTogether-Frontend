@@ -30,44 +30,6 @@ function GroupPage() {
   // }, []);
   // 예시 데이터를 설정를 설정하는 함수.
 
-  // useEffect(() => {
-  //   // 예시 데이터
-  //   const exampleGroups = [
-  //     {
-  //       groupId: 1,
-  //       name: "팀 1",
-  //       description: "2024-2학기 소프트웨어공학 팀플",
-  //       members: ["김00", "이00", "최00", "박00"],
-  //       image: "https://via.placeholder.com/70", // 예시 이미지 URL
-  //     },
-  //     {
-  //       groupId: 2,
-  //       name: "졸프 팀",
-  //       description: "졸업을 위하여...",
-  //       members: ["김00", "이00", "최00", "박00"],
-  //       image:
-  //         "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTL0mWBDKPR964fHPZTXR6e1Ul5QzsFpyPrBA&s", // 예시 이미지 URL
-  //     },
-  //     {
-  //       groupId: 3,
-  //       name: "밴드 소모임",
-  //       description: "밴드를 합시다~",
-  //       members: ["김00", "이00", "최00", "박00"],
-  //       image: "https://via.placeholder.com/70", // 예시 이미지 URL
-  //     },
-  //     {
-  //       id: 4,
-  //       name: "팀 4",
-  //       description: "2024-2학기 소프트웨어공학 팀플",
-  //       members: ["김00", "이00", "최00", "박00"],
-  //       image: "https://via.placeholder.com/70", // 예시 이미지 URL
-  //     },
-  //   ];
-
-  //   // 예시 데이터를 상태에 설정
-  //   setGroups(exampleGroups);
-  // }, []);
-
   useEffect(() => {
     // 새로운 배열 형식의 더미 응답 데이터
     const exampleResponse = {
@@ -79,7 +41,7 @@ function GroupPage() {
           groupName: "hello-world",
           groupTitle: "헬로우 월드",
           groupImg: "https://hello.com/helloworld/dy.jpg",
-          groupMembers: "101622476764454775716,100682045992698191363",
+          groupMembers: "101622476764454775716,100682045992698191363,123123132",
           groupMgrId: "118042957275397174302",
         },
         {
