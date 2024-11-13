@@ -1,12 +1,15 @@
 import React from "react";
 import "./MyPage.css"; // 스타일 파일 import
-import NavigationBar from "../components/NavigationBar"; // 네비게이션 바 import
+import ProfileCard from "../components/ProfileCard";
+import MyPageItem from "../components/MyPageItem";
 
 function MyPage() {
   return (
     <div className="group-page">
-      {/* 네비게이션 바 */}
-      {/* <NavigationBar /> */}
+      <ProfileCard name="최OO 님" />
+      <MyPageItem title="내 모임 기록" onClick={() => {}} />
+      <MyPageItem title="프로필 변경" onClick={() => {}} />
+      <MyPageItem title="로그아웃" onClick={() => {}} />
     </div>
   );
 }

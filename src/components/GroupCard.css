@@ -51,6 +51,7 @@
 .icon {
   cursor: pointer;
   color: #999;
+  z-index: 10000;
 }
 
 .share-icon:hover {
