@@ -184,7 +184,7 @@
 } */
 
 .today .day-number {
-  color: white;
+  color: white !important;
   position: relative;
   z-index: 1;
 }

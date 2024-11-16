@@ -166,7 +166,7 @@ function GroupPage() {
         isOpen={isDeleteModalOpen}
         onConfirm={handleDeleteConfirm}
         onCancel={closeDeleteModal}
-        groupName={selectedGroup ? selectedGroup.name : ""}
+        groupName={selectedGroup ? selectedGroup.groupName : ""}
       />
     </>
   );
