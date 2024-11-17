@@ -54,7 +54,7 @@ function MeetingsPage() {
       ],
     };
     setLocations(response.candidates); // 서버 응답 데이터를 상태로 설정
-  }, []);
+  }, [totalNumber]);
 
   //   useEffect(() => {
   //     const fetchLocations = async () => {
