@@ -12,6 +12,7 @@ const SharePopover = ({ inviteCode, onClose }) => {
   return (
     <div className="share-popover" onClick={(e) => e.stopPropagation()}>
       <span className="invite-code-text">초대 코드: &nbsp;{inviteCode}</span>
+
       <button className="copy-button" onClick={handleCopy}>
         <FaRegCopy className="copy-icon" /> 코드 복사
       </button>

@@ -12,12 +12,19 @@ import {
   setYear,
   isSameDay,
 } from "date-fns";
+import CalendarAddModal from "../components/CalendarAddModal";
 import "./CalendarPage.css";
 
 function CalendarPage() {
   const [currentDate, setCurrentDate] = useState(new Date());
-  const [selectedDate, setSelectedDate] = useState(new Date()); // 기본값을 오늘 날짜로 설정
+  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [events, setEvents] = useState({});
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const [modalDate, setModalDate] = useState(null);
+  const [editEvent, setEditEvent] = useState(null); // 수정할 이벤트 정보
   const [isYearMonthSelectorOpen, setIsYearMonthSelectorOpen] = useState(false);
+  const [focusedEvent, setFocusedEvent] = useState(null); //포커스이벤트
   const selectorRef = useRef(null);
 
   const monthStart = startOfMonth(currentDate);
@@ -46,28 +53,139 @@ function CalendarPage() {
   };
 
   const handleDateClick = (day) => {
-    // 현재 월과 클릭한 날짜의 월이 다른 경우 (disabled 클래스가 적용된 날짜)
     if (format(currentDate, "M") !== format(day, "M")) {
-      // 클릭한 날짜의 월로 이동하고 해당 날짜를 선택
       setCurrentDate(startOfMonth(day));
     }
-    // 클릭한 날짜를 선택한 날짜로 설정 (CSS 적용을 위해)
     setSelectedDate(day);
-    // setSelectedDate(day); // 클릭한 날짜를 selectedDate로 설정
   };
 
-  // 외부 클릭 시 연도/월 선택기 닫기
-  useEffect(() => {
-    function handleClickOutside(event) {
-      if (selectorRef.current && !selectorRef.current.contains(event.target)) {
-        setIsYearMonthSelectorOpen(false);
+  const handleDateDoubleClick = (day, event = null) => {
+    // const formattedDate = format(day, "yyyy-MM-dd");
+    // const focusedDate = focusedEvent ? focusedEvent.date : null;
+
+    // if (focusedDate && focusedEvent && focusedDate !== formattedDate) {
+    //   // 포커스된 게 있을 때 더블클릭한 날짜가 포커스된 날짜와 다를 경우 일정 등록 모달 열기
+    //   setEditEvent(null); // 수정 상태 초기화
+    //   setModalDate(day);
+    //   setIsModalOpen(true); // 등록 모달 열기
+    // } else {
+    setModalDate(day);
+    setIsModalOpen(true);
+    // }
+  };
+  const handleEventClick = (day, event) => {
+    // setFocusedEvent(event);
+    // setEditEvent(event);
+    // setIsEdModalOpen(true);
+    setFocusedEvent(event); // 포커스된 이벤트 설정
+    setEditEvent(event); // 수정할 이벤트 설정
+    setModalDate(day); // 날짜 설정
+    setIsModalOpen(true); // 수정 모달 열기
+  };
+
+  // const deleteEvent = (date, event) => {
+  //   setEvents((prevEvents) => ({
+  //     ...prevEvents,
+  //     [date]: prevEvents[date].filter((evt) => evt !== event),
+  //   }));
+  //   closeModal();
+  // };
+  const deleteEvent = (event) => {
+    const { startDate, endDate } = event;
+
+    setEvents((prevEvents) => {
+      const updatedEvents = { ...prevEvents };
+
+      if (startDate && endDate) {
+        let current = new Date(startDate);
+        const end = new Date(endDate);
+
+        while (current <= end) {
+          const formattedDate = format(current, "yyyy-MM-dd");
+          if (updatedEvents[formattedDate]) {
+            updatedEvents[formattedDate] = updatedEvents[formattedDate].filter(
+              (evt) => evt !== event
+            );
+            if (updatedEvents[formattedDate].length === 0) {
+              delete updatedEvents[formattedDate];
+            }
+          }
+          current.setDate(current.getDate() + 1);
+        }
+      } else {
+        const formattedDate = format(new Date(event.startDate), "yyyy-MM-dd");
+        if (updatedEvents[formattedDate]) {
+          updatedEvents[formattedDate] = updatedEvents[formattedDate].filter(
+            (evt) => evt !== event
+          );
+          if (updatedEvents[formattedDate].length === 0) {
+            delete updatedEvents[formattedDate];
+          }
+        }
       }
-    }
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
+
+      return updatedEvents;
+    });
+    closeModal();
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setModalDate(null);
+    setEditEvent(null);
+  };
+
+  const addEvent = (date, event) => {
+    setEvents((prevEvents) => ({
+      ...prevEvents,
+      [date]: [...(prevEvents[date] || []), event],
+    }));
+    closeModal();
+  };
+
+  const updateEvent = (updatedEvent) => {
+    const { startDate: oldStartDate, endDate: oldEndDate } = editEvent || {}; // 기존 이벤트
+    const { startDate: newStartDate, endDate: newEndDate } = updatedEvent; // 수정된 이벤트
+
+    setEvents((prevEvents) => {
+      const updatedEvents = { ...prevEvents };
+
+      // 1. 기존 이벤트 범위 삭제
+      if (oldStartDate && oldEndDate) {
+        let current = new Date(oldStartDate);
+        const oldEnd = new Date(oldEndDate);
+
+        while (current <= oldEnd) {
+          const formattedDate = format(current, "yyyy-MM-dd");
+          if (updatedEvents[formattedDate]) {
+            updatedEvents[formattedDate] = updatedEvents[formattedDate].filter(
+              (evt) => evt !== editEvent
+            );
+            if (updatedEvents[formattedDate].length === 0) {
+              delete updatedEvents[formattedDate];
+            }
+          }
+          current.setDate(current.getDate() + 1);
+        }
+      }
+
+      // 2. 새로운 이벤트 범위 추가
+      let current = new Date(newStartDate);
+      const newEnd = new Date(newEndDate);
+
+      while (current <= newEnd) {
+        const formattedDate = format(current, "yyyy-MM-dd");
+        if (!updatedEvents[formattedDate]) {
+          updatedEvents[formattedDate] = [];
+        }
+        updatedEvents[formattedDate].push(updatedEvent);
+        current.setDate(current.getDate() + 1);
+      }
+
+      return updatedEvents;
+    });
+    closeModal();
+  };
 
   const renderHeader = () => (
     <div className="calendar-header">
@@ -112,16 +230,30 @@ function CalendarPage() {
       </div>
     ));
   };
-
+  const hexToRgba = (hex, alpha = 1) => {
+    //hex를 rgb로 변경하는 함수
+    const r = parseInt(hex.slice(1, 3), 16);
+    const g = parseInt(hex.slice(3, 5), 16);
+    const b = parseInt(hex.slice(5, 7), 16);
+    return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+  };
+  const calculateDateRange = (start, end) => {
+    const startDate = new Date(start);
+    const endDate = new Date(end);
+    return Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24)) + 1; // 시작일~종료일까지의 일수 계산
+  };
   const renderCells = () => {
     const rows = [];
-    const totalDays = 35; // 5주(7일 * 5줄)로 그리드를 구성
+    const totalDays = 35;
+    const formattedStartDate = format(new Date(startDate), "yyyy-MM-dd"); //연속적인 일정처리
+    const formattedEndDate = format(new Date(endDate), "yyyy-MM-dd"); //연속적인 일정처리
 
     for (let i = 0; i < totalDays; i++) {
-      const day = addDays(startDate, i); // 각 셀이 고유한 날짜를 갖도록 설정
-      const formattedDate = format(day, "d");
+      const day = addDays(startDate, i);
+      const formattedDate = format(day, "yyyy-MM-dd");
       const isToday = isSameDay(day, new Date());
       const isSelected = isSameDay(day, selectedDate);
+      const dayEvents = events[formattedDate] || [];
 
       rows.push(
         <div
@@ -129,12 +261,27 @@ function CalendarPage() {
             format(currentDate, "M") !== format(day, "M") ? "disabled" : ""
           } ${isToday ? "today" : ""} ${isSelected ? "selected" : ""}`}
           key={day.getTime()}
-          onClick={() => {
-            console.log(day, "click"); // 선택된 날짜 출력
-            handleDateClick(day); // 클릭한 날짜를 selectedDate로 설정
-          }}
+          onClick={() => handleDateClick(day)}
+          onDoubleClick={() => handleDateDoubleClick(day)}
         >
-          <span className="day-number">{formattedDate}</span>
+          <span className="day-number">{format(day, "d")}</span>
+          {dayEvents.map((event, index) => (
+            <div
+              key={index}
+              style={{
+                backgroundColor:
+                  focusedEvent === event
+                    ? hexToRgba(event.color, 0.1)
+                    : event.color,
+                color: focusedEvent === event ? event.color : "white",
+              }}
+              className={`event ${focusedEvent === event ? "focused" : ""}`}
+              onDoubleClick={() => handleDateDoubleClick(day, event)}
+              onClick={() => handleEventClick(day, event)}
+            >
+              {event.title}
+            </div>
+          ))}
         </div>
       );
     }
@@ -153,6 +300,16 @@ function CalendarPage() {
         <div className="calendar-days">{renderDays()}</div>
         {renderCells()}
       </div>
+      {isModalOpen && (
+        <CalendarAddModal
+          date={modalDate}
+          addEvent={addEvent}
+          updateEvent={updateEvent}
+          closeModal={closeModal}
+          editEvent={editEvent} // 수정할 이벤트 전달
+          deleteEvent={deleteEvent} // 삭제할 이벤트 전달
+        />
+      )}
     </div>
   );
 }

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import "./GroupCard.css";
-import { FaTrash, FaShare } from "react-icons/fa";
+import { FaTrash, FaShare, FaUserPlus } from "react-icons/fa";
 import SharePopover from "./SharePopover";
 import { useNavigate } from "react-router-dom";
 
@@ -35,16 +35,18 @@ const GroupCard = ({ group, onDelete }) => {
   }, []);
 
   const totalNumber = group.groupMembers
-      ? group.groupMembers.split(",").length + 1
-      : 1;
+
+    ? group.groupMembers.split(",").length + 1
+    : 1;
+
+
   return (
     <div
       className="group-card"
       onClick={() => {
-        const memberCount = [...group.groupMembers.split('.')].length + 1;
-        navigate(
-          `/meetings/${group.groupId}?totalNumber=${totalNumber}`
-        );
+
+        navigate(`/meetings/${group.groupId}?totalNumber=${totalNumber}`);
+
       }}
     >
       <img src={group.groupImg} alt="Group" className="group-image" />
@@ -54,6 +56,19 @@ const GroupCard = ({ group, onDelete }) => {
         <p className="group-members">{group.groupMembers}</p>
       </div>
       <div className="group-actions">
+        {/* 공유 아이콘 클릭 시 Popover 표시 */}
+        <div
+          className="share-icon-wrapper"
+          onClick={togglePopover}
+          ref={popoverRef}
+        >
+          <FaUserPlus className="icon share-icon" title="Share" />
+          {/* <FaShare className="icon share-icon" title="Share" /> */}
+          {isPopoverOpen && (
+            <SharePopover inviteCode="1234-5678-ABCD" onClose={closePopover} />
+          )}
+        </div>
+
         {/* 삭제 아이콘 클릭 시 카드 이동 이벤트 방지 */}
         <FaTrash
           className="icon delete-icon"
@@ -63,18 +78,6 @@ const GroupCard = ({ group, onDelete }) => {
             onDelete();
           }}
         />
-
-        {/* 공유 아이콘 클릭 시 Popover 표시 */}
-        <div
-          className="share-icon-wrapper"
-          onClick={togglePopover}
-          ref={popoverRef}
-        >
-          <FaShare className="icon share-icon" title="Share" />
-          {isPopoverOpen && (
-            <SharePopover inviteCode="1234-5678-ABCD" onClose={closePopover} />
-          )}
-        </div>
       </div>
     </div>
   );

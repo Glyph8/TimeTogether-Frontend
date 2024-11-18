@@ -1,5 +1,79 @@
+// //인가코드 방식
 // import React, { useEffect } from "react";
-// // import { useHistory } from "react-router-dom";
+// import axios from "axios";
+// import { useNavigate } from "react-router-dom";
+
+// // 로컬 스토리지에 토큰 저장
+// function saveTokenToLocalStorage(accessToken, refreshToken) {
+//   localStorage.setItem("accessToken", accessToken);
+//   localStorage.setItem("refreshToken", refreshToken);
+// }
+// // 다른 페이지에서 토큰 사용할 때 참고:
+// // 로컬 스토리지에서 토큰 가져오기
+// // const accessToken = localStorage.getItem("accessToken");
+// // const refreshToken = localStorage.getItem("refreshToken");
+
+// function OAuthRedirectHandler() {
+//   const navigate = useNavigate();
+
+//   useEffect(() => {
+//     console.log("리다이렉트 ok");
+//     // URL에서 code 파라미터 추출
+//     const urlParams = new URLSearchParams(window.location.search);
+//     const authCode = urlParams.get("code");
+
+//     console.log("인가코드 추출 시작");
+//     if (authCode) {
+//       console.log("인가코드 존재");
+//       console.log(authCode);
+//       // 인가 코드를 alert로 출력
+//       // window.alert(`인가 코드 받음: ${authCode}`);
+
+//       // 백엔드에 인가 코드 전달하여 토큰 받기
+//       axios
+//         .get(
+//           `http://192.168.233.205:8080/oauth2/authorize/kakao?code=${authCode}`,
+//           {
+//             withCredentials: true,
+//           }
+//         )
+//         // .post("http://172.20.10.9:8080/oauth2/authorize/kakao", {
+//         //   code: authCode,
+//         // })
+//         .then((response) => {
+//           console.log("백엔드 응답 받음");
+//           console.log(response.data);
+//           // JSON 응답에서 accessToken과 refreshToken을 추출
+//           const { accessToken, refreshToken } = response.data;
+
+//           // 토큰을 로컬 스토리지에 저장
+//           if (accessToken && refreshToken) {
+//             saveTokenToLocalStorage(accessToken, refreshToken);
+//             console.log("토큰 저장 완료");
+
+//             // 메인 페이지로 리디렉트
+//             navigate("/group");
+//           } else {
+//             console.error("토큰을 받지 못했습니다.");
+//             window.alert("토큰을 받지 못했습니다.");
+//           }
+//         })
+//         .catch((error) => {
+//           console.error("로그인 실패:", error);
+//         });
+//     } else {
+//       console.log("인가 코드가 없습니다.");
+//       window.alert("인가 코드가 없습니다.");
+//     }
+//   }, [navigate]);
+
+//   return <div>로그인 처리 중...</div>;
+// }
+
+// export default OAuthRedirectHandler;
+
+//로그인 성공 후 바로 백으로 리다이렉트 해서, 백에서 토큰 받아오는 형식
+// import React, { useEffect } from "react";
 // import axios from "axios";
 // import { useNavigate } from "react-router-dom";
 
@@ -10,45 +84,41 @@
 // }
 
 // function OAuthRedirectHandler() {
-//   // const history = useHistory();
 //   const navigate = useNavigate();
 
 //   useEffect(() => {
-//     console.log("0000000");
-//     // URL에서 code 파라미터 추출
-//     const urlParams = new URLSearchParams(window.location.search);
-//     const authCode = urlParams.get("code");
+//     console.log("리다이렉트 완료 후 토큰 요청 시작");
 
-//     console.log("11111111");
-//     if (authCode) {
-//       console.log("22222222");
-//       // 인가 코드를 alert로 출력
-//       window.alert(`인가 코드 받음: ${authCode}`);
+//     // 백엔드에 토큰 요청
+//     axios
+//       .get("http://192.168.233.205:8080/login/oauth2/redirect", {
+//         withCredentials: true, // (필요한 경우)
+//       })
+//       .then((response) => {
+//         console.log("백엔드 응답 받음");
+//         console.log(response.data);
 
-//       // 백엔드에 POST 요청으로 인가 코드 전달하여 토큰 받기
-//       axios
-//         .get(`http://172.20.10.9:8080/oauth2/authorize/kakao?code=${authCode}`)
-//         // .post("http://172.20.10.9:8080/oauth2/authorize/kakao", {
-//         //   code: authCode,
-//         // })
-//         .then((response) => {
-//           const { token } = response.data;
+//         // JSON 응답에서 accessToken과 refreshToken을 추출
+//         const { accessToken, refreshToken } = response.data;
 
-//           // 토큰을 로컬 스토리지에 저장
-//           localStorage.setItem("token", token);
+//         // 토큰을 로컬 스토리지에 저장
+//         if (accessToken && refreshToken) {
+//           saveTokenToLocalStorage(accessToken, refreshToken);
+//           console.log("토큰 저장 완료");
 
 //           // 메인 페이지로 리디렉트
 //           navigate("/group");
-//         })
-//         .catch((error) => {
-//           console.error("로그인 실패:", error);
-//         });
-//     } else {
-//       console.log("33333333");
-//       window.alert("인가 코드가 없습니다.");
-//     }
-//     console.log("44444444");
-//   }, []);
+//         } else {
+//           console.error("토큰을 받지 못했습니다.");
+//           window.alert("토큰을 받지 못했습니다.");
+//           navigate("/login"); // 토큰이 없으면 로그인 페이지로 이동
+//         }
+//       })
+//       .catch((error) => {
+//         console.error("토큰 요청 실패:", error);
+//         navigate("/login"); // 요청 실패 시 로그인 페이지로 이동
+//       });
+//   }, [navigate]);
 
 //   return <div>로그인 처리 중...</div>;
 // }
@@ -70,10 +140,14 @@
 //   useEffect(() => {
 //     console.log("OAuthRedirectHandler 시작");
 
-//     // 백엔드로 GET 요청을 보내면 백엔드에서 헤더에 토큰을 설정해 반환
+//     // 백엔드로 인가코드를 보내면 백엔드에서 헤더에 토큰을 설정해 반환
 //     axios
-//       .get("http://172.20.10.9:8080/oauth2/authorize/kakao", {
-//         withCredentials: true,
+//       // .get("http://172.20.10.9:8080/oauth2/authorize/kakao", {
+//       //   withCredentials: true,
+//       // })
+//       // .get(`http://172.20.10.9:8080/oauth2/authorize/kakao?code=${authCode}`)
+//       .post("http://172.20.10.9:8080/oauth2/authorize/kakao", {
+//         code: authCode,
 //       })
 //       .then((response) => {
 //         // response가 null인지 확인
@@ -201,6 +275,8 @@
 
 // export default OAuthRedirectHandler;
 
+//-----------------------------------------------------------------------------------
+//쿼리 파라미터 방식
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -228,7 +304,7 @@ function sendTokenToBackend(token, isAccessToken = true) {
   console.log(`${tokenType} 토큰을 백엔드에 전송합니다.`);
 
   axios
-    .get("http://172.20.10.9:8080/header", {
+    .get("http://192.168.233.218:8080/header", {
       headers: {
         Authorization: `Bearer ${token}`,
       },

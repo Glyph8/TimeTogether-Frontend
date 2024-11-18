@@ -77,12 +77,12 @@
   margin-bottom: 70px;
 }
 
-.profile-placeholder {
+.profile-placeholder1 {
   width: 100px;
   height: 100px;
+  cursor: pointer;
   background-color: #f2f2f2;
   border-radius: 25%;
-  cursor: pointer;
 }
 
 /* 폼 그룹 */
