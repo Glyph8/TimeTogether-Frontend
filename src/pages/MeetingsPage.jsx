@@ -17,94 +17,100 @@ import MeetingListPage from "./MeetingListPage.jsx";
 
 function MeetingsPage() {
 
-  const { id: groupId } = useParams(); //groupid
-  const [activeTab, setActiveTab] = useState("언제");
-  const [locations, setLocations] = useState([]);
-  const [confirmLocationId, setConfirmLocationId] = useState(null);
-  const [selectedLocationIds, setSelectedLocationIds] = useState([]);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isHost, setIsHost] = useState(true); // 방장 여부 상태 추가
-  const [isPlaceConfirmed, setIsPlaceConfirmed] = useState(false);
-  const navigate = useNavigate();
+    const {id: groupId} = useParams(); //groupid
+    const [activeTab, setActiveTab] = useState("언제");
+    const [locations, setLocations] = useState([]);
+    const [confirmLocationId, setConfirmLocationId] = useState(null);
+    const [selectedLocationIds, setSelectedLocationIds] = useState([]);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isHost, setIsHost] = useState(true); // 방장 여부 상태 추가
+    const [isPlaceConfirmed, setIsPlaceConfirmed] = useState(false);
+    const navigate = useNavigate();
 
-  const searchParams = new URLSearchParams(location.search);
-  const totalNumber = searchParams.get("totalNumber") || 1;
+    const searchParams = new URLSearchParams(location.search);
+    const totalNumber = searchParams.get("totalNumber") || 1;
 
-  useEffect(() => {
-    console.log(totalNumber);
-    const response = {
-      code: 200,
-      message: "요청에 성공하였습니다.",
-      candidates: [
-        {
-          locationId: 101,
-          locationName: "스타벅스 강남점",
-          locationUrl: "https://naver.me/5xyzExample",
-          count: 4,
-        },
-        {
-          locationId: 102,
-          locationName: "투썸 강남점",
-          locationUrl: "https://naver.me/7abcExample",
-          count: 3,
-        },
-        {
-          locationId: 103,
-          locationName: "커피빈 강남점",
-          locationUrl: "https://naver.me/8defExample",
-          count: 2,
-        },
-      ],
+
+    const [whenData, setWhenData] = useState({});
+    useEffect(() => {
+
+        const whenDataResponse = {
+            code: 200,
+            message: "요청에 성공하였습니다.",
+            requestId: "9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d",
+            result: {
+                meetId: 10,
+                meetDTstart: "2024-10-09 14:30:00",
+                meetDTend: "2024-10-09 16:30:00",
+                meetType: "오프라인",
+                meetTitle: "산협프2 아이디어 회의",
+                meetContent: null,
+                groupName: "와쿠와쿠",
+                locationName: "투썸",
+                locationUrl: "https://search.naver.com/search.naver?where=nexearch&sm=top_hty&fbm=0&ie=utf8&query=%EA%B1%B4%EB%8C%80+%ED%88%AC%EC%8D%B8+url"
+            }
+        }
+        setWhenData(whenDataResponse.result);
+        console.log(totalNumber);
+        const response = {
+            code: 200,
+            message: "요청에 성공하였습니다.",
+            candidates: [
+                {
+                    locationId: 101,
+                    locationName: "스타벅스 강남점",
+                    locationUrl: "https://naver.me/5xyzExample",
+                    count: 4,
+                },
+                {
+                    locationId: 102,
+                    locationName: "투썸 강남점",
+                    locationUrl: "https://naver.me/7abcExample",
+                    count: 3,
+                },
+                {
+                    locationId: 103,
+                    locationName: "커피빈 강남점",
+                    locationUrl: "https://naver.me/8defExample",
+                    count: 2,
+                },
+            ],
+        };
+        setLocations(response.candidates); // 서버 응답 데이터를 상태로 설정
+    }, [totalNumber]);
+
+    //   useEffect(() => {
+    //     const fetchLocations = async () => {
+    //         try {
+    //             const response = await fetch(`/group/${groupId}/where/view`);
+    //             const data = await response.json();
+    //             setLocations(data.candidates);
+    //         } catch (error) {
+    //             console.error("API 요청 에러:", error);
+    //         }
+    //     };
+
+    //     // 초기 데이터 가져오기
+    //     fetchLocations();
+
+    //     // 5초마다 데이터 요청을 보냄
+    //     const intervalId = setInterval(fetchLocations, 5000);
+
+    //     // 컴포넌트 언마운트 시 인터벌 클리어
+    //     return () => clearInterval(intervalId);
+    // }, [groupId]);
+
+    const handleSelectLocation = (locationId) => {
+        setSelectedLocationIds((prevSelected) => {
+            if (prevSelected.includes(locationId)) {
+                // 이미 선택된 장소면 선택 해제
+                return prevSelected.filter((id) => id !== locationId);
+            } else {
+                // 선택되지 않은 장소면 선택 추가
+                return [...prevSelected, locationId];
+            }
+        });
     };
-    setLocations(response.candidates); // 서버 응답 데이터를 상태로 설정
-  }, [totalNumber]);
-
-  //   useEffect(() => {
-  //     const fetchLocations = async () => {
-  //         try {
-  //             const response = await fetch(`/group/${groupId}/where/view`);
-  //             const data = await response.json();
-  //             setLocations(data.candidates);
-  //         } catch (error) {
-  //             console.error("API 요청 에러:", error);
-  //         }
-  //     };
-
-  //     // 초기 데이터 가져오기
-  //     fetchLocations();
-
-  //     // 5초마다 데이터 요청을 보냄
-  //     const intervalId = setInterval(fetchLocations, 5000);
-
-  //     // 컴포넌트 언마운트 시 인터벌 클리어
-  //     return () => clearInterval(intervalId);
-  // }, [groupId]);
-
-  const handleSelectLocation = (locationId) => {
-    setSelectedLocationIds((prevSelected) => {
-      if (prevSelected.includes(locationId)) {
-        // 이미 선택된 장소면 선택 해제
-        return prevSelected.filter((id) => id !== locationId);
-      } else {
-        // 선택되지 않은 장소면 선택 추가
-        return [...prevSelected, locationId];
-      }
-    });
-  };
-
-  const handleConfirmLocation = (locationId) => {
-    setConfirmLocationId(locationId); // Confirm ID 설정
-  };
-
-  // 장소 삭제 함수
-  const handleDeleteLocation = (locationId) => {
-    setLocations((prevLocations) =>
-      prevLocations.filter((location) => location.locationId !== locationId)
-    );
-    setSelectedLocationIds((prevSelected) =>
-      prevSelected.filter((id) => id !== locationId)
-    );
-  };
 
 
     const handleConfirmLocation = (locationId) => {
@@ -168,12 +174,13 @@ function MeetingsPage() {
                     <>
                         <Routes>
                             <Route path="/" element={
+                                // <MeetingListPage whenData={whenData}/>
                                 <MeetingListPage whenData={whenData}/>
                             }/>
                             <Route path="/when/type" element={
                                 <TimetableContent
                                     groupId={groupId}
-                                    whenData ={whenData}
+                                    // whenData={whenData}
                                 />}/>
                         </Routes>
 

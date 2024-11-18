@@ -19,7 +19,7 @@ Content: null,
 groupName: "와쿠와쿠",
 */
 
-const TimetableContent = ({whenData}) => {
+const TimetableContent = () => {
     const location = useLocation();
     //const timetableData = location.state?.timetableData;
     const timetableData = location.state?.timetableData;
