@@ -17,6 +17,7 @@ import CreateGroup from "./components/CreateGroup"; // 그룹생성 페이지
 import NavigationBar from "./components/NavigationBar"; // 네비게이션 바
 import AddPlaceModal from "./components/AddPlaceModal";
 import OAuthRedirectHandler from "./components/OAuthRedirectHandler";
+import TimetableContent from "./components/TimetableContent.jsx";
 
 function App() {
   const location = useLocation(); // 현재 경로를 가져옵니다.
@@ -37,11 +38,13 @@ function App() {
           <Route path="/schedule" element={<SchedulePage />} />
           <Route path="/mypage" element={<MyPage />} />
           <Route path="/create-group" element={<CreateGroup />} />
+
           <Route path="/meetings/:id" element={<MeetingsPage />} />
           <Route
             path="login/oauth2/redirect"
             element={<OAuthRedirectHandler />}
           />
+
           {/* 백엔드가 /oauth2/redirect로 리다이렉트 해주면 OAuthRedirectHandler.jsx실행 */}
         </Routes>
         {/* 조건부로 NavigationBar 렌더링 */}

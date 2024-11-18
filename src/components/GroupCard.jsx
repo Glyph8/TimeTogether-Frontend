@@ -35,14 +35,18 @@ const GroupCard = ({ group, onDelete }) => {
   }, []);
 
   const totalNumber = group.groupMembers
+
     ? group.groupMembers.split(",").length + 1
     : 1;
+
 
   return (
     <div
       className="group-card"
       onClick={() => {
+
         navigate(`/meetings/${group.groupId}?totalNumber=${totalNumber}`);
+
       }}
     >
       <img src={group.groupImg} alt="Group" className="group-image" />

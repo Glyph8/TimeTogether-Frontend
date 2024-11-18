@@ -9,6 +9,7 @@ function ColorBar({memberCount}) {
     for (let i = 0; i < memberCount; i++) {
         const ratio = i / (memberCount - 1);
         const color = interpolateColor(startColor, endColor, ratio);
+        //console.log("컬러바 색상 ", color);
         let roundLeft = 0;
         let roundRight = 0;
 

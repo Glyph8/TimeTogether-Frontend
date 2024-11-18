@@ -1,6 +1,6 @@
 // MeetingsPage.js
-import React, { useState, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import React, {useState, useEffect} from "react";
+import {useParams, useNavigate, Routes, Route} from "react-router-dom";
 import WhereToMeet from "../components/WhereToMeet";
 import "./MeetingsPage.css";
 import Header from "../components/Header";
@@ -12,8 +12,11 @@ import SelectPlaceButton from "../components/SelectPlaceButton";
 import TimetableContent from "../components/TimetableContent.jsx";
 import ConfirmLocationButton from "../components/ConfirmLocationButton.jsx";
 import LocationSimpleItemList from "../components/LocationSimpleItemList.jsx";
+import axios from "axios";
+import MeetingListPage from "./MeetingListPage.jsx";
 
 function MeetingsPage() {
+
   const { id: groupId } = useParams(); //groupid
   const [activeTab, setActiveTab] = useState("언제");
   const [locations, setLocations] = useState([]);
@@ -103,77 +106,115 @@ function MeetingsPage() {
     );
   };
 
-  // 모달 열기
-  const openModal = () => setIsModalOpen(true);
 
-  // 모달 닫기
-  const closeModal = () => setIsModalOpen(false);
-
-  // 장소 추가
-  const handleAddPlace = ({ placeName, placeUrl }) => {
-    const newPlace = {
-      locationId: locations.length + 1 + 100,
-      locationName: placeName,
-      locationUrl: placeUrl,
+    const handleConfirmLocation = (locationId) => {
+        setConfirmLocationId(locationId); // Confirm ID 설정
     };
-    setLocations((prevLocations) => [...prevLocations, newPlace]);
-  };
 
-  const handleConfirmPlace = () => {
-    setIsPlaceConfirmed(true); // 장소 확정 상태를 true로 변경
-  };
+    // 장소 삭제 함수
+    const handleDeleteLocation = (locationId) => {
+        setLocations((prevLocations) =>
+            prevLocations.filter((location) => location.locationId !== locationId)
+        );
+        setSelectedLocationIds((prevSelected) =>
+            prevSelected.filter((id) => id !== locationId)
+        );
+    };
 
-  return (
-    <div className="meetings-page">
-      {isModalOpen && (
-        <AddPlaceModal onClose={closeModal} onAddPlace={handleAddPlace} />
-      )}
-      <Header
-        title={"ExampleTeam"}
-        onBackClick={() => {
-          if (window.history.length > 1) {
-            navigate(-1);
-          } else {
-            navigate("/group"); // 기본 경로 설정
-          }
-        }}
-        onMenuClick={() => {}}
-      />
-      <TabSelector
-        selectedOption={activeTab}
-        onSelect={(option) => setActiveTab(option)}
-      />
-      <div className="tab-content">
-        {activeTab === "언제" && <TimetableContent activeTab={activeTab} />}
-        {activeTab === "어디서" && (
-          <>
-            {!isPlaceConfirmed ? (
-              <>
-                <AddPlaceButton onAddPlace={openModal} />
-                <LocationItemList
-                  totalMembers={totalNumber}
-                  locations={locations}
-                  selectedLocationIds={selectedLocationIds}
-                  onSelectLocation={handleSelectLocation}
-                  onDeleteLocation={handleDeleteLocation}
-                />
-                {isHost && <SelectPlaceButton onClick={handleConfirmPlace} />}
-              </>
-            ) : (
-              <>
-                <ConfirmLocationButton onConfrimPlace={() => {}} />
-                <LocationSimpleItemList
-                  locations={locations}
-                  selectedLocationIds={confirmLocationId}
-                  onSelectLocation={handleConfirmLocation}
-                />
-              </>
+    // 모달 열기
+    const openModal = () => setIsModalOpen(true);
+
+    // 모달 닫기
+    const closeModal = () => setIsModalOpen(false);
+
+    // 장소 추가
+    const handleAddPlace = ({placeName, placeUrl}) => {
+        const newPlace = {
+            locationId: locations.length + 1 + 100,
+            locationName: placeName,
+            locationUrl: placeUrl,
+        };
+        setLocations((prevLocations) => [...prevLocations, newPlace]);
+    };
+
+    const handleConfirmPlace = () => {
+        setIsPlaceConfirmed(true); // 장소 확정 상태를 true로 변경
+    };
+
+    return (
+        <div className="meetings-page">
+            {isModalOpen && (
+                <AddPlaceModal onClose={closeModal} onAddPlace={handleAddPlace}/>
             )}
-          </>
-        )}
-      </div>
-    </div>
-  );
+            <Header
+                title={"ExampleTeam"}
+                onBackClick={() => {
+                    if (window.history.length > 1) {
+                        navigate(-1);
+                    } else {
+                        navigate("/group"); // 기본 경로 설정
+                    }
+                }}
+                onMenuClick={() => {
+                }}
+            />
+            <TabSelector
+                selectedOption={activeTab}
+                onSelect={(option) => setActiveTab(option)}
+            />
+            <div className="tab-content">
+                {activeTab === "언제" && (//해당 그룹의 모임 리스트 출력
+                    //group/{groupID}/when
+                    <>
+                        <Routes>
+                            <Route path="/" element={
+                                <MeetingListPage whenData={whenData}/>
+                            }/>
+                            <Route path="/when/type" element={
+                                <TimetableContent
+                                    groupId={groupId}
+                                    whenData ={whenData}
+                                />}/>
+                        </Routes>
+
+                        {/*<TimetableContent*/}
+                        {/*    groupId={groupId}*/}
+                        {/*    meetType={whenData.meetType}*/}
+                        {/*    meetDTstart={whenData.meetDTstart}*/}
+                        {/*    meetDTend={whenData.meetDTend}*/}
+                        {/*/>*/}
+                    </>
+                )}
+                {activeTab === "어디서" && (
+                    <>
+                        {!isPlaceConfirmed ? (
+                            <>
+                                <AddPlaceButton onAddPlace={openModal}/>
+                                <LocationItemList
+                                    totalMembers={totalNumber}
+                                    locations={locations}
+                                    selectedLocationIds={selectedLocationIds}
+                                    onSelectLocation={handleSelectLocation}
+                                    onDeleteLocation={handleDeleteLocation}
+                                />
+                                {isHost && <SelectPlaceButton onClick={handleConfirmPlace}/>}
+                            </>
+                        ) : (
+                            <>
+                                <ConfirmLocationButton onConfrimPlace={() => {
+                                }}/>
+                                <LocationSimpleItemList
+                                    locations={locations}
+                                    selectedLocationIds={confirmLocationId}
+                                    onSelectLocation={handleConfirmLocation}
+                                />
+                            </>
+                        )}
+                    </>
+                )}
+            </div>
+        </div>
+    );
 }
 
 export default MeetingsPage;
