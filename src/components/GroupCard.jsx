@@ -34,14 +34,16 @@ const GroupCard = ({ group, onDelete }) => {
     };
   }, []);
 
+  const totalNumber = group.groupMembers
+      ? group.groupMembers.split(",").length + 1
+      : 1;
   return (
     <div
       className="group-card"
       onClick={() => {
+        const memberCount = [...group.groupMembers.split('.')].length + 1;
         navigate(
-          `/meetings/${group.groupId}?totalNumber=${
-            group.groupMembers ? group.groupMembers.split(",").length + 1 : 1
-          }`
+          `/meetings/${group.groupId}?totalNumber=${totalNumber}`
         );
       }}
     >

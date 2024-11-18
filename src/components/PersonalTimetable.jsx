@@ -1,9 +1,8 @@
 import TimeGrid from '././TimeGrid.jsx';
 import {useEffect, useState} from "react";
 
-const PersonalTimetable = ({days, timeRange}) => {
-    const [saveBtn, setAddSaveBtn] = useState(false);
-
+const PersonalTimetable = ({days, timeRange, priorityOn}) => {
+    const [selectedPriority, setSelectedPriority] = useState(2);
     useEffect(() => {
 
     }, []);
@@ -12,25 +11,29 @@ const PersonalTimetable = ({days, timeRange}) => {
         <div className="personal-timetable">
             <div className="personal-timetable-header">
                 <h3 className="section-title">내 시간표</h3>
+                <p className="section-description">가능한 시간대를 드래그해서 표시해주세요.</p>
+                {priorityOn && (
+                    <div className="priority-buttons">
+                        {[0, 1, 2].map((priority) => (
+                            <div key={priority} className="priority-item">
+                                <button
+                                    onClick={() => setSelectedPriority(priority)}//우선순위 -1로 0 1 2 처리
+                                    className={`priority-button ${selectedPriority === priority ? 'selected' : ''}`}
+                                />
+                                <span className={`priority-text ${selectedPriority === priority ? 'selected' : ''}`}>
+                                    {priority + 1}순위
+                                </span>
+                            </div>
+                        ))}
+                    </div>
+                )}
             </div>
-            <TimeGrid days={days} timeRange={timeRange}/>
-            {
-                saveBtn ? <div className="calender-priority-btn">
-                    <button className="load-calender-btn">캘린더 불러오기</button>
-                    <button className="select-priority">우선순위 선택하기</button>
-                </div> : null
-            }
-
-            <button className="add-personal-timeBtn" onClick={()=>{
-                setAddSaveBtn(!saveBtn);
-            }}>{
-                saveBtn ? <p>저장하기</p> : (
-                    <p>내 시간표 추가하기</p>
-                )
-            }</button>
+            <TimeGrid days={days} timeRange={timeRange} selectedPriority={selectedPriority}/>
         </div>
     );
 };
 
 
 export default PersonalTimetable;
+
+

@@ -6,6 +6,7 @@ import CreateGroup from "../components/CreateGroup";
 import GroupCard from "../components/GroupCard";
 import InviteModal from "../components/InviteModal";
 import DeleteModal from "../components/DeleteModal"; // DeleteModal import
+import axios from "axios";
 
 function GroupPage() {
   const [groups, setGroups] = useState([]);
@@ -70,6 +71,12 @@ function GroupPage() {
 
   useEffect(() => {
     // 새로운 배열 형식의 더미 응답 데이터
+    axios.get("http://192.168.233.205:8080/header/group/groups/view").then((response) => {
+      console.log(response.data);
+    }).catch((err)=>{
+      console.log(`groupPage에서 view요청 실패 ${err}`);
+    })
+
     const exampleResponse = {
       message: "요청에 성공했습니다.",
       httpStatus: "OK",
