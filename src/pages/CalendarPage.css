@@ -235,11 +235,13 @@
   width: 45%;
   gap: 10px;
   z-index: 1;
+  border: 1px solid black;
 }
 .year-month-selector select {
   border: none;
   font-size: 1.2rem;
   color: #404040;
+  cursor: pointer;
 }
 .year-month-selector select:focus {
   outline: none;
@@ -263,4 +265,22 @@
   max-width: 100%; /* 너비가 날짜 셀을 넘지 않도록 고정 */
   text-align: left;
   cursor: pointer;
+}
+
+.event.focused {
+  /* font-weight: bold; */
+  font-weight: bold;
+  border: 1px solid rgb(85, 85, 85);
+}
+
+.continuous-event {
+  margin: 4px auto 0 auto;
+  padding: 2px 4px;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  color: white;
+  grid-column: span 1; /* 날짜 범위에 따라 동적으로 설정 */
+  overflow: hidden;
+  white-space: nowrap; /* 텍스트 줄바꿈 방지 */
+  text-overflow: ellipsis; /* 말줄임표 (...) 표시 */
 }
