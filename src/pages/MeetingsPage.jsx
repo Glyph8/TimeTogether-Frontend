@@ -30,27 +30,52 @@ function MeetingsPage() {
     const searchParams = new URLSearchParams(location.search);
     const totalNumber = searchParams.get("totalNumber") || 1;
 
-
-    const [whenData, setWhenData] = useState({});
+    const [whenData, setWhenData] = useState([]);
+    const [whenProcessData, setWhenProcessData] = useState([]);
     useEffect(() => {
 
         const whenDataResponse = {
             code: 200,
             message: "요청에 성공하였습니다.",
             requestId: "9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d",
-            result: {
-                meetId: 10,
-                meetDTstart: "2024-10-09 14:30:00",
-                meetDTend: "2024-10-09 16:30:00",
-                meetType: "오프라인",
-                meetTitle: "산협프2 아이디어 회의",
-                meetContent: null,
-                groupName: "와쿠와쿠",
-                locationName: "투썸",
-                locationUrl: "https://search.naver.com/search.naver?where=nexearch&sm=top_hty&fbm=0&ie=utf8&query=%EA%B1%B4%EB%8C%80+%ED%88%AC%EC%8D%B8+url"
-            }
+            result: [
+                {
+                    "meetId": 8,
+                    "meetDTstart": "2024-10-09 14:30:00",
+                    "meetDTend": "2024-10-09 16:30:00",
+                    "meetType": "오프라인",
+                    "meetTitle": "산협프2 아이디어 회의",
+                    "meetContent": null,
+                    "groupName": "와쿠와쿠",
+                    "locationName": "투썸",
+                    "locationUrl": "https://search.naver.com/search.naver?where=nexearch&sm=top_hty&fbm=0&ie=utf8&query=%EA%B1%B4%EB%8C%80+%ED%88%AC%EC%8D%B8+url"
+                },
+                {
+                    "meetId": 9,
+                    "meetDTstart": "2024-10-09 14:30:00",
+                    "meetDTend": "2024-10-09 16:30:00",
+                    "meetType": "오프라인",
+                    "meetTitle": "산협프2 프론트백 연결 회의",
+                    "meetContent": null,
+                    "groupName": "와쿠와쿠",
+                    "locationName": "K큐브",
+                    "locationUrl": "https://search.naver.com/search.naver?where=nexearch&sm=top_hty&fbm=0&ie=utf8&query=%EA%B1%B4%EB%8C%80+%ED%88%AC%EC%8D%B8+url"
+                }
+            ],
+            process: [
+                {
+                    "meetId": 10,
+                    "meetTitle": "전기프2 재설계 회의",
+                },
+                {
+                    "meetId": 11,
+                    "meetTitle": "아키텍쳐 클래스 회의"
+                }
+            ],
         }
         setWhenData(whenDataResponse.result);
+        setWhenProcessData(whenDataResponse.process);
+
         console.log(totalNumber);
         const response = {
             code: 200,
@@ -175,7 +200,11 @@ function MeetingsPage() {
                         <Routes>
                             <Route path="/" element={
                                 // <MeetingListPage whenData={whenData}/>
-                                <MeetingListPage whenData={whenData}/>
+                                <MeetingListPage
+                                    whenData={whenData}
+                                    whenProcessData = {whenProcessData}
+                                    groupId={groupId}
+                                />
                             }/>
                             <Route path="/when/type" element={
                                 <TimetableContent
@@ -183,13 +212,6 @@ function MeetingsPage() {
                                     // whenData={whenData}
                                 />}/>
                         </Routes>
-
-                        {/*<TimetableContent*/}
-                        {/*    groupId={groupId}*/}
-                        {/*    meetType={whenData.meetType}*/}
-                        {/*    meetDTstart={whenData.meetDTstart}*/}
-                        {/*    meetDTend={whenData.meetDTend}*/}
-                        {/*/>*/}
                     </>
                 )}
                 {activeTab === "어디서" && (

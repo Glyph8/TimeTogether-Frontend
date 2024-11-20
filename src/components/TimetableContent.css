@@ -1,4 +1,3 @@
-
 .timetable-content {
     width: 100%;
     max-width: 100%;
@@ -19,7 +18,6 @@
 .timetable-content::-webkit-scrollbar {
     display: none;
 }
-
 
 .group-timetable {
     margin: 0;

@@ -1,6 +1,18 @@
 import {configureStore, createSlice} from "@reduxjs/toolkit";
 import personalTimetable from "./components/PersonalTimetable.jsx";
 
+let selectedGroupTimes = createSlice({
+    name : 'selectedGroupTime',
+    initialState: '09002400',
+
+    reducers:{
+        setGroupTimes(state, action){
+            console.log(action.payload);
+            return action.payload;
+        }
+    }
+})
+
 let personalTimeData = createSlice({
     name: "personalTimeData",
     initialState:
@@ -14,17 +26,10 @@ let personalTimeData = createSlice({
             return action.payload;
         },
         updateTimeValues(state, action) {
-            return state.map((user, userIndex) => {
-                return {
-                    ...user,
-                    days: user.days.map((day, dayIndex) => {
-                        return {
-                            ...day,
-                            time: action.payload[dayIndex] || day.time  // new time을 기존 time에 맞게 적용
-                        };
-                    })
-                };
-            });
+            return state.map(day => ({
+                ...day,
+                time: action.payload[state.indexOf(day)] || day.time
+            }));
         },
     }
 })
@@ -43,11 +48,13 @@ let timeOnlyData = createSlice({
 
 export let {updatePersonalTimeData, updateTimeValues} = personalTimeData.actions
 export let {updateTimeOnly} = timeOnlyData.actions
+export let {setGroupTimes} = selectedGroupTimes.actions
 
 
 export default configureStore({
     reducer: {
         personalTimeData: personalTimeData.reducer,
         timeOnlyData: timeOnlyData.reducer,
+        selectedGroupTimes: selectedGroupTimes.reducer,
     },
 });

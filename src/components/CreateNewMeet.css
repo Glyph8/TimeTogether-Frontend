@@ -1,0 +1,133 @@
+.new-meet-calendar {
+    --calendar-width: 500px;
+    --calendar-day-size: 50px;
+    width: var(--calendar-width);
+    /*width: 550px;*/
+    /*height: 550px;*/
+    background: white;
+    border-radius: 20px;
+    margin-top: 30px;
+    padding: 16px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    overflow: hidden;
+}
+
+.new-meet-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+    padding: 0 8px;
+}
+
+.new-meet-month-year {
+    font-size: 18px;
+    font-weight: 500;
+}
+
+.new-meet-nav-button {
+    background: none;
+    border: none;
+    font-size: 18px;
+    cursor: pointer;
+    padding: 0;
+    color: #333;
+}
+
+.new-meet-days-header {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    margin-bottom: 8px;
+}
+
+.new-meet-day-name {
+    text-align: center;
+    font-size: 12px;
+    padding: 4px 0;
+    color: #666;
+}
+
+.new-meet-calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 2px;
+}
+
+.new-meet-calendar-day {
+    /*width: 32px;*/
+    /*height: 32px;*/
+    width: var(--calendar-day-size);
+    height: var(--calendar-day-size);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    border-radius: 50%;
+    font-size: 13px;
+    transition: background-color 0.2s;
+    margin: auto;
+}
+
+.new-meet-calendar-day:hover {
+    background-color: #f0f0f0;
+}
+
+.new-meet-current-month {
+    color: #333;
+}
+
+.new-meet-other-month {
+    color: #ccc;
+}
+
+.new-meet-selected {
+    background-color: #6b46c1;
+    color: white !important;
+}
+
+.new-meet-selected:hover {
+    background-color: #553c9a;
+}
+
+/* Add styles for Sunday (first column) */
+.new-meet-calendar-grid > div:nth-child(7n+1) {
+    color: #e53e3e;
+}
+
+/* Add styles for Saturday (last column) */
+.new-meet-calendar-grid > div:nth-child(7n) {
+    color: #e53e3e;
+}
+
+/* Preserve red color for weekends in header */
+.new-meet-days-header > div:first-child,
+.new-meet-days-header > div:last-child {
+    color: #e53e3e;
+}
+
+.meeting-name-input {
+    border: none;
+    outline: none;
+    background: none;
+    width: 100%;
+    font-size: 18px; /* 텍스트 크기를 18px로 키움 */
+    font-weight: bold;
+    color: #555; /* 텍스트 색상 */
+}
+
+.meeting-name-input::placeholder {
+    color: #bbb; /* placeholder 색상 */
+    font-size: 18px;
+}
+
+.new-meet-day-button {
+    width: 180px;
+    height: 40px;
+    background-color: #731aef;
+    color: white;
+    padding: 5px;
+    margin: 10px;
+    border-radius: 4px;
+    border-color: #731aef;
+}
+
