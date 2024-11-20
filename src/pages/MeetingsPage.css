@@ -12,4 +12,12 @@
   padding: 0px; /* 필요에 따라 여백을 추가 */
   box-sizing: border-box; /* 패딩이 너비 계산에 포함되도록 설정 */
   overflow-y: auto;
+
+  scrollbar-width: none; /* Firefox에서 스크롤바 숨기기 */
+  -ms-overflow-style: none; /* IE 및 Edge에서 스크롤바 숨기기 */
 }
+
+.meeting-list::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Edge에서 스크롤바 숨기기 */
+}
+

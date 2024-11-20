@@ -1,12 +1,28 @@
 /* Meeting Item Container */
 .meeting-item {
-  width: 100%;
+  width: 95%;
+
   display: flex;
   flex-direction: column;
   padding-left: 15px;
   padding-right: 15px;
   margin-bottom: 25px;
   background-color: white;
+  height: 55px;
+
+  /*한 그룹 내에서 회의리스트 깔끔하게 보이게 UI 수정*/
+
+
+  /*height: auto;*/
+  /*!*height: 70px;*!*/
+  /*margin-left: 15px;*/
+  /*margin-right: 15px;*/
+  /*!*flex-grow: 0.02;*!*/
+  /*!*flex-basis: auto;*!*/
+  /*!*flex-shrink: 0;*!*/
+  /*border-bottom: 1px solid #e4e4e4;*/
+
+
 }
 
 /* Meeting Header: Status + Time in one row */
@@ -19,6 +35,7 @@
 
 /* Status (Online/Offline) */
 .meeting-status {
+  height: 100%;
   display: inline-block;
   padding: 2px 6px; /* 상태 크기 축소 */
   border-radius: 8px;

@@ -22,7 +22,7 @@ groupName: "와쿠와쿠",
 const TimetableContent = () => {
     const location = useLocation();
     //const timetableData = location.state?.timetableData;
-    const timetableData = location.state?.timetableData;
+    const timetableData = location.state?.timetableData; //MeetingListPage로부터 data 받아옴.
 
     const timetableDataForGroup = structuredClone(timetableData); //개인-그룹 시간표 영향 해결
 
@@ -71,16 +71,20 @@ const TimetableContent = () => {
                 <PersonalTimetable days={days} timeRange={timeRange} priorityOn={priorityOn}/>
                 : null}
 
-            {/*<UnderBtn */}
-            {/*    btnColorChange={btnColorChange}*/}
-            {/*    setBtnColorChange={setBtnColorChange}*/}
-            {/*    loadPersonalTime={loadPersonalTime}*/}
-            {/*    setLoadPersonalTime={setLoadPersonalTime}*/}
-            {/*></UnderBtn>*/}
-
             {
                 loadPersonalTime ? <div className="calender-priority-btn">
-                    <button className="load-calender-btn">캘린더 불러오기</button>
+                    <button className="load-calender-btn" onClick={()=>{
+                        console.log("캘린더 불러오기 요청 보내기");
+
+                        ///group/{groupId}/when/{title}/{type}/load
+                        //request :: post ::
+                        // {
+                        //     "groupId" : "101",
+                        //     "type" : "online",
+                        //     "title": "밴드 회식"
+                        // }
+
+                    }}>캘린더 불러오기</button>
                     <button className="select-priority" onClick={()=>{
                         setPriorityOn(!priorityOn);
                     }}>우선순위 선택하기</button>
@@ -91,7 +95,7 @@ const TimetableContent = () => {
                 if (!loadPersonalTime) {//'내 시간표 추가하기' 누른 경우
                     setLoadPersonalTime(true);
 
-                } else {//저장하기 상태
+                } else {//저장하기 상태에서 클릭하는 경우? 저장되었다는 의미로 버튼 색 변화
                     setBtnColorChange("save-btn")
                 }
             }}>{
@@ -99,6 +103,11 @@ const TimetableContent = () => {
                     //바뀐 내용을 내보내야함.
                     // axios.post(`group/${groupId}/when/${type}/add`)
                     //     .then(req => )
+
+                    // const timeValues = timeOnlyData.map(day => day.time);
+                    // dispatch(updateTimeValues(timeValues));
+                    // dispatch(updateTimeValues(timeOnlyData))
+
                     dispatch(updateTimeValues(timeOnlyData))
                     console.log("갱신된 시간표 정보", timeOnlyData)
                     console.log("개인시간표 정보", personalTimeData);
@@ -112,45 +121,6 @@ const TimetableContent = () => {
         </div>
     );
 };
-
-
-function UnderBtn({loadPersonalTime, setLoadPersonalTime,btnColorChange ,setBtnColorChange}){
-    if (loadPersonalTime) {
-        return (
-            <>
-                <div className="calender-priority-btn">
-                    <button className="load-calender-btn">캘린더 불러오기</button>
-                    <button className="select-priority">우선순위 선택하기</button>
-                </div>
-
-                <button className={btnColorChange} onClick={
-                    () => {
-                        setBtnColorChange("save-btn")
-                    }
-                }>
-                <p onClick={() => {
-                    //바뀐 내용을 내보내야함.
-                    // axios.post(`group/${groupId}/when/${type}/add`)
-                    //     .then(req => )
-                    console.log("개인시간표 정보", );
-                }}>저장하기</p>
-
-                </button>
-            </>
-        )
-    }
-    else{
-        return (
-            <button className={btnColorChange} onClick={
-                () => {
-                    setLoadPersonalTime(true);
-                }
-            }>
-            <p>내 시간표 추가하기</p>
-            </button>
-        )
-    }
-}
 
 function createEmptyTimes(timetableData) {//groupTimeTable에도 있음.
     const emptyTimes = timetableData.users[0].days;
