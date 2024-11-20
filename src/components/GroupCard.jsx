@@ -41,7 +41,6 @@ const GroupCard = ({ group, onDelete }) => {
   }, []);
 
   const totalNumber = group.groupMembers
-
     ? group.groupMembers.split(",").length + 1
     : 1;
 
@@ -61,17 +60,17 @@ const GroupCard = ({ group, onDelete }) => {
       className="group-card"
       onClick={() => {
         //각 그룹 카드 클릭 시
-        
+
         //loadMeetings(group.groupId); /group/{groupId}/meet 요청
         //dispatch(setGroupTimes(group.groupTimes)); //그룹이 생성될 때 설정한 groupTimes state값으로 설정
-        
+
         navigate(`/meetings/${group.groupId}?totalNumber=${totalNumber}`); //MeetingsPage로 navigate
       }}
     >
       <img src={group.groupImg} alt="Group" className="group-image" />
       <div className="group-info">
         <h3>{group.groupName}</h3>
-        <p className="group-description">{group.groupTitle}</p>
+        <p className="group-description">{group.groupIntro}</p>
         <p className="group-members">{group.groupMembers}</p>
       </div>
       <div className="group-actions">
@@ -84,7 +83,7 @@ const GroupCard = ({ group, onDelete }) => {
           <FaUserPlus className="icon share-icon" title="Share" />
           {/* <FaShare className="icon share-icon" title="Share" /> */}
           {isPopoverOpen && (
-            <SharePopover inviteCode="1234-5678-ABCD" onClose={closePopover} />
+            <SharePopover inviteCode={group.url} onClose={closePopover} />
           )}
         </div>
 

@@ -1,0 +1,15 @@
+.back-button {
+  font-size: 1em; /* 아이콘 크기 */
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #333; /* 아이콘 색상 */
+  display: flex;
+  align-items: center;
+  padding: 0;
+  margin-right: 0px; /* 제목과의 간격 */
+}
+
+.back-button:hover {
+  color: #666; /* 호버 시 색상 변경 */
+}

@@ -50,6 +50,7 @@ export let {updatePersonalTimeData, updateTimeValues} = personalTimeData.actions
 export let {updateTimeOnly} = timeOnlyData.actions
 export let {setGroupTimes} = selectedGroupTimes.actions
 
+
 export default configureStore({
     reducer: {
         personalTimeData: personalTimeData.reducer,

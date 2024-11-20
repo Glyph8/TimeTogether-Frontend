@@ -247,7 +247,7 @@ const MeetingScheduleItem = ({ meeting, groupId }) => {
               })}
           </div>
       </div>
-        {locationName && <div className="meeting-location">{locationName}</div>}
+      {locationName && <div className="meeting-location">{locationName}</div>}
     </div>
   );
 };

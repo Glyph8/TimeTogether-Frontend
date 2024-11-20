@@ -33,6 +33,7 @@ function MeetingsPage() {
     const [whenData, setWhenData] = useState([]);
     const [whenProcessData, setWhenProcessData] = useState([]);
     useEffect(() => {
+
         const whenDataResponse = {
             code: 200,
             message: "요청에 성공하였습니다.",
@@ -194,6 +195,7 @@ function MeetingsPage() {
             />
             <div className="tab-content">
                 {activeTab === "언제" && (//해당 그룹의 모임 리스트 출력
+                    //group/{groupID}/when
                     <>
                         <Routes>
                             <Route path="/" element={
