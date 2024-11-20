@@ -1,30 +1,14 @@
-import React, { useState, useEffect } from "react";
-import {
-  useParams,
-  useNavigate,
-  Routes,
-  Route,
-  useLocation,
-} from "react-router-dom";
-import MeetingScheduleItemList from "../components/MeetingScheduleItemList.jsx";
-import CreateNewMeet from "../components/CreateNewMeet.jsx";
-import MeetingScheduleItem from "../components/MeetingScheduleItem.jsx";
-import MeetingGroupScheduleItem from "../components/MeetingGroupScheduleItem.jsx";
-import MeetList from "../components/MeetList.jsx";
+import React from "react";
+import "./MeetingScheduleItem.css";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
-const MeetingListPage = () => {
-  const { groupId } = useParams(); //groupId
-  const location = useLocation();
-  const searchParams = new URLSearchParams(location.search);
-  const totalNumber = searchParams.get("totalNumber") || 1;
-  const isMgr = searchParams.get("isMgr") || false;
-  const [makeNewMeeting, setMakeNewMeeting] = useState(false);
+const MeetingGroupScheduleItem = ({ onMeetingNavigate, meeting, groupId }) => {
+  const { meetTitle, meetDTstart, meetDTend, meetType, locationName } = meeting;
   const navigate = useNavigate();
-
   const loadMeetingInfo = () => {
     //const response = await axios.get("기존 시간표 내용 요청");
-
-    console.log("loadmeetingInfo");
+    console.log("load meetingInfo");
     const response = {
       code: 200,
       message: "요청에 성공하였습니다.",
@@ -217,38 +201,36 @@ const MeetingListPage = () => {
   };
 
   return (
-    <div className="group-page" style={{ overflowY: "auto" }}>
-      <header
-        className="group-header"
-        style={{ borderBottom: `5px solid #e4e4e4` }}
-      >
-        <h2>모임 일정</h2>
-      </header>
+    <div className="meeting-item" onClick={onMeetingNavigate}>
+      <div className="meeting-header">
+        <div
+          className={`meeting-status ${
+            meetType === "온라인" ? "online" : "offline"
+          }`}
+        >
+          {meetType}
+        </div>
 
-      {makeNewMeeting ? (
-        <CreateNewMeet />
-      ) : (
-        <>
-          {/* <MeetList
-            groupId={groupId}
-            totalNumber={totalNumber}
-            isMgr={isMgr}
-            whenData={whenData}
-            whenProcessData={whenProcessData}
-          /> */}
-
-          <button
-            className="new-meet-day-button"
-            onClick={() => {
-              setMakeNewMeeting(!makeNewMeeting);
-            }}
-          >
-            모임날짜 추가하기
-          </button>
-        </>
-      )}
+        <div className="meeting-time">
+          {new Date(meetDTstart).toLocaleDateString("ko-KR", {
+            month: "2-digit",
+            day: "2-digit",
+            weekday: "short",
+          })}{" "}
+          {new Date(meetDTstart).toLocaleTimeString("ko-KR", {
+            hour: "2-digit",
+            minute: "2-digit",
+          })}{" "}
+          ~{" "}
+          {new Date(meetDTend).toLocaleTimeString("ko-KR", {
+            hour: "2-digit",
+            minute: "2-digit",
+          })}
+        </div>
+      </div>
+      {locationName && <div className="meeting-location">{locationName}</div>}
     </div>
   );
 };
 
-export default MeetingListPage;
+export default MeetingGroupScheduleItem;

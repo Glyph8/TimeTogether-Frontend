@@ -13,10 +13,10 @@ const LocationItemList = ({
     <ul className="location-list">
       {locations.map((location) => (
         <LocationItem
-          key={location.locationId}
-          locationId={location.locationId}
-          locationName={location.locationName}
-          url={location.locationUrl}
+          key={location.groupWhereId}
+          locationId={location.groupWhereId}
+          locationName={location.groupLocationName}
+          url={location.groupWhereUrl}
           attendanceCount={location.count} // 서버에서 받아오는 데이터
           totalMembers={totalMembers} // 그룹의 총 인원 수
           isSelected={selectedLocationIds.includes(location.locationId)}
