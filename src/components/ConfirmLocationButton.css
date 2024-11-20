@@ -1,0 +1,30 @@
+.button-component {
+  width: 100%;
+  max-width: none;
+  padding-top: 15px;
+  padding-bottom: 15px;
+  background-color: #fff;
+  cursor: pointer;
+  text-align: center;
+  border-bottom: 5px solid #eee;
+}
+
+.button-header {
+  display: flex;
+  justify-content: center; /* title을 가운데 정렬 */
+  align-items: center;
+  padding-bottom: 8px;
+  position: relative; /* icon을 절대 위치로 설정하기 위한 기준 */
+}
+
+.button-title {
+  font-size: 1.5em;
+  font-weight: bold;
+  color: #333;
+}
+
+.button-subtitle {
+  font-size: 1em;
+  color: #777;
+  margin-top: 5px;
+}

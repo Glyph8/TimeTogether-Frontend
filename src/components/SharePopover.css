@@ -1,0 +1,85 @@
+.share-popover {
+  position: absolute;
+  top: 30px; /* 아이콘 아래에 배치 */
+  right: -40px;
+  width: 22rem;
+  /* background-color: #a26af0; */
+  /* background-color: rgb(59, 59, 59); */
+  background-color: white;
+  padding: 10px;
+  border: 1px solid #404040;
+  /* border: gray; */
+  border-radius: 8px;
+  z-index: 1000;
+}
+
+.invite-code-text {
+  font-size: 1rem;
+  color: #404040;
+  /* color: white; */
+  margin-left: 0.4rem;
+  margin-bottom: 8px;
+  font-weight: bold;
+}
+.invite-code-text2 {
+  display: inline-flex;
+  font-size: 1rem;
+  color: #404040;
+  /* color: white; */
+  /* margin-left: 0.4rem;
+  margin-bottom: 8px; */
+  font-weight: bold;
+  position: relative;
+  left: 30px;
+}
+
+.copy-button {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 8px;
+  background-color: #e6e6e6;
+  color: rgb(160, 160, 160);
+  /* background-color: white;
+  color: rgb(59, 59, 59); */
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.8rem;
+  margin-left: 1rem;
+  position: absolute;
+  right: 10px;
+  top: 7px;
+}
+
+.copy-icon {
+  margin-right: 4px;
+}
+
+.copy-button:focus {
+  outline: none;
+}
+
+@media (max-width: 767px) {
+  /*모바일 화면*/
+  .share-popover {
+    width: 19rem;
+  }
+  .invite-code-text {
+    font-size: 0.85rem;
+  }
+  .copy-button {
+    font-size: 0.6rem;
+  }
+}
+@media (max-width: 374px) {
+  /*더 작은 모바일 화면*/
+  .share-popover {
+    width: 18rem;
+  }
+  .invite-code-text {
+    font-size: 0.8rem;
+  }
+  .copy-button {
+    font-size: 0.6rem;
+  }
+}

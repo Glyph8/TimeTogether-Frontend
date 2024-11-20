@@ -1,0 +1,18 @@
+.wheretomeet {
+  width: 100%; /* 화면 너비의 50%로 설정 */
+  height: 100vh; /* 화면 높이를 모두 채우도록 설정 */
+  max-width: none;
+  margin: 0 auto;
+  background-color: #fff;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 모바일 환경을 위해 기본 크기를 설정 */
+@media (max-width: 600px) {
+  .wheretomeet {
+    width: 90%;
+    max-width: 390px; /* 작은 화면에서는 390px로 제한 */
+  }
+}

@@ -1,0 +1,22 @@
+.group-item-list {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px; /* 아이템 간 간격 */
+  padding: 10px 0;
+  overflow-y: auto; /* 스크롤 가능 */
+  scrollbar-width: none; /* Firefox에서 스크롤바 숨기기 */
+  -ms-overflow-style: none; /* IE 및 Edge에서 스크롤바 숨기기 */
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+.group-item-list::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Edge에서 스크롤바 숨기기 */
+}
+
+.group-item-list {
+  border-right: 2px solid #eee; /* 오른쪽에 회색 선 추가 */
+  margin-right: 20px;
+}
