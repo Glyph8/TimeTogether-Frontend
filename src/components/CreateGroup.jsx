@@ -175,18 +175,56 @@ const CreateGroup = () => {
     }
   };
 
-  // 그룹 생성 요청 함수
+  // // 그룹 생성 요청 함수
+  // const handleCreateGroup = async () => {
+  //   const accessToken = localStorage.getItem("accessToken");
+
+  //   // 사용자가 이미지를 업로드하지 않았다면 랜덤 이미지 설정
+  //   if (!groupImg) {
+  //     setGroupImg(getRandomImage());
+  //   }
+
+  //   console.log(groupName);
+  //   console.log(groupIntro);
+  //   console.log(groupImg);
+  //   console.log("백엔드 전송시작");
+
+  //   try {
+  //     const response = await axios.post(
+  //       "http://192.168.233.218:8080/group/create",
+  //       {
+  //         groupName: groupName,
+  //         groupIntro: groupIntro,
+  //         groupImg: groupImg, // Data URL 또는 랜덤 이미지 URL로 전송
+  //       },
+  //       {
+  //         headers: {
+  //           Authorization: `Bearer ${accessToken}`,
+  //         },
+  //       }
+  //     );
+
+  //     if (response.data.httpStatus === "OK") {
+  //       console.log("그룹 생성 성공:", response.data);
+  //       navigate("/group");
+  //     }
+  //   } catch (error) {
+  //     if (error.response && error.response.data) {
+  //       console.error("그룹 생성 실패:", error.response.data);
+  //     } else {
+  //       console.error("요청 중 오류 발생:", error);
+  //     }
+  //   }
+  // };
   const handleCreateGroup = async () => {
     const accessToken = localStorage.getItem("accessToken");
 
-    // 사용자가 이미지를 업로드하지 않았다면 랜덤 이미지 설정
-    if (!groupImg) {
-      setGroupImg(getRandomImage());
-    }
+    // 랜덤 이미지 또는 사용자가 업로드한 이미지를 설정
+    const finalGroupImg = groupImg || getRandomImage();
 
     console.log(groupName);
     console.log(groupIntro);
-    console.log(groupImg);
+    console.log(finalGroupImg);
     console.log("백엔드 전송시작");
 
     try {
@@ -195,7 +233,7 @@ const CreateGroup = () => {
         {
           groupName: groupName,
           groupIntro: groupIntro,
-          groupImg: groupImg, // Data URL 또는 랜덤 이미지 URL로 전송
+          groupImg: finalGroupImg, // finalGroupImg를 직접 전송
         },
         {
           headers: {

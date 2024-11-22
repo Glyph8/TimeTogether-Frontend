@@ -4,15 +4,15 @@ import { FaTrash, FaShare, FaUserPlus } from "react-icons/fa";
 import SharePopover from "./SharePopover";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import {useDispatch, useSelector} from "react-redux";
-import {setGroupTimes} from "../store.js";
+import { useDispatch, useSelector } from "react-redux";
+import { setGroupTimes } from "../store.js";
 
 const GroupCard = ({ group, onDelete }) => {
   const [isPopoverOpen, setIsPopoverOpen] = useState(false);
   const popoverRef = useRef(null); // Popover와 공유 아이콘을 감지하기 위한 ref
   const navigate = useNavigate();
 
-  const selectedGroupTimes = useSelector(state => state.selectedGroupTimes);
+  const selectedGroupTimes = useSelector((state) => state.selectedGroupTimes);
   let dispatch = useDispatch();
 
   const togglePopover = (e) => {
@@ -44,15 +44,19 @@ const GroupCard = ({ group, onDelete }) => {
     ? group.groupMembers.split(",").length + 1
     : 1;
 
-
   const loadMeetings = async (groupId) => {
-    axios.get(`group/${groupId}/meet`).then((res)=>{
-      const responseData = res.data.data.meetTableDTO;
-      console.log(responseData);
-      navigate(`/meetings/${group.groupId}?totalNumber=${totalNumber}`, {state: responseData});
-    }).catch((err)=>{
-      console.log(`GroupCard에서 회의 리스트 요청실패 ${err}`);
-    })
+    axios
+      .get(`group/${groupId}/meet`)
+      .then((res) => {
+        const responseData = res.data.data.meetTableDTO;
+        console.log(responseData);
+        navigate(`/meetings/${group.groupId}?totalNumber=${totalNumber}`, {
+          state: responseData,
+        });
+      })
+      .catch((err) => {
+        console.log(`GroupCard에서 회의 리스트 요청실패 ${err}`);
+      });
   };
 
   return (

@@ -23,7 +23,7 @@ const DeleteModal = ({
         : `/group/${groupId}/leave`; // 일반 사용자일 경우 그룹 나가기
       console.log(endpoint);
       const response = await axios.delete(
-        `http://192.168.233.218:8080${endpoint}`,
+        `http://192.168.186.162:8080${endpoint}`,
         {
           headers: {
             Authorization: `Bearer ${accessToken}`,
@@ -32,14 +32,15 @@ const DeleteModal = ({
       );
       console.log(response.data);
       if (response.data.httpStatus === "OK") {
-        alert(response.data.data || "요청이 성공적으로 처리되었습니다."); // 성공 메시지
+        alert(response.data.message || "요청이 성공적으로 처리되었습니다."); // 성공 메시지
         onConfirm(); // 모달 닫기 및 부모 컴포넌트 처리
         navigate("/group"); // 그룹 페이지로 이동
       } else {
         throw new Error(response.data.message || "요청 처리에 실패했습니다."); // 실패 시 에러 처리
       }
     } catch (error) {
-      if (error.response && error.response.data.message) {
+      // if (error.response && error.response.data.message) {
+      if (response.data.httpStatus === "NOT_FOUND") {
         setErrorMessage(error.response.data.message); // 에러 메시지 표시
       } else {
         setErrorMessage("알 수 없는 오류가 발생했습니다."); // 기타 오류 처리

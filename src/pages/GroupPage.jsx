@@ -18,51 +18,56 @@ function GroupPage() {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false); // 삭제 모달 열림 상태
   const [selectedGroup, setSelectedGroup] = useState(null); // 삭제할 그룹 정보
 
-  // useEffect(() => { // 실제 백엔드 연결코드
-  //   const fetchGroups = async () => {
-  //     // console.log("액세스 토큰: ", { accessToken });
-  //     console.log("fetchGroups 함수 호출됨");
+  useEffect(() => {
+    // 실제 백엔드 연결코드
+    const fetchGroups = async () => {
+      // console.log("액세스 토큰: ", { accessToken });
+      console.log("fetchGroups 함수 호출됨");
 
-  //     try {
-  //       const response = await axios.get(
-  //         "http://192.168.233.218:8080/group/groups/view",
-  //         {
-  //           headers: {
-  //             Authorization: `Bearer ${accessToken}`,
-  //           },
-  //         }
-  //       );
+      try {
+        const response = await axios.get(
+          "http://192.168.233.218:8080/group/groups/view",
+          {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
+          }
+        );
 
-  //       if (response.data.httpStatus === "OK") {
-  //         console.log("응답 데이터:", response.data);
+        if (response.data.httpStatus === "OK") {
+          console.log("응답 데이터:", response.data);
 
-  //         // 새로운 데이터 구조에 맞게 변환
-  //         const formattedData = response.data.data.map((group) => ({
-  //           groupId: group.groupId,
-  //           groupName: group.groupName,
-  //           groupIntro: group.groupIntro,
-  //           groupImg: group.groupImg,
-  //           mgr: group.mgr,
-  //           url: group.groupUrl,
-  //           members: group.userNameResponseList.map((user) => user.userName), // userNameResponseList에서 userName 추출
-  //         }));
+          // 새로운 데이터 구조에 맞게 변환
+          const formattedData = response.data.data.map((group) => ({
+            groupId: group.groupId,
+            groupName: group.groupName,
+            groupIntro: group.groupIntro,
+            groupImg: group.groupImg,
+            mgr: group.mgr,
+            url: group.groupUrl,
+            // members: group.userNameResponseList.map((user) => user.userName), // userNameResponseList에서 userName 추출
+            groupMembers: group.userNameResponseList
+              ? group.userNameResponseList
+                  .map((user) => user.userName)
+                  .join(", ")
+              : "No Members",
+          }));
 
-  //         setGroups(formattedData);
-  //         console.log(groups);
-  //       }
-  //     } catch (error) {
-  //       console.error("그룹 데이터를 가져오는 중 오류 발생:", error);
+          setGroups(formattedData);
+        }
+      } catch (error) {
+        console.error("그룹 데이터를 가져오는 중 오류 발생:", error);
 
-  //       // 에러 응답 처리
-  //       if (error.response) {
-  //         console.error("응답 코드:", error.response.status);
-  //         console.error("응답 메시지:", error.response.data.message);
-  //       }
-  //     }
-  //   };
+        // 에러 응답 처리
+        if (error.response) {
+          console.error("응답 코드:", error.response.status);
+          console.error("응답 메시지:", error.response.data.message);
+        }
+      }
+    };
 
-  //   fetchGroups();
-  // }, []);
+    fetchGroups();
+  }, []);
 
   useEffect(() => {
     // 새로운 배열 형식의 더미 응답 데이터
@@ -97,7 +102,7 @@ function GroupPage() {
           groupIntro: "미야옹 월드",
           groupImg:
             "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSJDsEehUFFYoZno3N0UGUrInuTXBK4adOXPw&s",
-          groupMembers: null,
+          groupMembers: "Alice, Bob",
           groupMgrId: "100682045992698191363",
           mgr: false,
           url: "hijklmnop",
@@ -108,7 +113,7 @@ function GroupPage() {
           groupIntro: "미야옹 월드",
           groupImg:
             "https://image.utoimage.com/preview/cp872722/2021/10/202110001984_500.jpg",
-          groupMembers: null,
+          groupMembers: "김OO",
           groupMgrId: "100682045992698191363",
         },
         {
@@ -176,6 +181,7 @@ function GroupPage() {
               <GroupCard
                 key={group.groupId}
                 group={group}
+                groups={groups}
                 onDelete={() => openDeleteModal(group)} // 삭제 버튼 클릭 시 삭제 모달 열기
               />
             ))

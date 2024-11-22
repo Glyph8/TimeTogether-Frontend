@@ -34,7 +34,7 @@ function Login() {
           <img className="social-button" src={kakao} alt="카카오로 시작" />
         </a> */}
         <a
-          href="http://192.168.233.218:8080/oauth2/authorization/kakao"
+          href="http://192.168.186.162:8080/oauth2/authorization/kakao"
           target="_self"
           rel="noopener noreferrer"
         >

@@ -304,7 +304,7 @@ function sendTokenToBackend(token, isAccessToken = true) {
   console.log(`${tokenType} 토큰을 백엔드에 전송합니다.`);
 
   axios
-    .get("http://192.168.233.218:8080/header", {
+    .get("http://192.168.186.162:8080/header", {
       headers: {
         Authorization: `Bearer ${token}`,
       },
