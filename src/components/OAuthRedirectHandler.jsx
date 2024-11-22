@@ -280,6 +280,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import {useSelector} from "react-redux";
 
 // 로컬 스토리지에 토큰 저장
 function saveTokensToLocalStorage(accessToken, refreshToken) {
@@ -304,7 +305,7 @@ function sendTokenToBackend(token, isAccessToken = true) {
   console.log(`${tokenType} 토큰을 백엔드에 전송합니다.`);
 
   axios
-    .get("http://192.168.233.218:8080/header", {
+    .get("http://192.168.15.181:8080/header", {
       headers: {
         Authorization: `Bearer ${token}`,
       },

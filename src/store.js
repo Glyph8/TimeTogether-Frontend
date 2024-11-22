@@ -1,6 +1,12 @@
 import {configureStore, createSlice} from "@reduxjs/toolkit";
 import personalTimetable from "./components/PersonalTimetable.jsx";
 
+let testip = createSlice({//백엔드 ip Login.jsx제외!
+    name : 'testip',
+    initialState: 'http://192.168.166.198:8080'
+})
+
+
 let selectedGroupTimes = createSlice({
     name : 'selectedGroupTime',
     initialState: '09002400',
@@ -56,5 +62,6 @@ export default configureStore({
         personalTimeData: personalTimeData.reducer,
         timeOnlyData: timeOnlyData.reducer,
         selectedGroupTimes: selectedGroupTimes.reducer,
+        testip: testip.reducer,
     },
 });

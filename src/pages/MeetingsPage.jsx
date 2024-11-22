@@ -1,6 +1,6 @@
 // MeetingsPage.js
 import React, {useState, useEffect} from "react";
-import {useParams, useNavigate, Routes, Route} from "react-router-dom";
+import {useParams, useNavigate, Routes, Route, useLocation} from "react-router-dom";
 import WhereToMeet from "../components/WhereToMeet";
 import "./MeetingsPage.css";
 import Header from "../components/Header";
@@ -14,10 +14,13 @@ import ConfirmLocationButton from "../components/ConfirmLocationButton.jsx";
 import LocationSimpleItemList from "../components/LocationSimpleItemList.jsx";
 import axios from "axios";
 import MeetingListPage from "./MeetingListPage.jsx";
+import {useSelector} from "react-redux";
 
 function MeetingsPage() {
 
     const {id: groupId} = useParams(); //groupid
+    const location = useLocation();
+
     const [activeTab, setActiveTab] = useState("언제");
     const [locations, setLocations] = useState([]);
     const [confirmLocationId, setConfirmLocationId] = useState(null);
@@ -27,12 +30,30 @@ function MeetingsPage() {
     const [isPlaceConfirmed, setIsPlaceConfirmed] = useState(false);
     const navigate = useNavigate();
 
+    const accessToken = localStorage.getItem("accessToken");
+    const refreshToken = localStorage.getItem("refreshToken");
+
     const searchParams = new URLSearchParams(location.search);
     const totalNumber = searchParams.get("totalNumber") || 1;
 
     const [whenData, setWhenData] = useState([]);
     const [whenProcessData, setWhenProcessData] = useState([]);
+
     useEffect(() => {
+        //연결 성공
+        // const whenDataResponse = axios.get(`http://192.168.166.198:8080/group/${groupId}/meet`, {
+        //         headers: {
+        //             Authorization: `Bearer ${accessToken}`,
+        //         },
+        //     })
+        //     .then((res) => {
+        //         const responseData = res.data.data;
+        //         console.log(responseData);
+        //         setWhenData(whenDataResponse.result);
+        //         setWhenProcessData(whenDataResponse.meeting);
+        //     }).catch((err) => {
+        //         console.log(`GroupCard에서 회의 리스트 요청실패 ${err}`);
+        //     })
 
         const whenDataResponse = {
             code: 200,
@@ -43,8 +64,8 @@ function MeetingsPage() {
                     "meetId": 8,
                     "meetDTstart": "2024-10-09 14:30:00",
                     "meetDTend": "2024-10-09 16:30:00",
-                    "meetType": "오프라인",
-                    "meetTitle": "산협프2 아이디어 회의",
+                    "meetType": "OFFLINE",
+                    "meetTitle": "test",
                     "meetContent": null,
                     "groupName": "와쿠와쿠",
                     "locationName": "투썸",
@@ -54,8 +75,20 @@ function MeetingsPage() {
                     "meetId": 9,
                     "meetDTstart": "2024-10-09 14:30:00",
                     "meetDTend": "2024-10-09 16:30:00",
-                    "meetType": "오프라인",
-                    "meetTitle": "산협프2 프론트백 연결 회의",
+                    "meetType": "OFFLINE",
+                    "meetTitle": "test1",
+                    "meetContent": null,
+                    "groupName": "와쿠와쿠",
+                    "locationName": "K큐브",
+                    "locationUrl": "https://search.naver.com/search.naver?where=nexearch&sm=top_hty&fbm=0&ie=utf8&query=%EA%B1%B4%EB%8C%80+%ED%88%AC%EC%8D%B8+url"
+                }
+                ,
+                {
+                    "meetId": 10,
+                    "meetDTstart": "2024-10-09 14:30:00",
+                    "meetDTend": "2024-10-09 16:30:00",
+                    "meetType": "OFFLINE",
+                    "meetTitle": "final",
                     "meetContent": null,
                     "groupName": "와쿠와쿠",
                     "locationName": "K큐브",
@@ -65,18 +98,21 @@ function MeetingsPage() {
             process: [
                 {
                     "meetId": 10,
-                    "meetTitle": "전기프2 재설계 회의",
+                    "meetTitle": "abc",
+                    "meetType": "OFFLINE"
                 },
                 {
                     "meetId": 11,
-                    "meetTitle": "아키텍쳐 클래스 회의"
+                    "meetTitle": "아키텍쳐 클래스 회의",
+                    "meetType": "OFFLINE"
                 }
             ],
         }
         setWhenData(whenDataResponse.result);
         setWhenProcessData(whenDataResponse.process);
 
-        console.log(totalNumber);
+        //여기까지 회의 리스트 더미데이터
+
         const response = {
             code: 200,
             message: "요청에 성공하였습니다.",
@@ -102,7 +138,7 @@ function MeetingsPage() {
             ],
         };
         setLocations(response.candidates); // 서버 응답 데이터를 상태로 설정
-    }, [totalNumber]);
+    }, [accessToken, groupId, totalNumber]);
 
     //   useEffect(() => {
     //     const fetchLocations = async () => {
@@ -136,7 +172,6 @@ function MeetingsPage() {
             }
         });
     };
-
 
     const handleConfirmLocation = (locationId) => {
         setConfirmLocationId(locationId); // Confirm ID 설정
@@ -202,14 +237,22 @@ function MeetingsPage() {
                                 // <MeetingListPage whenData={whenData}/>
                                 <MeetingListPage
                                     whenData={whenData}
-                                    whenProcessData = {whenProcessData}
+                                    whenProcessData={whenProcessData}
                                     groupId={groupId}
                                 />
                             }/>
-                            <Route path="/when/type" element={
+
+                            {/*<Route path="/when/type" element={*/}
+                            {/*    <TimetableContent*/}
+                            {/*        groupId={groupId}*/}
+                            {/*    />}/>*/}
+
+                            <Route path='when/:meetTitle/:meetType' element={
+                            /* <Route path='/when/:groupId/:meetTitle/:meetType' element={*/
+                            /*<Route path='/when/:meetTitle/:meetType' element={*/
+                             // <Route path='/group/:groupId/when/:meetTitle/:meetType' element={
                                 <TimetableContent
                                     groupId={groupId}
-                                    // whenData={whenData}
                                 />}/>
                         </Routes>
                     </>

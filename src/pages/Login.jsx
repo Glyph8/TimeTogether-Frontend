@@ -6,6 +6,7 @@ import logo from "../img/logo.png";
 import kakao from "../img/kakao.png";
 import naver from "../img/naver.png";
 import google from "../img/google.png";
+import {useSelector} from "react-redux";
 
 function Login() {
   const navigate = useNavigate();
@@ -34,7 +35,7 @@ function Login() {
           <img className="social-button" src={kakao} alt="카카오로 시작" />
         </a> */}
         <a
-          href="http://192.168.233.218:8080/oauth2/authorization/kakao"
+          href="http://192.168.166.198:8080/oauth2/authorization/kakao"//testIP state 불가
           target="_self"
           rel="noopener noreferrer"
         >

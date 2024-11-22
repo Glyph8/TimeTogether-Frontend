@@ -45,26 +45,15 @@ const GroupCard = ({ group, onDelete }) => {
     : 1;
 
 
-  const loadMeetings = async (groupId) => {
-    axios.get(`group/${groupId}/meet`).then((res)=>{
-      const responseData = res.data.data.meetTableDTO;
-      console.log(responseData);
-      navigate(`/meetings/${group.groupId}?totalNumber=${totalNumber}`, {state: responseData});
-    }).catch((err)=>{
-      console.log(`GroupCard에서 회의 리스트 요청실패 ${err}`);
-    })
-  };
-
   return (
     <div
       className="group-card"
       onClick={() => {
         //각 그룹 카드 클릭 시
-
-        //loadMeetings(group.groupId); /group/{groupId}/meet 요청
+        ///group/{groupId}/meet 요청
         //dispatch(setGroupTimes(group.groupTimes)); //그룹이 생성될 때 설정한 groupTimes state값으로 설정
-
-        navigate(`/meetings/${group.groupId}?totalNumber=${totalNumber}`); //MeetingsPage로 navigate
+        // navigate(`/meetings/${group.groupId}?totalNumber=${totalNumber}`); //MeetingsPage로 navigate
+        navigate(`/group/${group.groupId}`); //MeetingsPage로 navigate
       }}
     >
       <img src={group.groupImg} alt="Group" className="group-image" />

@@ -1,16 +1,21 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import './CreateNewMeet.css'
 import {useNavigate} from "react-router-dom";
 import {useSelector} from "react-redux";
+import axios from "axios";
 
-
-
-function CreateNewMeet() {
+function CreateNewMeet({groupId, setMakeNewMeeting}) {
     const [currentDate, setCurrentDate] = useState(new Date());
     const [selectedDates, setSelectedDates] = useState([]);
     const [readyToNaming, setReadyToNaming] = useState(false);
     const [newMeetTitle, setNewMeetTitle] = useState('');
     const selectedGroupTimes = useSelector(state => state.selectedGroupTimes);
+
+    const testip = useSelector(state => state.testip);//test용 백 ip
+
+    const accessToken = localStorage.getItem("accessToken");
+    const refreshToken = localStorage.getItem("refreshToken");
+
     const navigate = useNavigate();
 
     const months = [
@@ -20,7 +25,6 @@ function CreateNewMeet() {
 
     const days = ["일", "월", "화", "수", "목", "금", "토"];
 
-    // Get days in month
     const getDaysInMonth = (date) => {
         const year = date.getFullYear();
         const month = date.getMonth();
@@ -168,6 +172,10 @@ function CreateNewMeet() {
         });
     }
 
+    useEffect(() => {
+
+    }, []);
+
     return (
         <div className="new-meet-calendar">
             <div className="new-meet-header">
@@ -215,12 +223,28 @@ function CreateNewMeet() {
                         //checkDupMeetName(); //기존 회의명과 중복 여부 판단 -> meetID있으면 필요 없는듯?
                         if(newMeetTitle.length > 0 && selectedDates.length > 0){
                             const formatedDate = changeDateFormat(selectedDates)
-                            const weekDays = makeDays(selectedDates);
-                            console.log("회의 이름 : ", newMeetTitle);
-                            console.log("선택한 날짜들 : ", formatedDate);
-                            console.log("선택한 날짜들 원본 : ", selectedDates);
-                            console.log("요일들 : ", makeDays(selectedDates));
-                            createNewMeeting(formatedDate, weekDays);
+
+                            //새 회의 생성 연결 성공
+                            axios.post(
+                                `${testip}/group/${groupId}/meet/${newMeetTitle}/add`
+                                // `http://192.168.164.228:8080/group/${groupId}/meet/${newMeetTitle}/add`
+                                , formatedDate,
+                                {
+                                    headers:
+                                        {
+                                            Authorization: `Bearer ${accessToken}`
+                                        }
+                                }
+                            ).then((res)=>{
+                                console.log(res.data);
+                                setMakeNewMeeting(false);
+                                // navigate(-1);
+                            }).catch((err)=>{
+                                console.log(`CreateNewMeet에서 회의 리스트 요청실패 ${err}`);
+
+                            })
+
+                            //createNewMeeting(formatedDate, weekDays);
                         }
                         else{
                             //날짜 추가선택, 회의 이름 입력 안내 -> 팝업? 입력창 border red로?

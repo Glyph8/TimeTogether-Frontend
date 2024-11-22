@@ -39,7 +39,8 @@ function App() {
           <Route path="/mypage" element={<MyPage />} />
           <Route path="/create-group" element={<CreateGroup />} />
 
-          <Route path="/meetings/:id/*" element={<MeetingsPage />} />
+          {/*<Route path="/meetings/:id/*" element={<MeetingsPage />} />*/}
+          <Route path="/group/:id/*" element={<MeetingsPage />} />
           <Route
             path="login/oauth2/redirect"
             element={<OAuthRedirectHandler />}

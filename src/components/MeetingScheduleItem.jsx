@@ -2,17 +2,21 @@ import React from "react";
 import "./MeetingScheduleItem.css";
 import {useNavigate} from "react-router-dom";
 import axios from "axios";
+import {useSelector} from "react-redux";
 
-const MeetingScheduleItem = ({ meeting, groupId }) => {
+const MeetingScheduleItem = ({meeting, groupId}) => {
+    console.log("testttt", groupId)
+    const accessToken = localStorage.getItem("accessToken");
+    const refreshToken = localStorage.getItem("refreshToken");
+    const {meetTitle, meetDTstart, meetDTend, meetType, locationName} = meeting;
+    const navigate = useNavigate();
 
-  const { meetTitle, meetDTstart, meetDTend, meetType, locationName } = meeting;
-  const navigate = useNavigate();
     const loadMeetingInfo = () => {
         //const response = await axios.get("기존 시간표 내용 요청");
         console.log("load meetingInfo");
         const response = {
             code: 200,
-            message: "요청에 성공하였습니다.",
+            message: "더미 요청에 성공하였습니다.",
             requestId: "9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d",
             groupTimes: "10002200", //오전 7시 - 오전 9시
             users: [
@@ -193,63 +197,80 @@ const MeetingScheduleItem = ({ meeting, groupId }) => {
                 }
             ]
         }
-        console.log("미팅리스트에서 loadmeetingInfo : ", response);
-        navigate("/meetings/:id/when/type", {
+        console.log("MeetingScheduleItem에서 loadmeetingInfo : ", response);
+        // navigate("/meetings/:id/when/type", {
+        navigate(`/group/${groupId}/when/${meetTitle}/${meetType}`, {
+        // navigate(`/meetings/${groupId}/when/${meetTitle}/${meetType}`, {
             state: {timetableData: response}
             // state: {timetableData: response.data}
         });
         //시간표 값 전달
-
     }
 
-  return (
-    <div className="meeting-item"
-         onClick={
-             ()=> {
-                 console.log(`groupId : ${groupId}\ntype : ${meetType}\ntitle : ${meetTitle}`);
-                 // axios.post('/group/{groupId}/when/{title}/{type}', {
-                 //     groupId : {groupId}, //     "groupId" : "101",
-                 //     type : {meetType}, //     "type": "offline",
-                 //     title : {meetTitle},//     "title": "산협프"
-                 // }).then(() => {
-                 // }).catch(() => {
-                 // })
-                 // //로 request 보내고, 받아온 결과로 시간표 출력.
-                 loadMeetingInfo()
-             }
-         }>
-      <div className="meeting-header">
-        <div
-          className={`meeting-status ${
-            meetType === "온라인" ? "online" : "offline"
-          }`}
-        >
-          {meetType}
-        </div>
+    return (
+        <div className="meeting-item"
+             onClick={
+                 () => {
+                     console.log(`groupId : ${groupId}\ntype : ${meetType}\ntitle : ${meetTitle}`);
+                     // axios.post(`${testip}/group/${groupId}/when/${meetTitle}/${meetType}`, {
+                     axios.get(`http://192.168.166.198:8080/group/${groupId}/when/${meetTitle}/${meetType}`
+                         ,{
+                             headers:
+                                 {
+                                     Authorization: `Bearer ${accessToken}`
+                                 }
+                         }
+                         ).then((res) => {
+                         console.log('meetingSchedulItem : ', res.data);
+                         // navigate(`/meetings/${groupId}/when/${meetTitle}/${meetType}`, {
+                         //
+                         //
+                         // // navigate("/meetings/:id/when/type", {
+                         // // navigate("/meetings/1/when/제목/OFFLINE", {
+                         //     state: {timetableData: res.data}
+                         //     // state: {timetableData: response.data}
+                         // });
+                         //시간표 값 전달
+                     }).catch((err)=>{
+                         console.log(`MeetingScheduleItem에서 시간표정보 요청실패 ${err}`);
+                     })//로 request 보내고, 받아온 결과로 시간표 출력.
 
-          <div className="meeting-time">
-              <div className="meeting-title">
-                  {meetTitle}
-              </div>
-              {new Date(meetDTstart).toLocaleDateString("ko-KR", {
-                  month: "2-digit",
-                  day: "2-digit",
-                  weekday: "short",
-              })}{" "}
-              {new Date(meetDTstart).toLocaleTimeString("ko-KR", {
-                  hour: "2-digit",
-                  minute: "2-digit",
-              })}{" "}
-              ~{" "}
-              {new Date(meetDTend).toLocaleTimeString("ko-KR", {
-                  hour: "2-digit",
-                  minute: "2-digit",
-              })}
-          </div>
-      </div>
-      {locationName && <div className="meeting-location">{locationName}</div>}
-    </div>
-  );
+                     console.log("MeetingScheduleItem에서 더미데이터 시간표 출력")
+                     loadMeetingInfo(); //더미 시간표출력
+                 }
+             }>
+            <div className="meeting-header">
+                <div
+                    className={`meeting-status ${
+                        meetType === "온라인" ? "online" : "offline"
+                    }`}
+                >
+                    {meetType}
+                </div>
+
+                <div className="meeting-time">
+                    <div className="meeting-title">
+                        {meetTitle}
+                    </div>
+                    {new Date(meetDTstart).toLocaleDateString("ko-KR", {
+                        month: "2-digit",
+                        day: "2-digit",
+                        weekday: "short",
+                    })}{" "}
+                    {new Date(meetDTstart).toLocaleTimeString("ko-KR", {
+                        hour: "2-digit",
+                        minute: "2-digit",
+                    })}{" "}
+                    ~{" "}
+                    {new Date(meetDTend).toLocaleTimeString("ko-KR", {
+                        hour: "2-digit",
+                        minute: "2-digit",
+                    })}
+                </div>
+            </div>
+            {locationName && <div className="meeting-location">{locationName}</div>}
+        </div>
+    );
 };
 
 export default MeetingScheduleItem;
