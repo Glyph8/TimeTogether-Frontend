@@ -18,7 +18,16 @@ const GroupTimetable = ({timetableData, timeRange}) => {
     return (
         <div className="group-timetable">
             <div className="group-timetable-header">
-                <div className="on-offline">{onOffline}</div>
+                <div className="on-offline" onClick={()=>{
+                    //type변경 요청 API가 필요?
+                    if(onOffline === '온라인') {
+                        setOnOffline("오프라인");
+                    }
+                    if(onOffline === '오프라인') {
+                        setOnOffline("온라인");
+                    }
+
+                }}>{onOffline}</div>
                 <h3 className="section-title">그룹 시간표</h3>
                 <p className="section-description">
                     시간을 클릭하면 누가 체크했는지 볼 수 있어요.
