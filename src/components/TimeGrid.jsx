@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import {useDispatch, useSelector} from "react-redux";
 import {updatePersonalTimeData, updateTimeOnly} from "../store.js";
 
-const TimeGrid = ({ days, timeRange, selectedPriority}) => {
+const TimeGrid = ({ days, timeRange, selectedPriority, setEdited}) => {
     const [hourCount, setHourCount] = useState(16);
     const [startHour, setStartHour] = useState(9);
     const daySet = daySets(days);
@@ -36,6 +36,7 @@ const TimeGrid = ({ days, timeRange, selectedPriority}) => {
                     rankSet={ranks}
                     hourCount={hourCount}
                     selectedPriority={selectedPriority}
+                    setEdited = {setEdited}
                 />
             </div>
         </div>
@@ -56,7 +57,7 @@ const TimeScale = ({ hourCount , startHour }) => {
     );
 };
 
-const GridCells = ({ days, hourCount, timeSet, rankSet, selectedPriority }) => {
+const GridCells = ({ days, hourCount, timeSet, rankSet, selectedPriority, setEdited }) => {
     // const [times, setTimes] = useState([]);
     const [times, setTimes] = useState(timeSet);
     const [ranks, setRanks] = useState(rankSet);
@@ -104,6 +105,8 @@ const GridCells = ({ days, hourCount, timeSet, rankSet, selectedPriority }) => {
                             style={{backgroundColor: cellColor, border: '1px dotted #c6c6c6'}}
 
                             onClick={() => {
+                                setEdited(true); //시간표 수정됨. 저장하기 활성화 + 캘린더 로드 블록
+
                                 let newTimes = [...times];
                                 let newRanks = [...ranks];
                                 console.log("check 여부", checked);

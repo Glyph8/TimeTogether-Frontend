@@ -1,7 +1,7 @@
 import TimeGrid from '././TimeGrid.jsx';
 import {useEffect, useState} from "react";
 
-const PersonalTimetable = ({days, timeRange, priorityOn}) => {
+const PersonalTimetable = ({days, timeRange, priorityOn, setEdited}) => {
     const [selectedPriority, setSelectedPriority] = useState(2);
     useEffect(() => {
 
@@ -28,7 +28,7 @@ const PersonalTimetable = ({days, timeRange, priorityOn}) => {
                     </div>
                 )}
             </div>
-            <TimeGrid days={days} timeRange={timeRange} selectedPriority={selectedPriority}/>
+            <TimeGrid days={days} timeRange={timeRange} selectedPriority={selectedPriority} setEdited={setEdited}/>
         </div>
     );
 };
