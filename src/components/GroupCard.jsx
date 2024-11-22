@@ -40,9 +40,11 @@ const GroupCard = ({ group, onDelete }) => {
     };
   }, []);
 
-  const totalNumber = group.groupMembers
-    ? group.groupMembers.split(",").length + 1
-    : 1;
+  // const totalNumber = group.groupMembers
+  //   ? group.groupMembers.split(",").length + 1
+  //   : 1;
+
+  const totalNumber = 4;
 
   const loadMeetings = async (groupId) => {
     axios
@@ -68,7 +70,9 @@ const GroupCard = ({ group, onDelete }) => {
         //loadMeetings(group.groupId); /group/{groupId}/meet 요청
         //dispatch(setGroupTimes(group.groupTimes)); //그룹이 생성될 때 설정한 groupTimes state값으로 설정
 
-        navigate(`/meetings/${group.groupId}?totalNumber=${totalNumber}`); //MeetingsPage로 navigate
+        navigate(
+          `/meeting-list/${group.groupId}?totalNumber=${totalNumber}&isMgr=${group.mgr}`
+        ); //MeetingsPage로 navigate
       }}
     >
       <img src={group.groupImg} alt="Group" className="group-image" />

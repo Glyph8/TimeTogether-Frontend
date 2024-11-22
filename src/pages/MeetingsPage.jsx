@@ -1,6 +1,6 @@
 // MeetingsPage.js
-import React, {useState, useEffect} from "react";
-import {useParams, useNavigate, Routes, Route} from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useParams, useNavigate, Routes, Route } from "react-router-dom";
 import WhereToMeet from "../components/WhereToMeet";
 import "./MeetingsPage.css";
 import Header from "../components/Header";
@@ -14,236 +14,378 @@ import ConfirmLocationButton from "../components/ConfirmLocationButton.jsx";
 import LocationSimpleItemList from "../components/LocationSimpleItemList.jsx";
 import axios from "axios";
 import MeetingListPage from "./MeetingListPage.jsx";
+import { useLocation } from "react-router-dom";
 
 function MeetingsPage() {
+  const { groupId, meetingId } = useParams(); //groupid
+  const [activeTab, setActiveTab] = useState("언제");
+  const [locations, setLocations] = useState([]);
+  const [confirmLocationId, setConfirmLocationId] = useState(null);
+  const [selectedLocationIds, setSelectedLocationIds] = useState([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isHost, setIsHost] = useState(false); // 방장 여부 상태 추가
+  const [isPlaceConfirmed, setIsPlaceConfirmed] = useState(false);
+  const navigate = useNavigate();
+  const accessToken = localStorage.getItem("accessToken");
 
-    const {id: groupId} = useParams(); //groupid
-    const [activeTab, setActiveTab] = useState("언제");
-    const [locations, setLocations] = useState([]);
-    const [confirmLocationId, setConfirmLocationId] = useState(null);
-    const [selectedLocationIds, setSelectedLocationIds] = useState([]);
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [isHost, setIsHost] = useState(true); // 방장 여부 상태 추가
-    const [isPlaceConfirmed, setIsPlaceConfirmed] = useState(false);
-    const navigate = useNavigate();
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
 
-    const searchParams = new URLSearchParams(location.search);
-    const totalNumber = searchParams.get("totalNumber") || 1;
+  const totalNumber = searchParams.get("totalNumber") || 1;
+  const meetingTitle = searchParams.get("meetTitle") || "";
+  const isMgr = searchParams.get("isMgr") || false;
 
-    const [whenData, setWhenData] = useState([]);
-    const [whenProcessData, setWhenProcessData] = useState([]);
-    useEffect(() => {
 
-        const whenDataResponse = {
-            code: 200,
-            message: "요청에 성공하였습니다.",
-            requestId: "9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d",
-            result: [
-                {
-                    "meetId": 8,
-                    "meetDTstart": "2024-10-09 14:30:00",
-                    "meetDTend": "2024-10-09 16:30:00",
-                    "meetType": "오프라인",
-                    "meetTitle": "산협프2 아이디어 회의",
-                    "meetContent": null,
-                    "groupName": "와쿠와쿠",
-                    "locationName": "투썸",
-                    "locationUrl": "https://search.naver.com/search.naver?where=nexearch&sm=top_hty&fbm=0&ie=utf8&query=%EA%B1%B4%EB%8C%80+%ED%88%AC%EC%8D%B8+url"
-                },
-                {
-                    "meetId": 9,
-                    "meetDTstart": "2024-10-09 14:30:00",
-                    "meetDTend": "2024-10-09 16:30:00",
-                    "meetType": "오프라인",
-                    "meetTitle": "산협프2 프론트백 연결 회의",
-                    "meetContent": null,
-                    "groupName": "와쿠와쿠",
-                    "locationName": "K큐브",
-                    "locationUrl": "https://search.naver.com/search.naver?where=nexearch&sm=top_hty&fbm=0&ie=utf8&query=%EA%B1%B4%EB%8C%80+%ED%88%AC%EC%8D%B8+url"
-                }
-            ],
-            process: [
-                {
-                    "meetId": 10,
-                    "meetTitle": "전기프2 재설계 회의",
-                },
-                {
-                    "meetId": 11,
-                    "meetTitle": "아키텍쳐 클래스 회의"
-                }
-            ],
+  useEffect(() => {
+    setIsHost(isMgr);
+  }, [isMgr]);
+
+  useEffect(() => {
+    console.log(totalNumber);
+    const response = {
+      code: 200,
+      message: "요청에 성공하였습니다.",
+      candidates: [
+        {
+          locationId: 101,
+          locationName: "스타벅스 강남점",
+          locationUrl: "https://naver.me/5xyzExample",
+          count: 4,
+        },
+        {
+          locationId: 102,
+          locationName: "투썸 강남점",
+          locationUrl: "https://naver.me/7abcExample",
+          count: 3,
+        },
+        {
+          locationId: 103,
+          locationName: "커피빈 강남점",
+          locationUrl: "https://naver.me/8defExample",
+          count: 2,
+        },
+      ],
+    };
+    setLocations(response.candidates); // 서버 응답 데이터를 상태로 설정
+  }, [totalNumber]);
+
+  useEffect(() => {
+
+    let intervalId;
+    const fetchMeetingLocations = async () => {
+      try {
+        const response = await axios.get(
+          `http://192.168.233.218:8080/group/${groupId}/${meetingId}/where/view`,
+          {
+            headers: {
+              Authorization: `Bearer ${accessToken}`, // 토큰 헤더 추가
+            },
+          }
+        );
+
+        // 응답 데이터 처리
+        const data = response.data;
+        if (data.httpStatus === "OK") {
+          setLocations(data); // 상태 업데이트
+        } else {
+          throw new Error(data.message || "데이터 로드에 실패했습니다.");
         }
-        setWhenData(whenDataResponse.result);
-        setWhenProcessData(whenDataResponse.process);
+      } catch (error) {
+        // 에러 처리
+        if (error.response && error.response.data) {
+          console.error(
+            error.response.data.message || "API 오류가 발생했습니다."
+          );
+        } else {
+          console.error("알 수 없는 오류가 발생했습니다.");
+        }
+      }
+    };
 
-        console.log(totalNumber);
-        const response = {
-            code: 200,
-            message: "요청에 성공하였습니다.",
-            candidates: [
-                {
-                    locationId: 101,
-                    locationName: "스타벅스 강남점",
-                    locationUrl: "https://naver.me/5xyzExample",
-                    count: 4,
-                },
-                {
-                    locationId: 102,
-                    locationName: "투썸 강남점",
-                    locationUrl: "https://naver.me/7abcExample",
-                    count: 3,
-                },
-                {
-                    locationId: 103,
-                    locationName: "커피빈 강남점",
-                    locationUrl: "https://naver.me/8defExample",
-                    count: 2,
-                },
-            ],
-        };
-        setLocations(response.candidates); // 서버 응답 데이터를 상태로 설정
-    }, [totalNumber]);
+    // 주기적으로 fetchMeetingLocations 실행
+    intervalId = setInterval(fetchMeetingLocations, 1000); // 1초마다 호출
 
-    //   useEffect(() => {
-    //     const fetchLocations = async () => {
-    //         try {
-    //             const response = await fetch(`/group/${groupId}/where/view`);
-    //             const data = await response.json();
-    //             setLocations(data.candidates);
-    //         } catch (error) {
-    //             console.error("API 요청 에러:", error);
-    //         }
-    //     };
+    // 클린업 함수
+    return () => clearInterval(intervalId); // 언마운트 시 Interval 해제
+  }, [groupId, meetingId, accessToken]);
 
-    //     // 초기 데이터 가져오기
-    //     fetchLocations();
+  const handleSelectLocation = async (locationId) => {
+    const isSelected = selectedLocationIds.includes(locationId);
 
-    //     // 5초마다 데이터 요청을 보냄
-    //     const intervalId = setInterval(fetchLocations, 5000);
+    // 낙관적 업데이트: 로컬 상태 즉시 업데이트
+    setSelectedLocationIds(
+      (prevSelected) =>
+        isSelected
+          ? prevSelected.filter((id) => id !== locationId) // 선택 해제
+          : [...prevSelected, locationId] // 선택 추가
+    );
 
-    //     // 컴포넌트 언마운트 시 인터벌 클리어
-    //     return () => clearInterval(intervalId);
-    // }, [groupId]);
-
-    const handleSelectLocation = (locationId) => {
-        setSelectedLocationIds((prevSelected) => {
-            if (prevSelected.includes(locationId)) {
-                // 이미 선택된 장소면 선택 해제
-                return prevSelected.filter((id) => id !== locationId);
-            } else {
-                // 선택되지 않은 장소면 선택 추가
-                return [...prevSelected, locationId];
+    setLocations((prevLocations) =>
+      prevLocations.map((location) =>
+        location.groupWhereId === locationId
+          ? {
+              ...location,
+              count: isSelected ? location.count - 1 : location.count + 1, // 선택 여부에 따라 count 변경
             }
-        });
-    };
+          : location
+      )
+    );
 
+    try {
+      // 서버와 동기화
+      await syncVoteWithServer(locationId, isSelected ? 0 : 1);
+    } catch (error) {
+      console.error("투표 요청 실패:", error.message);
 
-    const handleConfirmLocation = (locationId) => {
-        setConfirmLocationId(locationId); // Confirm ID 설정
-    };
+      // 서버 요청 실패 시 로컬 상태 복구
+      setSelectedLocationIds(
+        (prevSelected) =>
+          isSelected
+            ? [...prevSelected, locationId] // 복구: 선택 복원
+            : prevSelected.filter((id) => id !== locationId) // 복구: 선택 해제
+      );
 
-    // 장소 삭제 함수
-    const handleDeleteLocation = (locationId) => {
+      setLocations((prevLocations) =>
+        prevLocations.map((location) =>
+          location.groupWhereId === locationId
+            ? {
+                ...location,
+                count: isSelected ? location.count + 1 : location.count - 1, // 복구: count 원래대로
+              }
+            : location
+        )
+      );
+    }
+  };
+
+  const syncVoteWithServer = async (locationId, UpAndDown) => {
+    try {
+      const response = await axios.post(
+        `http://192.168.233.218:8080/group/${groupId}/${meetingId}/where/vote/${locationId}/${UpAndDown}`,
+        {}, // POST 요청 본문이 없으면 빈 객체 전달
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`, // 인증 토큰 추가
+          },
+        }
+      );
+
+      const data = response.data;
+
+      if (data.httpStatus === "OK") {
+        console.log(`장소 ${locationId} 투표 성공! UpAndDown: ${UpAndDown}`);
+      } else {
+        throw new Error(data.message || "투표 요청에 실패했습니다.");
+      }
+    } catch (error) {
+      throw new Error(
+        error.response?.data?.message || "API 요청 중 오류가 발생했습니다."
+      );
+    }
+  };
+
+  const handleConfirmLocationId = (groupWhereId) => {
+    setConfirmLocationId(groupWhereId); // Confirm ID 설정
+  };
+
+  const handleFinalConfirmLocation = async () => {
+    try {
+      if (!confirmLocationId) {
+        alert("확정할 장소가 선택되지 않았습니다.");
+        return;
+      }
+
+      // API 요청
+      const response = await axios.post(
+        `http://192.168.233.218:8080/group/${groupId}/${meetingId}/where/done/${confirmLocationId}`,
+        {}, // POST 요청 본문이 없으면 빈 객체 전달
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`, // 인증 헤더 추가
+          },
+        }
+      );
+
+      const data = response.data;
+
+      if (data.httpStatus === "OK") {
+        alert("장소가 확정되었습니다!");
+        setConfirmLocationId(confirmLocationId); // 성공한 whereId 저장
+        setIsPlaceConfirmed(false);
+      } else {
+        throw new Error(data.message || "장소 확정에 실패했습니다.");
+      }
+    } catch (error) {
+      // 에러 처리
+      if (error.response && error.response.data) {
+        alert(
+          error.response.data.message || "API 요청 중 오류가 발생했습니다."
+        );
+      } else {
+        alert("알 수 없는 오류가 발생했습니다.");
+      }
+    }
+  };
+
+  // 모달 열기
+  const openModal = () => setIsModalOpen(true);
+
+  // 모달 닫기
+  const closeModal = () => setIsModalOpen(false);
+
+  //장소 삭제
+  const handleDeleteLocation = async (groupWhereId) => {
+    try {
+      // 서버에 삭제 요청
+      const response = await axios.delete(
+        `http://192.168.233.218:8080/group/${groupId}/${meetingId}/where/delete/${groupWhereId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`, // 필요하면 인증 토큰 추가
+          },
+        }
+      );
+
+      const data = response.data;
+
+      if (data.httpStatus === "OK") {
+        alert(data.data); // "삭제가 완료되었습니다." 메시지 표시
+
+        // 로컬 상태 업데이트
         setLocations((prevLocations) =>
-            prevLocations.filter((location) => location.locationId !== locationId)
+          prevLocations.filter(
+            (location) => location.groupWhereId !== groupWhereId
+          )
         );
         setSelectedLocationIds((prevSelected) =>
-            prevSelected.filter((id) => id !== locationId)
+          prevSelected.filter((id) => id !== groupWhereId)
         );
-    };
+      } else {
+        throw new Error(data.message || "삭제 요청에 실패했습니다.");
+      }
+    } catch (error) {
+      // 에러 처리
+      if (error.response && error.response.data) {
+        alert(
+          error.response.data.message || "API 요청 중 오류가 발생했습니다."
+        );
+      } else {
+        alert("알 수 없는 오류가 발생했습니다.");
+      }
+    }
+  };
 
-    // 모달 열기
-    const openModal = () => setIsModalOpen(true);
+  // 장소 추가
+  const handleAddPlace = async ({ placeName, placeUrl }) => {
+    try {
+      // 요청 데이터 준비
+      const requestData = {
+        groupWhereName: placeName,
+        groupWhereUrl: placeUrl,
+      };
 
-    // 모달 닫기
-    const closeModal = () => setIsModalOpen(false);
+      // API 호출
+      const response = await axios.post(
+        `http://192.168.233.218:8080/group/${groupId}/${meetingId}/where/create`,
+        requestData,
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`, // 필요하면 인증 토큰 추가
+          },
+        }
+      );
 
-    // 장소 추가
-    const handleAddPlace = ({placeName, placeUrl}) => {
+      // 응답 데이터 처리
+      const data = response.data;
+      if (data.httpStatus === "OK") {
         const newPlace = {
-            locationId: locations.length + 1 + 100,
-            locationName: placeName,
-            locationUrl: placeUrl,
+          groupWhereId: data.groupWhereId,
+          groupId: data.groupId,
+          groupLocationName: data.groupLocationName,
+          groupWhereUrl: data.groupWhereUrl,
+          count: data.count,
+          groupMeetingId: data.groupMeetingId,
         };
-        setLocations((prevLocations) => [...prevLocations, newPlace]);
-    };
+        setLocations((prevLocations) => [...prevLocations, newPlace]); // 상태 업데이트
+      } else {
+        throw new Error(data.message || "장소 추가에 실패했습니다.");
+      }
+    } catch (error) {
+      // 에러 처리
+      if (error.response && error.response.data) {
+        alert(
+          error.response.data.message || "API 요청 중 오류가 발생했습니다."
+        );
+      } else {
+        alert("알 수 없는 오류가 발생했습니다.");
+      }
+    }
+  };
 
-    const handleConfirmPlace = () => {
-        setIsPlaceConfirmed(true); // 장소 확정 상태를 true로 변경
-    };
+  const handleConfirmPlacePage = () => {
+    setIsPlaceConfirmed(true); // 장소 확정 상태를 true로 변경
+  };
 
-    return (
-        <div className="meetings-page">
-            {isModalOpen && (
-                <AddPlaceModal onClose={closeModal} onAddPlace={handleAddPlace}/>
+  return (
+    <div className="meetings-page">
+      {isModalOpen && (
+        <AddPlaceModal onClose={closeModal} onAddPlace={handleAddPlace} />
+      )}
+      <Header
+        title={"ExampleTeam"}
+        onBackClick={() => {
+          if (window.history.length > 1) {
+            navigate(-1);
+          } else {
+            navigate("/group"); // 기본 경로 설정
+          }
+        }}
+        onMenuClick={() => {}}
+      />
+      <TabSelector
+        selectedOption={activeTab}
+        onSelect={(option) => setActiveTab(option)}
+      />
+      <div className="tab-content">
+        {activeTab === "언제" && ( //해당 그룹의 모임 리스트 출력
+          <>
+            <TimetableContent></TimetableContent>
+          </>
+        )}
+        {activeTab === "어디서" && (
+          <>
+            {!isPlaceConfirmed ? (
+              <>
+                <AddPlaceButton onAddPlace={openModal} />
+                <LocationItemList
+                  totalMembers={totalNumber}
+                  locations={locations}
+                  selectedLocationIds={selectedLocationIds}
+                  onSelectLocation={handleSelectLocation}
+                  onDeleteLocation={handleDeleteLocation}
+                />
+                {isHost && (
+                  <SelectPlaceButton onClick={handleConfirmPlacePage} />
+                )}
+              </>
+            ) : (
+              <>
+                <ConfirmLocationButton
+                  onConfrimPlace={handleFinalConfirmLocation}
+                />
+                <LocationSimpleItemList
+                  locations={locations}
+                  selectedLocationIds={confirmLocationId}
+                  onSelectLocation={handleConfirmLocationId}
+                  totalNumber={totalNumber}
+                />
+              </>
             )}
-            <Header
-                title={"ExampleTeam"}
-                onBackClick={() => {
-                    if (window.history.length > 1) {
-                        navigate(-1);
-                    } else {
-                        navigate("/group"); // 기본 경로 설정
-                    }
-                }}
-                onMenuClick={() => {
-                }}
-            />
-            <TabSelector
-                selectedOption={activeTab}
-                onSelect={(option) => setActiveTab(option)}
-            />
-            <div className="tab-content">
-                {activeTab === "언제" && (//해당 그룹의 모임 리스트 출력
-                    //group/{groupID}/when
-                    <>
-                        <Routes>
-                            <Route path="/" element={
-                                // <MeetingListPage whenData={whenData}/>
-                                <MeetingListPage
-                                    whenData={whenData}
-                                    whenProcessData = {whenProcessData}
-                                    groupId={groupId}
-                                />
-                            }/>
-                            <Route path="/when/type" element={
-                                <TimetableContent
-                                    groupId={groupId}
-                                    // whenData={whenData}
-                                />}/>
-                        </Routes>
-                    </>
-                )}
-                {activeTab === "어디서" && (
-                    <>
-                        {!isPlaceConfirmed ? (
-                            <>
-                                <AddPlaceButton onAddPlace={openModal}/>
-                                <LocationItemList
-                                    totalMembers={totalNumber}
-                                    locations={locations}
-                                    selectedLocationIds={selectedLocationIds}
-                                    onSelectLocation={handleSelectLocation}
-                                    onDeleteLocation={handleDeleteLocation}
-                                />
-                                {isHost && <SelectPlaceButton onClick={handleConfirmPlace}/>}
-                            </>
-                        ) : (
-                            <>
-                                <ConfirmLocationButton onConfrimPlace={() => {
-                                }}/>
-                                <LocationSimpleItemList
-                                    locations={locations}
-                                    selectedLocationIds={confirmLocationId}
-                                    onSelectLocation={handleConfirmLocation}
-                                />
-                            </>
-                        )}
-                    </>
-                )}
-            </div>
-        </div>
-    );
+          </>
+        )}
+      </div>
+    </div>
+  );
 }
 
 export default MeetingsPage;
