@@ -40,9 +40,11 @@ const GroupCard = ({ group, onDelete }) => {
     };
   }, []);
 
-  const totalNumber = group.groupMembers
-    ? group.userNameResponseList.length + 1
-    : 1;
+  // const totalNumber = group.groupMembers
+  //   ? group.userNameResponseList.length + 1
+  //   : 1;
+
+  const totalNumber = 4;
 
   const loadMeetings = async (groupId) => {
     axios
