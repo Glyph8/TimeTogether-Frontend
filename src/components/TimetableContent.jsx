@@ -6,7 +6,9 @@ import {useEffect, useMemo, useState} from "react";
 import {useLocation, useParams} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import axios from "axios";
-import {updatePersonalTimeData, updateTimeValues} from "../store.js";
+import store, {updatePersonalTimeData, updateRankValues, updateTimeValues} from "../store.js";
+import GroupCellModal from "./GroupCellModal.jsx";
+import groupCellModal from "./GroupCellModal.jsx";
 
 /*
 meetId: 10,
@@ -29,6 +31,10 @@ const TimetableContent = () => {
     const isMgr = searchParams.get("isMgr") || false;
     const meetTitle = searchParams.get("meetTitle") || "";
     const meetType = searchParams.get("type") || 'OFFLINE';
+
+    // store.subscribe(() => {
+    //     console.log("Redux 상태가 업데이트됨: ", store.getState().personalTimeData); //좀 잦긴하다.
+    // });
 
     const response1 = {
         code: 200,
@@ -243,17 +249,22 @@ const TimetableContent = () => {
 
     let personalTimeData = useSelector((state)=> state.personalTimeData);
     let timeOnlyData = useSelector(state => state.timeOnlyData);
+    let rankOnlyData = useSelector(state => state.rankOnlyData);
     let dispatch = useDispatch();
+
+    const groupCellModal = useSelector(state => state.groupCellModal)
 
     let [isEdited, setIsEdited] = useState(false);
 
     const [selectedSlot, setSelectedSlot] = useState(null);
 
-    const timeSlots = [
-        {id: 1, label: '1순위', date: '10/12 (토)', time: '09:00~10:00'},
-        {id: 2, label: '2순위', date: '10/13 (토)', time: '10:00~12:00'},
-        {id: 3, label: '3순위', date: '-', time: '-'}
-    ];
+    // const timeSlots = [
+    //     {id: 1, label: '1순위', date: '10/12 (토)', time: '09:00~10:00'},
+    //     {id: 2, label: '2순위', date: '10/13 (토)', time: '10:00~12:00'},
+    //     {id: 3, label: '3순위', date: '-', time: '-'}
+    // ];
+    const timeSlots = useSelector(state => state.timeSlots);
+
 
     const handleSlotClick = (slotId) => {
         if (selectedSlot === slotId) {
@@ -267,6 +278,7 @@ const TimetableContent = () => {
         if (!timetableData) return null;
         return structuredClone(timetableData);
     }, [timetableData && JSON.stringify(timetableData)]); // 깊은 비교
+
 
     useEffect(() => {
         if (timetableData?.groupTimes) {
@@ -282,17 +294,17 @@ const TimetableContent = () => {
     }, [stableTimetableData, myUserId]);
 
     useEffect(() => {
-        console.log("timetableData changed:", timetableData);
+    //    console.log("timetableData changed:", timetableData);
     }, [timetableData]);
 
     return (
         <div className="timetable-content">
             <GroupTimetable timetableData={stableTimetableData} timeRange={timeRange}/>
-            {/*<GroupTimetable timetableData={timetableDataForGroup} timeRange={timeRange}/>*/}
             {loadPersonalTime ?
-                // <PersonalTimetable days={personalTimeData} timeRange={timeRange}/>
                 <PersonalTimetable days={days} timeRange={timeRange} priorityOn={priorityOn} setEdited={setIsEdited}/>
                 : null}
+
+            {groupCellModal ? <GroupCellModal timetableData={stableTimetableData}/> : null}
 
             {
                 loadPersonalTime ? <div className="calender-priority-btn">
@@ -337,6 +349,8 @@ const TimetableContent = () => {
                 if (!loadPersonalTime) {//'내 시간표 추가하기' 누른 경우
                     console.log("내 시간표 추가하기 버튼 클릭")
                     setLoadPersonalTime(true);
+                    dispatch(updatePersonalTimeData(days)); //개인시간표 store state에 저장
+
                     //API : /group/{groupId}/when/{title}/{type}/add
                     // axios.post(`${testip}/group/${groupId}/when/${meetTitle}/${meetType}/add`, null
                         axios.post(`http://192.168.166.198:8080/group/${groupId}/when/${meetTitle}/${meetType}/add`, null
@@ -358,37 +372,18 @@ const TimetableContent = () => {
                     setBtnColorChange("save-btn")
 
                     //API : /group/{groupId}/when/{title}/{type}/update
-                    const myTableData = [ //dummy requset
-                        {
-                            "date": "2024-11-22",
-                            "day": "금요일",
-                            "time": "0000111000", //15분 단위이므로 2시간일때 8개
-                            "rank": "0000121000"
-                        }
-                        // ,
-                        // {
-                        //     "date": "2024-11-05",
-                        //     "day": "화요일",
-                        //     "time": "1110000000",
-                        //     "rank": "1310000000"
-                        // },
-                        // {
-                        //     "date": "2024-11-06",
-                        //     "day": "수요일",
-                        //     "time": "0011000000",
-                        //     "rank": "0013000000"
-                        // }
-                    ]
-                    // const timeValues = timeOnlyData.map(day => day.time);
-                    // dispatch(updateTimeValues(timeValues));
-                    // dispatch(updateTimeValues(timeOnlyData))
 
                     dispatch(updateTimeValues(timeOnlyData))
-                    console.log("갱신된 시간표 정보", timeOnlyData)
-                    console.log("개인시간표 정보", personalTimeData);
+
+                    dispatch(updateRankValues(rankOnlyData))
+
+                    // console.log("갱신된 timeOnlyData 정보", timeOnlyData);
+                    // console.log("갱신된 rankOnlyData 정보", rankOnlyData);
+                    // console.log("갱신된 개인시간표 정보", personalTimeData); state변경이 할당한 변수에 안됨.
+                    console.log("갱신된 개인시간표 정보_redux ", store.getState().personalTimeData);
 
                     // axios.post(`${testip}/group/${groupId}/when/${meetTitle}/${meetType}/update`, myTableData, {
-                    axios.post(`http://192.168.166.198:8080/group/${groupId}/when/${meetTitle}/${meetType}/update`, myTableData, {
+                    axios.post(`http://192.168.166.198:8080/group/${groupId}/when/${meetTitle}/${meetType}/update`, store.getState().personalTimeData, {
                             headers:
                                 {
                                     Authorization: `Bearer ${accessToken}`
@@ -398,7 +393,7 @@ const TimetableContent = () => {
                         console.log(res.data);
                         setLoadPersonalTime(true);
                     }).catch((err) => {
-                        console.log(`timeTableContent에서 내 시간표 생성 요청실패 ${err}`);
+                        console.log(`timeTableContent에서 내 시간표 update 요청실패 ${err}`);
                     })
                 }
             }}>
@@ -427,12 +422,14 @@ const TimetableContent = () => {
                 <button
                     className={`done-decision-button ${selectedSlot ? 'done-selected' : ''}`}
                     onClick={() => {
-                        //API : /group/{groupId}/when/{title}/{type}/add
-                        if (selectedSlot !== null) {
-                            console.log("timeTableContent에서 Done 요청");
+                        if (selectedSlot !== null && (meetType === 'ONLINE' || true)) {//이 자리에 장소 결정완료 상태값
+                            console.log('슬롯번호 : ',selectedSlot)
+                            const doneTime = timeSlots[selectedSlot - 1];
+                            const startTime = doneTime.time.slice(0,5) + ':00';
+                            console.log("timeTableContent에서 Done 요청", doneTime);
                             // axios.post(`${testip}/group/${groupId}/when/${meetTitle}/${meetType}/done`, {
                                     axios.post(`http://192.168.164.228:8080/group/${groupId}/when/${meetTitle}/${meetType}/done`, {
-                                    meetDt: "2024-10-09 14:30:00"
+                                    meetDt: `${doneTime.date}T${startTime}`
                                 }, {
                                     headers:
                                         {
@@ -468,10 +465,10 @@ function createEmptyTimes(timetableData) {//groupTimeTable에도 있음.
 }
 
 function returnMyTimeTable(timetableData, myUserId) {
+    //console.log('개인시간표 불러오기 전 전체 시간표 : ',timetableData, myUserId)
     for (let i = 0; i < timetableData.users.length; i++) {
         if (timetableData.users[i].userId === myUserId) {
-            console.log("개인시간표가 있어서 해당 시간표를 로드함.")
-            console.log(timetableData.users[i].days);
+            console.log("개인시간표가 있어서 해당 시간표를 로드함.", timetableData.users[i].days);
             return timetableData.users[i].days;
         }
     }

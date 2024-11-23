@@ -5,7 +5,6 @@ import SharePopover from "./SharePopover";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
-import { setGroupTimes } from "../store.js";
 
 const GroupCard = ({ group, onDelete }) => {
   const [isPopoverOpen, setIsPopoverOpen] = useState(false);

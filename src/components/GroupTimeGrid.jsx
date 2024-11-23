@@ -1,6 +1,10 @@
 import {useEffect, useState} from "react";
 import './TimeGrid.css';
 import PropTypes from 'prop-types';
+import GroupCellModal from "./GroupCellModal.jsx";
+import MeetingsPage from "../pages/MeetingsPage.jsx";
+import {useDispatch} from "react-redux";
+import {setDayIndexData, setGroupCellModal, setHourIndexData} from "../store.js";
 
 const GroupTimeGrid = ({ days, timeRange, memberCount}) => {
     const [hourCount, setHourCount] = useState(16);
@@ -61,6 +65,7 @@ const GroupGridCells = ({ days, hourCount, timeSet, groupColorArray}) => {
     // const [times, setTimes] = useState([]);
     const [times, setTimes] = useState(timeSet);
     const daySet = daySets(days);
+    const dispatch = useDispatch();
     useEffect(() => {
         setTimes(timeSet);
     }, [timeSet]);
@@ -90,7 +95,10 @@ const GroupGridCells = ({ days, hourCount, timeSet, groupColorArray}) => {
                                 className={cellName}
                                 style={{backgroundColor: cellColor, border: '1px dotted #c6c6c6'}}
                                 onClick={() => {
-
+                                    //그룹 시간표 셀 클릭 시 해당타임 인원 조회
+                                    dispatch(setDayIndexData(dayIndex));
+                                    dispatch(setHourIndexData(hourIndex));
+                                    dispatch(setGroupCellModal(true));
                                 }}
                             >
 

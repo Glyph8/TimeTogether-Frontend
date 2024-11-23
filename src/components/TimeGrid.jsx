@@ -2,7 +2,7 @@ import {useEffect, useState} from "react";
 import './TimeGrid.css';
 import PropTypes from 'prop-types';
 import {useDispatch, useSelector} from "react-redux";
-import {updatePersonalTimeData, updateTimeOnly} from "../store.js";
+import {updatePersonalTimeData, updateRankOnly, updateTimeOnly} from "../store.js";
 
 const TimeGrid = ({ days, timeRange, selectedPriority, setEdited}) => {
     const [hourCount, setHourCount] = useState(16);
@@ -11,6 +11,8 @@ const TimeGrid = ({ days, timeRange, selectedPriority, setEdited}) => {
     const dayLabel = dayLabelSet(days);
     const times = timeSet(days);
     const ranks = rankSet(days);
+
+    console.log("개인시간표 : ", days)
 
     useEffect(() => {
         setHourCount(getTimeRange(timeRange));
@@ -117,14 +119,15 @@ const GridCells = ({ days, hourCount, timeSet, rankSet, selectedPriority, setEdi
                                     newRanks[dayIndex] = newRanks[dayIndex].substring(0, hourIndex) + '0' + newRanks[dayIndex].substring(hourIndex + 1);
                                 }
                                 if (checked === "0") {
-
                                     newTimes[dayIndex] = newTimes[dayIndex].substring(0, hourIndex) + '1' + newTimes[dayIndex].substring(hourIndex + 1);
                                     newRanks[dayIndex] = newRanks[dayIndex].substring(0, hourIndex) + selectedPriority + newRanks[dayIndex].substring(hourIndex + 1);
                                 }
                                 setTimes(newTimes);
                                 setRanks(newRanks);
+
                                 // dispatch(updatePersonalTimeData(newTimes));
-                                // dispatch(updateTimeOnly(newTimes));
+                                dispatch(updateTimeOnly(newTimes));
+                                dispatch(updateRankOnly(newRanks));
                             }}
                         >
                         </div>

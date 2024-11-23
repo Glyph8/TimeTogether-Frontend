@@ -12,7 +12,10 @@ function MeetList({groupId, totalNumber, isMgr, whenData, whenProcessData}) {
 
     return (
 
-        <div className="meeting-list">
+        <div className="meeting-list" style={{
+            gap: '0',
+            padding: '0',
+        }}>
             {whenData.length === 0 ? (
                 <header
                     className="group-header"
@@ -34,14 +37,22 @@ function MeetList({groupId, totalNumber, isMgr, whenData, whenProcessData}) {
                     );
                 })
             }
+
             {whenProcessData.length !== 0 ? (
                 <header
                     className="group-header"
-                    style={{borderBottom: `5px solid #e4e4e4`}}
+                    style={{
+                        height: '100%',
+                        borderBottom: `5px solid #e4e4e4`}}
                 >
-                    <h2>결정이 완료되지 않은 회의</h2>
+                    <h2 style={{
+                        height: '60px',
+                        textAlign: "center",
+                        lineHeight: '60px',
+                    }}>결정이 완료되지 않은 회의가 있어요</h2>
                 </header>
             ) : null}
+
             {
                 // processList &&
                 whenProcessData &&
