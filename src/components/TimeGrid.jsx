@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import {useDispatch, useSelector} from "react-redux";
 import {updatePersonalTimeData, updateRankOnly, updateTimeOnly} from "../store.js";
 
-const TimeGrid = ({ days, timeRange, selectedPriority, setEdited}) => {
+const TimeGrid = ({days, timeRange, selectedPriority, setEdited}) => {
     const [hourCount, setHourCount] = useState(16);
     const [startHour, setStartHour] = useState(9);
     const daySet = daySets(days);
@@ -20,7 +20,7 @@ const TimeGrid = ({ days, timeRange, selectedPriority, setEdited}) => {
     }, [days, timeRange]);
 
     return (
-        <div className="time-grid" style={{ backgroundColor: '#f4f4f4' }}>
+        <div className="time-grid" style={{backgroundColor: '#f4f4f4'}}>
             <div className="grid-header">
                 <div className="time-column"></div>
                 {daySet.map((day, index) => (
@@ -33,20 +33,20 @@ const TimeGrid = ({ days, timeRange, selectedPriority, setEdited}) => {
             <div className="grid-content">
                 <TimeScale hourCount={hourCount} startHour={startHour}/>
                 <GridCells
-                    days = {days} //굳이 days를 통으로 줄 필요가 없는 듯
+                    days={days} //굳이 days를 통으로 줄 필요가 없는 듯
                     timeSet={times}
                     rankSet={ranks}
                     hourCount={hourCount}
                     selectedPriority={selectedPriority}
-                    setEdited = {setEdited}
+                    setEdited={setEdited}
                 />
             </div>
         </div>
     );
 };
 
-const TimeScale = ({ hourCount , startHour }) => {
-    const hours = Array.from({ length: hourCount }, (_, i) => i + startHour);
+const TimeScale = ({hourCount, startHour}) => {
+    const hours = Array.from({length: hourCount}, (_, i) => i + startHour);
 
     return (
         <div className="time-scale">
@@ -59,19 +59,58 @@ const TimeScale = ({ hourCount , startHour }) => {
     );
 };
 
-const GridCells = ({ days, hourCount, timeSet, rankSet, selectedPriority, setEdited }) => {
+const GridCells = ({days, hourCount, timeSet, rankSet, selectedPriority, setEdited}) => {
     // const [times, setTimes] = useState([]);
     const [times, setTimes] = useState(timeSet);
     const [ranks, setRanks] = useState(rankSet);
     const daySet = daySets(days);
 
-    let personalTimeData = useSelector((state)=> state.personalTimeData);
+    let personalTimeData = useSelector((state) => state.personalTimeData);
     let dispatch = useDispatch();
 
     useEffect(() => {
         //setTimes(timeSet);
         //setRanks(rankSet)
     }, [days, rankSet, timeSet]);
+
+    const [isDragging, setIsDragging] = useState(false); // 드래그 상태
+    const [checkingRule, setCheckingRule] = useState(true);
+    const handleCellClick = (dayIndex, hourIndex) => {
+        setEdited(true);
+        let newTimes = [...times];
+        let newRanks = [...ranks];
+        if (checkingRule) {//true면 uncheck
+            newTimes[dayIndex] = newTimes[dayIndex].substring(0, hourIndex) + '0' + newTimes[dayIndex].substring(hourIndex + 1);
+            newRanks[dayIndex] = newRanks[dayIndex].substring(0, hourIndex) + '0' + newRanks[dayIndex].substring(hourIndex + 1);
+        } else {//false면 check
+            newTimes[dayIndex] = newTimes[dayIndex].substring(0, hourIndex) + '1' + newTimes[dayIndex].substring(hourIndex + 1);
+            newRanks[dayIndex] = newRanks[dayIndex].substring(0, hourIndex) + selectedPriority + newRanks[dayIndex].substring(hourIndex + 1);
+        }
+        setTimes(newTimes);
+        setRanks(newRanks);
+
+        dispatch(updateTimeOnly(newTimes));
+        dispatch(updateRankOnly(newRanks));
+    };
+    const handleMouseDown = (dayIndex, hourIndex) => {
+        setIsDragging(true);
+        if (times[dayIndex][hourIndex] === '1') {
+            setCheckingRule(true);
+        } else {
+            setCheckingRule(false);
+        }
+        handleCellClick(dayIndex, hourIndex);
+    };
+    const handleMouseEnter = (dayIndex, hourIndex) => {
+        if (isDragging) {
+            handleCellClick(dayIndex, hourIndex);
+        }
+    };
+    const handleMouseUp = () => {
+        setIsDragging(false);
+        setCheckingRule(!checkingRule);
+    }
+
 
     return (
         <div className="grid-cells" style={{
@@ -80,58 +119,36 @@ const GridCells = ({ days, hourCount, timeSet, rankSet, selectedPriority, setEdi
             gridTemplateColumns: `repeat(${daySet.length}, 1fr)`,
             gridAutoFlow: 'column', //세로(시간 순)부터 셀 채우기
             gridTemplateRows: `repeat(${hourCount * 2}, 1fr)`
-        }}>
+        }} onMouseUp={handleMouseUp}>
 
-            {Array.from({ length: daySet.length }).map((_, dayIndex) => (
+            {Array.from({length: daySet.length}).map((_, dayIndex) => (
                 // 각 날짜마다 세로로 30분 단위 셀 생성
-                Array.from({ length: hourCount * 2 }).map((_, hourIndex) => {
-                    const cellName = `grid-cell-${daySet[dayIndex]}-${hourIndex}`
-                    let cellColor = "#ffffff";
-                    const checked = times[dayIndex][hourIndex];
-                    const rank = ranks[dayIndex][hourIndex];
+                Array.from({length: hourCount * 2}).map((_, hourIndex) => {
+                        const cellName = `grid-cell-${daySet[dayIndex]}-${hourIndex}`
+                        let cellColor = "#ffffff";
+                        const checked = times[dayIndex][hourIndex];
+                        const rank = ranks[dayIndex][hourIndex];
 
-                    if(checked === "1" && rank === "0"){
-                        cellColor = "#FFC553";
-                    }
-                    if(checked === "1" && rank === "1"){
-                        cellColor = "#FEA666";
-                    }
-                    if(checked === "1" && rank === "2"){
-                        cellColor = "#FDBAAB";
-                    }
+                        if (checked === "1" && rank === "0") {
+                            cellColor = "#FFC553";
+                        }
+                        if (checked === "1" && rank === "1") {
+                            cellColor = "#FEA666";
+                        }
+                        if (checked === "1" && rank === "2") {
+                            cellColor = "#FDBAAB";
+                        }
 
-                    return(
-                        <div
-                            key={`${dayIndex}-${hourIndex}`}
-                            className={cellName}
-                            style={{backgroundColor: cellColor, border: '1px dotted #c6c6c6'}}
-
-                            onClick={() => {
-                                setEdited(true); //시간표 수정됨. 저장하기 활성화 + 캘린더 로드 블록
-
-                                let newTimes = [...times];
-                                let newRanks = [...ranks];
-                                console.log("check 여부", checked);
-                                console.log("rank 값", rank);
-
-                                if (checked === "1") {
-                                    newTimes[dayIndex] = newTimes[dayIndex].substring(0, hourIndex) + '0' + newTimes[dayIndex].substring(hourIndex + 1);
-                                    newRanks[dayIndex] = newRanks[dayIndex].substring(0, hourIndex) + '0' + newRanks[dayIndex].substring(hourIndex + 1);
-                                }
-                                if (checked === "0") {
-                                    newTimes[dayIndex] = newTimes[dayIndex].substring(0, hourIndex) + '1' + newTimes[dayIndex].substring(hourIndex + 1);
-                                    newRanks[dayIndex] = newRanks[dayIndex].substring(0, hourIndex) + selectedPriority + newRanks[dayIndex].substring(hourIndex + 1);
-                                }
-                                setTimes(newTimes);
-                                setRanks(newRanks);
-
-                                // dispatch(updatePersonalTimeData(newTimes));
-                                dispatch(updateTimeOnly(newTimes));
-                                dispatch(updateRankOnly(newRanks));
-                            }}
-                        >
-                        </div>
-                    )
+                        return (
+                            <div
+                                key={`${dayIndex}-${hourIndex}`}
+                                className={cellName}
+                                style={{backgroundColor: cellColor, border: '1px dotted #c6c6c6'}}
+                                onMouseDown={() => handleMouseDown(dayIndex, hourIndex)} // 드래그 시작
+                                onMouseEnter={() => handleMouseEnter(dayIndex, hourIndex)} // 드래그 중
+                            >
+                            </div>
+                        )
                     }
                 )
             ))}
