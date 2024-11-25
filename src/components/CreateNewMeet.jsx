@@ -218,10 +218,11 @@ function CreateNewMeet({groupId, setMakeNewMeeting}) {
                         if(newMeetTitle.length > 0 && selectedDates.length > 0){
                             const formatedDate = changeDateFormat(selectedDates)
 
+                            console.log('debug', groupId, newMeetTitle)
                             //새 회의 생성 연결 성공
                             axios.post(
                                 // `${testip}/group/${groupId}/meet/${newMeetTitle}/add`
-                                `http://192.168.164.228:8080/group/${groupId}/meet/${newMeetTitle}/add`
+                                `http://172.20.10.4:8080/group/${groupId}/meet/${newMeetTitle}/add`
                                 , formatedDate,
                                 {
                                     headers:

@@ -11,6 +11,7 @@ import CreateNewMeet from "../components/CreateNewMeet.jsx";
 import MeetingScheduleItem from "../components/MeetingScheduleItem.jsx";
 import MeetingGroupScheduleItem from "../components/MeetingGroupScheduleItem.jsx";
 import MeetList from "../components/MeetList.jsx";
+import axios from "axios";
 
 const MeetingListPage = () => {
   const { groupId } = useParams(); //groupId
@@ -30,16 +31,19 @@ const MeetingListPage = () => {
 
   useEffect(() => {
     //GroupCard Click event로 시작
-    // const whenDataResponse = axios.get(`http://192.168.166.198:8080/group/${groupId}/meet`, {
+    // const whenDataResponse = axios.get(`http://172.20.10.4:8080/group/${groupId}/meet`, {
     //         headers: {
     //             Authorization: `Bearer ${accessToken}`,
     //         },
     //     })
     //     .then((res) => {
     //         const responseData = res.data.data;
-    //         console.log(responseData);
-    //         setWhenData(whenDataResponse.result);
-    //         setWhenProcessData(whenDataResponse.meeting);
+    //         console.log('ree',res.data);
+    //         console.log('meetListPage 회의 리스트 요청 성공',responseData.data);
+    //         // setWhenData(whenDataResponse.result);
+    //         // setWhenProcessData(whenDataResponse.meeting);
+    //       setWhenData(responseData.result);
+    //       setWhenProcessData(responseData.meeting);
     //     }).catch((err) => {
     //         console.log(`MeeingListPage서 회의 리스트 요청실패 ${err}`);
     //     })
@@ -86,7 +90,7 @@ const MeetingListPage = () => {
           "locationUrl": "https://search.naver.com/search.naver?where=nexearch&sm=top_hty&fbm=0&ie=utf8&query=%EA%B1%B4%EB%8C%80+%ED%88%AC%EC%8D%B8+url"
         }
       ],
-      process: [
+      meeting: [
         {
           "meetId": 10,
           "meetTitle": "abcd",
@@ -100,7 +104,7 @@ const MeetingListPage = () => {
       ],
     }
     setWhenData(whenDataResponse.result);
-    setWhenProcessData(whenDataResponse.process);
+    setWhenProcessData(whenDataResponse.meeting);
     //여기까지 회의 리스트 더미데이터
     
     
@@ -116,7 +120,7 @@ const MeetingListPage = () => {
       </header>
 
       {makeNewMeeting ? (
-        <CreateNewMeet />
+        <CreateNewMeet groupId={groupId} setMakeNewMeeting={setMakeNewMeeting}/>
       ) : (
         <>
           <MeetList

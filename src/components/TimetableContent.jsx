@@ -27,6 +27,7 @@ Content: null,
 groupName: "와쿠와쿠",
 */
 
+
 const TimetableContent = () => {
     const location = useLocation();
     const accessToken = localStorage.getItem("accessToken");
@@ -38,45 +39,46 @@ const TimetableContent = () => {
     const meetTitle = searchParams.get("meetTitle") || "";
     const meetType = searchParams.get("type") || 'OFFLINE';
 
-    //dummy start
+    // dummy start
+
     const response1 = {
         code: 200,
         message: "요청에 성공하였습니다.",
         requestId: "9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d",
-        groupTimes: "10002200", //오전 7시 - 오전 9시
+        groupTimes: "07001200", //오전 7시 - 오전 9시
         users: [
             {
                 userId: "user1",
                 days: [
                     {
-                        date: "2024-10-07",
+                        date: "2024-11-07",
                         day: "월요일",
-                        time: "101010101010101010101010",
-                        rank: "100000000000100000000000",
+                        time: "10101010",
+                        rank: "10000000",
                     },
                     {
-                        date: "2024-10-08",
+                        date: "2024-11-08",
                         day: "화요일",
-                        time: "010101010101010101010101",
-                        rank: "010000000000010000000000",
+                        time: "01010101",
+                        rank: "01000000",
                     },
                     {
-                        date: "2024-10-09",
+                        date: "2024-11-09",
                         day: "수요일",
-                        time: "111000111000111000111000",
-                        rank: "001000000000001000000000",
+                        time: "11100011",
+                        rank: "00100000",
                     },
                     {
-                        date: "2024-10-10",
+                        date: "2024-11-10",
                         day: "목요일",
-                        time: "000111000111000111000111",
-                        rank: "000100000000000100000000",
+                        time: "00011100",
+                        rank: "00010000",
                     },
                     {
-                        date: "2024-10-11",
+                        date: "2024-11-11",
                         day: "금요일",
-                        time: "100001000001000001000001",
-                        rank: "000010000000000010000000",
+                        time: "10000100",
+                        rank: "00001000",
                     },
                 ],
             },
@@ -86,152 +88,50 @@ const TimetableContent = () => {
                     {
                         date: "2024-10-07",
                         day: "월요일",
-                        time: "110011001100110011001100",
-                        rank: "000001000000000001000000",
+                        time: "11001100",
+                        rank: "00000100",
                     },
                     {
                         date: "2024-10-08",
                         day: "화요일",
-                        time: "001100110011001100110011",
-                        rank: "000000100000000000100000",
+                        time: "00110011",
+                        rank: "00000010",
                     },
                     {
                         date: "2024-10-09",
                         day: "수요일",
-                        time: "111100001111111100001111",
-                        rank: "000000010000000000010000",
+                        time: "11110000",
+                        rank: "00000001",
                     },
                     {
                         date: "2024-10-10",
                         day: "목요일",
-                        time: "000011110000000011110000",
-                        rank: "000000001000000000001000",
+                        time: "00001111",
+                        rank: "00000000",
                     },
                     {
                         date: "2024-10-11",
                         day: "금요일",
-                        time: "111111111111111111111111",
-                        rank: "000000000100000000000100",
+                        time: "11111111",
+                        rank: "00000000",
                     },
                 ],
             },
-            {
-                userId: "user3",
-                days: [
-                    {
-                        date: "2024-10-07",
-                        day: "월요일",
-                        time: "100100100100100100100100",
-                        rank: "000000000010000000000010",
-                    },
-                    {
-                        date: "2024-10-08",
-                        day: "화요일",
-                        time: "011001100110011001100110",
-                        rank: "000000000001000000000001",
-                    },
-                    {
-                        date: "2024-10-09",
-                        day: "수요일",
-                        time: "101010101010101010101010",
-                        rank: "000010000001000010000001",
-                    },
-                    {
-                        date: "2024-10-10",
-                        day: "목요일",
-                        time: "010101010101010101010101",
-                        rank: "000100100100000100100100",
-                    },
-                    {
-                        date: "2024-10-11",
-                        day: "금요일",
-                        time: "110011001100110011001100",
-                        rank: "100001000000100001000000",
-                    },
-                ],
-            },
-            {
-                userId: "user4",
-                days: [
-                    {
-                        date: "2024-10-07",
-                        day: "월요일",
-                        time: "000000111111111111000000",
-                        rank: "000000000010000000000010",
-                    },
-                    {
-                        date: "2024-10-08",
-                        day: "화요일",
-                        time: "111111000000000000111111",
-                        rank: "000000010000000000010000",
-                    },
-                    {
-                        date: "2024-10-09",
-                        day: "수요일",
-                        time: "101010000000000000101010",
-                        rank: "010000001000000001000000",
-                    },
-                    {
-                        date: "2024-10-10",
-                        day: "목요일",
-                        time: "000000101010101010000000",
-                        rank: "000010000000000010000000",
-                    },
-                    {
-                        date: "2024-10-11",
-                        day: "금요일",
-                        time: "111000111000111000111000",
-                        rank: "001000000000001000000000",
-                    },
-                ],
-            },
-            {
-                userId: "user5",
-                days: [
-                    {
-                        date: "2024-10-07",
-                        day: "월요일",
-                        time: "001100001100001100001100",
-                        rank: "000000000001000000000001",
-                    },
-                    {
-                        date: "2024-10-08",
-                        day: "화요일",
-                        time: "110000110000110000110000",
-                        rank: "000000000100000000000100",
-                    },
-                    {
-                        date: "2024-10-09",
-                        day: "수요일",
-                        time: "111111000000111111000000",
-                        rank: "000100000010000100000010",
-                    },
-                    {
-                        date: "2024-10-10",
-                        day: "목요일",
-                        time: "000000111111000000111111",
-                        rank: "010000000100000000100000",
-                    },
-                    {
-                        date: "2024-10-11",
-                        day: "금요일",
-                        time: "101010101010101010101010",
-                        rank: "100000000000100000000000",
-                    },
-                ],
-            },
+
         ],
     };
     const timetableData = response1;
-    //dummy end
 
+
+    // dummy end
+    //
     //연결시작
 
-    // let timetableData = response1;
+    // let timetableData;
     // useEffect(() => {
     //     console.log(`groupId : ${groupId}\ntype : ${meetType}\ntitle : ${meetTitle}`);
     //     // axios.post(`${testip}/group/${groupId}/when/${meetTitle}/${meetType}`, {
-    //     axios.get(`http://192.168.166.198:8080/group/${groupId}/when/${meetTitle}/${meetType}`
+    //     axios.get(`http://172.20.10.4:8080/group/${groupId}/when/${meetTitle}/${meetType}`
     //         ,{
     //             headers:
     //                 {
@@ -239,13 +139,14 @@ const TimetableContent = () => {
     //                 }
     //         }
     //     ).then((res) => {
-    //         console.log('meetingSchedulItem : ', res.data);
+    //         console.log('요청 시퀀스 후')
+    //         console.log('timetableData에서 시간표 요청 성공 : ', res.data);
     //         timetableData = res.data;
     //         //시간표 값 전달
     //     }).catch((err)=>{
-    //         console.log(`MeetingScheduleItem에서 시간표정보 요청실패 ${err}`);
+    //         console.log(`timetableData에서 시간표 요청실패 ${err}`);
     //     })//로 request 보내고, 받아온 결과로 시간표 출력.
-    //
+    //     console.log('요청 시퀀스 후')
     // }, []);
 
     // 여기까지 연결
@@ -350,56 +251,58 @@ const TimetableContent = () => {
 
                             // `${testip}/group/${groupId}/meet/${meetTitle}/add`
 
-                            // axios.post(
-                            //
-                            //     `http://192.168.164.228:8080/group/${groupId}/meet/${meetTitle}/add`
-                            //     , postData,
-                            //     {
-                            //         headers:
-                            //             {
-                            //                 Authorization: `Bearer ${accessToken}`
-                            //             }
-                            //     }
-                            // ).then((res) => {
-                            //     console.log(`캘린더 불러오기 성공 : ${res.data.data.groupTableDTO}`);
-                            //     loadCalender(res.data.data);
-                            // }).catch((err) => {
-                            //     console.log(`TimetableContent에서 캘린더 불러오기 요청실패 ${err}`);
-                            // })
+                            axios.post(
+
+                                // `http://172.20.10.4:8080/group/${groupId}/when/${meetTitle}/${meetType}/load`, postData,
+                                `http://172.20.10.4:8080/group/${groupId}/when/${meetTitle}/${meetType}/load`, null,
+                                {
+                                    headers:
+                                        {
+                                            Authorization: `Bearer ${accessToken}`
+                                        }
+                                }
+                            ).then((res) => {
+                                console.log(res.data.data.users)
+                                // console.log(`캘린더 불러오기 성공 : ${res.data.data.groupTableDTO}`);
+                                loadCalender(res.data.data.users);
+                                // loadCalender(resData.data.groupTableDTO.days);
+                            }).catch((err) => {
+                                console.log(`TimetableContent에서 캘린더 불러오기 요청실패 ${err}`);
+                            })
 
                             //dummy 시작
-                            const resData = {
-                                message: "요청에 성공했습니다.",
-                                httpStatus: "OK",
-                                requestId:"9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d",
-                                data: {
-                                    groupTableDTO: {
-                                        groupTimes: "07000900",  // 오전 7시 - 오전 9시
-                                        type: "online",
-                                        days: [
-                                            {
-                                               date: "2024-10-09",
-                                               day: "수요일",
-                                               time: "101011101010101010101010",  // 15분 단위이므로 2시간일때 8개
-                                               rank: "000022201010101010101010"
-                                            },
-                                            {
-                                               date: "2024-10-10",
-                                               day: "목요일",
-                                               time: "111000001010101010101010",
-                                               rank: "222000001010101010101010"
-                                            },
-                                            {
-                                               date: "2024-10-11",
-                                               day: "금요일",
-                                               time: "101100001010101010101010",
-                                               rank: "002200001010101010101010"
-                                            }
-                                        ]
-                                    }
-                                }
-                            }
-                            loadCalender(resData.data.groupTableDTO.days);
+                            // const resData = {
+                            //     message: "요청에 성공했습니다.",
+                            //     httpStatus: "OK",
+                            //     requestId:"9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d",
+                            //     data: {
+                            //         groupTableDTO: {
+                            //             groupTimes: "07000900",  // 오전 7시 - 오전 9시
+                            //             type: "online",
+                            //             days: [
+                            //                 {
+                            //                    date: "2024-10-09",
+                            //                    day: "수요일",
+                            //                    time: "101011101010101010101010",  // 15분 단위이므로 2시간일때 8개
+                            //                    rank: "000022201010101010101010"
+                            //                 },
+                            //                 {
+                            //                    date: "2024-10-10",
+                            //                    day: "목요일",
+                            //                    time: "111000001010101010101010",
+                            //                    rank: "222000001010101010101010"
+                            //                 },
+                            //                 {
+                            //                    date: "2024-10-11",
+                            //                    day: "금요일",
+                            //                    time: "101100001010101010101010",
+                            //                    rank: "002200001010101010101010"
+                            //                 }
+                            //             ]
+                            //         }
+                            //     }
+                            // }
+                            // loadCalender(resData.data.groupTableDTO.days);
                             //dummy 끝
                         }
 
@@ -420,7 +323,7 @@ const TimetableContent = () => {
 
                     //API : /group/{groupId}/when/{title}/{type}/add
                     // axios.post(`${testip}/group/${groupId}/when/${meetTitle}/${meetType}/add`, null
-                        axios.post(`http://192.168.166.198:8080/group/${groupId}/when/${meetTitle}/${meetType}/add`, null
+                        axios.post(`http://172.20.10.4:8080/group/${groupId}/when/${meetTitle}/${meetType}/add`, null
                         , {
                             headers:
                                 {
@@ -449,7 +352,7 @@ const TimetableContent = () => {
                     console.log("갱신된 개인시간표 정보_redux ", store.getState().personalTimeData);
 
                     // axios.post(`${testip}/group/${groupId}/when/${meetTitle}/${meetType}/update`, myTableData, {
-                    axios.post(`http://192.168.166.198:8080/group/${groupId}/when/${meetTitle}/${meetType}/update`, store.getState().personalTimeData, {
+                    axios.post(`http://172.20.10.4:8080/group/${groupId}/when/${meetTitle}/${meetType}/update`, store.getState().personalTimeData, {
                             headers:
                                 {
                                     Authorization: `Bearer ${accessToken}`
@@ -495,7 +398,7 @@ const TimetableContent = () => {
                             const startTime = doneTime.time.slice(0,5) + ':00';
                             console.log("timeTableContent에서 Done 요청", doneTime);
                             // axios.post(`${testip}/group/${groupId}/when/${meetTitle}/${meetType}/done`, {
-                                    axios.post(`http://192.168.164.228:8080/group/${groupId}/when/${meetTitle}/${meetType}/done`, {
+                                    axios.post(`http://172.20.10.4:8080/group/${groupId}/when/${meetTitle}/${meetType}/done`, {
                                     meetDt: `${doneTime.date}T${startTime}`
                                 }, {
                                     headers:
@@ -545,6 +448,7 @@ function returnMyTimeTable(timetableData, myUserId) {
 }
 
 function checkPersonalTime(timetableData, myUserId) {
+    // console.log('checkP', timetableData)
     for (let i = 0; i < timetableData.users.length; i++) {
         if (timetableData.users[i].userId === myUserId) {
             return true;

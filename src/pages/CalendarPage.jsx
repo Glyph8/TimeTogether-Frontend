@@ -382,13 +382,15 @@ function CalendarPage() {
 
     try {
       const response = await axios.get(
-        `http://192.168.186.162:8080/calendar/view/${year}/${month}`,
+        `http://172.20.10.4:8080/calendar/view/${year}/${month}`,
         {
           headers: {
             Authorization: `Bearer ${accessToken}`,
           },
         }
-      );
+      )
+
+
       console.log(response.data);
       // const { meetingList } = response.data.data;
       const { e, l } = response.data.data; // 응답에서 e와 l 추출
@@ -420,7 +422,12 @@ function CalendarPage() {
         ];
         const groupId = meeting.id; // 그룹 ID
         const color = colors[groupId % colors.length]; // ID 기반으로 색상 선택
-        const meetType = meeting.meetType;
+
+
+        const meetType = 'ONLINE';
+        // const meetType = meeting.meetType;
+
+
         // locationMap에서 meeting.id로 location 정보 찾기
         const locationInfo = locationMap[meeting.id] || {};
         const locationName = locationInfo.locationName;
@@ -440,7 +447,9 @@ function CalendarPage() {
             content: meeting.meetContent,
             location: locationName, // 병합된 locationName
             locationUrl, // 병합된 locationUrl
-            meetType,
+
+            meetType: 'ONLINE',
+
             groupName: meeting.groupName || "그룹명 없음", // 그룹 이름
             isAllDay,
             startDate,

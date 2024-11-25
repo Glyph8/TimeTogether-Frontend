@@ -612,8 +612,10 @@ function CalendarAddModal({
       // meetingId: editEvent?.id || null,
       meetTitle: title.trim() || "새로운 일정",
       meetContent: content.trim() || "내용 없음",
-      // meetType: null,
-      meetType: meetType.trim(),
+      meetType: null,
+
+      // meetType: meetType.trim(),
+
       meetDTstart: `${startDate}${formattedStartTime}`,
       meetDTend: `${endDate}${formattedEndTime}`,
       groupName: groupName.trim() || "", // 사용자 수정 불가능한 그룹 이름
@@ -629,7 +631,7 @@ function CalendarAddModal({
       const accessToken = localStorage.getItem("accessToken");
       if (editEvent) {
         const response = await axios.patch(
-          `http://192.168.186.162:8080/calendar/update/${editEvent.id}`,
+          `http://172.20.10.4:8080/calendar/update/${editEvent.id}`,
           eventData2,
           {
             headers: {
@@ -642,7 +644,7 @@ function CalendarAddModal({
       } else {
         console.log("보낸내용: ", eventData1);
         const response = await axios.post(
-          `http://192.168.186.162:8080/calendar/create`,
+          `http://172.20.10.4:8080/calendar/create`,
           eventData1,
           {
             headers: {
@@ -672,7 +674,7 @@ function CalendarAddModal({
     if (!editEvent?.id) return;
     try {
       const response = await axios.delete(
-        `http://192.168.186.162:8080/calendar/delete/${editEvent.id}`,
+        `http://172.20.10.4:8080/calendar/delete/${editEvent.id}`,
         {
           headers: {
             Authorization: `Bearer ${accessToken}`,

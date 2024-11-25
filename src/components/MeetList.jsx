@@ -16,7 +16,7 @@ function MeetList({groupId, totalNumber, isMgr, whenData, whenProcessData}) {
             gap: '0',
             padding: '0',
         }}>
-            {whenData.length === 0 ? (
+            {(!whenData || whenData.length === 0) ? (
                 <header
                     className="group-header"
                     style={{borderBottom: `5px solid #e4e4e4`}}
