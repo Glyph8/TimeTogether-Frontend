@@ -420,7 +420,8 @@ function CalendarPage() {
         ];
         const groupId = meeting.id; // 그룹 ID
         const color = colors[groupId % colors.length]; // ID 기반으로 색상 선택
-        const meetType = meeting.meetType;
+        // const meetType = meeting.meetType;
+        const meetType = "ONLINE";
         // locationMap에서 meeting.id로 location 정보 찾기
         const locationInfo = locationMap[meeting.id] || {};
         const locationName = locationInfo.locationName;

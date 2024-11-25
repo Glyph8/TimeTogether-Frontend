@@ -35,7 +35,6 @@ function MeetingsPage() {
   const meetingTitle = searchParams.get("meetTitle") || "";
   const isMgr = searchParams.get("isMgr") || false;
 
-
   useEffect(() => {
     setIsHost(isMgr);
   }, [isMgr]);
@@ -70,7 +69,6 @@ function MeetingsPage() {
   }, [totalNumber]);
 
   useEffect(() => {
-
     let intervalId;
     const fetchMeetingLocations = async () => {
       try {

@@ -1,80 +1,79 @@
 /* Meeting Group Item Container */
 
 .meeting-group-item {
-    width: 100%;
-    height: 100%;
-    /*height: fit-content;*/
-    display: flex;
-    flex-direction: column;
-    /*justify-content: flex-start;*/
-    padding-left: 15px;
-    padding-right: 15px;
-    /*margin-bottom: 25px;*/
-    margin-right: 5px;
-    background-color: white;
-    border-bottom: 1px solid #ccc;
-    align-items: stretch; /* 또는 flex-start, center로 테스트 */
-    justify-content: flex-start; /* 원하는 정렬 방식 확인 */
-
+  width: 100%;
+  height: 100%;
+  /*height: fit-content;*/
+  display: flex;
+  flex-direction: column;
+  /*justify-content: flex-start;*/
+  padding-left: 15px;
+  padding-right: 15px;
+  /*margin-bottom: 25px;*/
+  margin-right: 5px;
+  background-color: white;
+  border-bottom: 1px solid #ccc;
+  align-items: stretch; /* 또는 flex-start, center로 테스트 */
+  justify-content: flex-start; /* 원하는 정렬 방식 확인 */
 }
-
 
 /* Meeting Header: Status + Time in one row */
 .meeting-group-header {
-    display: flex;
-    align-items: center;
-    gap: 10px; /* 상태와 시간 간격 */
-    margin-bottom: 5px;
+  display: flex;
+  align-items: center;
+  gap: 10px; /* 상태와 시간 간격 */
+  margin-bottom: 5px;
+  cursor: pointer;
 }
 
 /* Status (Online/Offline) */
 .meeting-group-status {
-    display: inline-block;
-    padding: 2px 6px; /* 상태 크기 축소 */
-    border-radius: 8px;
-    font-size: 17px; /* 작은 텍스트 크기 */
-    font-weight: bold;
+  display: inline-block;
+  padding: 2px 6px; /* 상태 크기 축소 */
+  border-radius: 8px;
+  font-size: 17px; /* 작은 텍스트 크기 */
+  font-weight: bold;
 }
 
 .meeting-group-status.online {
-    background-color: #ffe6e6;
-    color: #ff4d4f;
+  background-color: #ffe6e6;
+  color: #ff4d4f;
 }
 
 .meeting-group-status.offline {
-    background-color: #e6f7ff;
-    color: #1890ff;
+  background-color: #e6f7ff;
+  color: #1890ff;
 }
 
 /* Meeting Time */
-.meeting-group-data{
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    margin: 0 auto;
+.meeting-group-data {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin: 0 auto;
 }
 
 .meeting-group-title {
-    font-size: 22px;
-    font-weight: bold;
-    color: #333;
-    white-space: nowrap; /* 한 줄에 표시 */
+  font-size: 22px;
+  font-weight: bold;
+  color: #333;
+  white-space: nowrap; /* 한 줄에 표시 */
 }
 
 .meeting-group-time {
-    font-size: 18px;
-    /*font-weight: bold;*/
-    color: #333;
-    white-space: nowrap; /* 한 줄에 표시 */
+  font-size: 18px;
+  /*font-weight: bold;*/
+  color: #333;
+  white-space: nowrap; /* 한 줄에 표시 */
 }
 
 /* Meeting Location */
 .meeting-group-location {
-    font-size: 17px;
-    color: #888;
-    margin-top: 3px;
-    text-align: left;
+  font-size: 17px;
+  color: #888;
+  margin-top: 3px;
+  text-align: left;
 
-    display: inline-block;
-    width: fit-content;
+  display: inline-block;
+  width: fit-content;
 }

@@ -1,0 +1,75 @@
+.ig-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  /* background: rgba(0, 0, 0, 0.5); */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.ig-modal-content {
+  position: absolute;
+  top: 0px;
+  right: 0;
+  background: #fff;
+  border-radius: 20px 0 0px 20px;
+  padding: 20px;
+
+  width: 300px;
+  max-width: 400px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  /* position: relative; */
+  text-align: center;
+}
+
+.ig-modal-header {
+  margin-bottom: 20px;
+}
+
+.ig-group-image {
+  width: 80px;
+  height: 80px;
+  border-radius: 30%;
+  object-fit: cover;
+}
+
+.ig-member-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  text-align: left;
+  margin-top: 20px;
+}
+
+.ig-member-item {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 15px;
+}
+
+.ig-member-image {
+  width: 40px;
+  height: 40px;
+  border-radius: 35%;
+  object-fit: cover;
+}
+
+.ig-close-button {
+  background: none;
+  color: #656565;
+  border: none;
+  width: 100%;
+  font-size: 1rem;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.ig-close-button:hover {
+  color: red;
+}

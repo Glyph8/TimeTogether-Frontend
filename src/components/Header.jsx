@@ -5,10 +5,10 @@ import MenuButton from "./MenuButton";
 
 const Header = ({ title, onBackClick, onMenuClick }) => {
   return (
-    <div className="header">
+    <div className="h-header">
       <BackButton onClick={onBackClick} />
-      <div className="header-title">{title}</div>
-      <MenuButton onClick={onMenuClick} />
+      <div className="h-header-title">{title}</div>
+      {/* <MenuButton onClick={onMenuClick} /> */}
     </div>
   );
 };

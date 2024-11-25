@@ -70,10 +70,19 @@ const GroupCard = ({ group, onDelete }) => {
         //dispatch(setGroupTimes(group.groupTimes)); //그룹이 생성될 때 설정한 groupTimes state값으로 설정
 
         navigate(
-          `/meeting-list/${group.groupId}?totalNumber=${totalNumber}&isMgr=${group.mgr}`
+          `/meeting-list/${group.groupId}?totalNumber=${totalNumber}&isMgr=${group.mgr}`,
+          {
+            state: {
+              groupName: group.groupName,
+              groupMembers: group.groupMembers,
+              groupImg: group.groupImg,
+              isMgr: group.mgr,
+            },
+          }
         ); //MeetingsPage로 navigate
       }}
     >
+      {" "}
       <img src={group.groupImg} alt="Group" className="group-image" />
       <div className="group-info">
         <h3>{group.groupName}</h3>

@@ -19,6 +19,10 @@
   border-bottom: 2px solid rgb(246, 246, 246);
   display: block;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+
+  font-weight: 600;
+  font-size: 1.3rem;
+  color: black;
 }
 .main-container {
   width: 100%;

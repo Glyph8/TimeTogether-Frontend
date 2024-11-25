@@ -19,6 +19,10 @@
   box-sizing: border-box;
   border-bottom: 2px solid rgb(246, 246, 246);
   display: block;
+
+  font-weight: 600;
+  font-size: 1.3rem;
+  color: black;
 }
 
 .profile-info {
