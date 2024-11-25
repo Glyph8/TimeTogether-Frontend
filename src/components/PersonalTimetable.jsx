@@ -3,9 +3,6 @@ import {useEffect, useState} from "react";
 
 const PersonalTimetable = ({days, timeRange, priorityOn, setEdited}) => {
     const [selectedPriority, setSelectedPriority] = useState(2);
-    useEffect(() => {
-
-    }, []);
 
     return (
         <div className="personal-timetable">

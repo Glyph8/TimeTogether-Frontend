@@ -6,7 +6,13 @@ import {useEffect, useMemo, useState} from "react";
 import {useLocation, useParams} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import axios from "axios";
-import store, {updatePersonalTimeData, updateRankValues, updateTimeValues} from "../store.js";
+import store, {
+    updatePersonalTimeData,
+    updateRankOnly,
+    updateRankValues,
+    updateTimeOnly,
+    updateTimeValues
+} from "../store.js";
 import GroupCellModal from "./GroupCellModal.jsx";
 import groupCellModal from "./GroupCellModal.jsx";
 
@@ -242,7 +248,7 @@ const TimetableContent = () => {
     const [days, setDays] = useState([]);
     const [timeRange, setTimeRange] = useState("");
     const [btnColorChange, setBtnColorChange] = useState("add-personal-timeBtn")
-    const myUserId = 'user1';
+    const myUserId = 'user9';
     const [loadPersonalTime, setLoadPersonalTime] = useState(false);
 
     const [priorityOn, setPriorityOn] = useState(false);
@@ -258,13 +264,7 @@ const TimetableContent = () => {
 
     const [selectedSlot, setSelectedSlot] = useState(null);
 
-    // const timeSlots = [
-    //     {id: 1, label: '1순위', date: '10/12 (토)', time: '09:00~10:00'},
-    //     {id: 2, label: '2순위', date: '10/13 (토)', time: '10:00~12:00'},
-    //     {id: 3, label: '3순위', date: '-', time: '-'}
-    // ];
     const timeSlots = useSelector(state => state.timeSlots);
-
 
     const handleSlotClick = (slotId) => {
         if (selectedSlot === slotId) {
@@ -279,6 +279,32 @@ const TimetableContent = () => {
         return structuredClone(timetableData);
     }, [timetableData && JSON.stringify(timetableData)]); // 깊은 비교
 
+    const isExistPersonal = checkPersonalTime(stableTimetableData, myUserId);
+
+    const loadCalender = (res) => {
+        console.log('로드한 캘린더 데이터', res)
+
+        const newPersonalTimeData = structuredClone(days);
+
+        newPersonalTimeData.forEach((eachDay) => {
+            res.forEach((calenderDay) => {
+                if (eachDay.date === calenderDay.date) {
+                    console.log('일치 적용', eachDay.time, calenderDay.time);
+                    eachDay.time = calenderDay.time;
+                    eachDay.rank = calenderDay.rank;
+                }
+            });
+        });
+
+        const updatedDays = newPersonalTimeData.map((day) => ({ ...day }));
+        setDays(updatedDays);
+        dispatch(updatePersonalTimeData(updatedDays))
+        setIsEdited(true);
+    }
+
+    useEffect(() => {
+        console.log('변경된 days useEffect : ', days);
+    }, [days]);
 
     useEffect(() => {
         if (timetableData?.groupTimes) {
@@ -293,9 +319,6 @@ const TimetableContent = () => {
         }
     }, [stableTimetableData, myUserId]);
 
-    useEffect(() => {
-    //    console.log("timetableData changed:", timetableData);
-    }, [timetableData]);
 
     return (
         <div className="timetable-content">
@@ -319,21 +342,60 @@ const TimetableContent = () => {
                                 type: meetType,
                                 title: meetTitle,
                             }
-                            axios.post(
-                                // `${testip}/group/${groupId}/meet/${meetTitle}/add`
-                                `http://192.168.164.228:8080/group/${groupId}/meet/${meetTitle}/add`
-                                , postData,
-                                {
-                                    headers:
-                                        {
-                                            Authorization: `Bearer ${accessToken}`
-                                        }
+
+                            // `${testip}/group/${groupId}/meet/${meetTitle}/add`
+
+                            // axios.post(
+                            //
+                            //     `http://192.168.164.228:8080/group/${groupId}/meet/${meetTitle}/add`
+                            //     , postData,
+                            //     {
+                            //         headers:
+                            //             {
+                            //                 Authorization: `Bearer ${accessToken}`
+                            //             }
+                            //     }
+                            // ).then((res) => {
+                            //     console.log(`캘린더 불러오기 성공 : ${res.data.data.groupTableDTO}`);
+                            //     loadCalender(res.data.data);
+                            // }).catch((err) => {
+                            //     console.log(`TimetableContent에서 캘린더 불러오기 요청실패 ${err}`);
+                            // })
+
+                            //dummy 시작
+                            const resData = {
+                                message: "요청에 성공했습니다.",
+                                httpStatus: "OK",
+                                requestId:"9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d",
+                                data: {
+                                    groupTableDTO: {
+                                        groupTimes: "07000900",  // 오전 7시 - 오전 9시
+                                        type: "online",
+                                        days: [
+                                            {
+                                               date: "2024-10-09",
+                                               day: "수요일",
+                                               time: "101011101010101010101010",  // 15분 단위이므로 2시간일때 8개
+                                               rank: "000022201010101010101010"
+                                            },
+                                            {
+                                               date: "2024-10-10",
+                                               day: "목요일",
+                                               time: "111000001010101010101010",
+                                               rank: "222000001010101010101010"
+                                            },
+                                            {
+                                               date: "2024-10-11",
+                                               day: "금요일",
+                                               time: "101100001010101010101010",
+                                               rank: "002200001010101010101010"
+                                            }
+                                        ]
+                                    }
                                 }
-                            ).then((res) => {
-                                console.log(`캘린더 불러오기 성공 : ${res.data}`);
-                            }).catch((err) => {
-                                console.log(`TimetableContent에서 캘린더 불러오기 요청실패 ${err}`);
-                            })
+                            }
+                            loadCalender(resData.data.groupTableDTO.days);
+                            //dummy 끝
                         }
 
                     }}>캘린더 불러오기
@@ -369,12 +431,11 @@ const TimetableContent = () => {
                 } else {//저장하기 상태에서 클릭하는 경우? 저장되었다는 의미로 버튼 색 변화
                     //다시 시간표 클릭해서 변동되면 캘린더 버튼 색 변화, 저장하기 색 복귀하도록 할것
 
-                    setBtnColorChange("save-btn")
+                    //setBtnColorChange("save-btn")
 
                     //API : /group/{groupId}/when/{title}/{type}/update
 
                     dispatch(updateTimeValues(timeOnlyData))
-
                     dispatch(updateRankValues(rankOnlyData))
 
                     // console.log("갱신된 timeOnlyData 정보", timeOnlyData);
@@ -399,7 +460,8 @@ const TimetableContent = () => {
             }}>
                 {
                     loadPersonalTime ? <p>저장하기</p> : (
-                        <p>내 시간표 추가하기</p>
+                        isExistPersonal ? <p>내 시간표 수정하기</p> : <p>내 시간표 추가하기</p>
+
                     )
                 }
             </button>
@@ -454,6 +516,7 @@ const TimetableContent = () => {
         </div>
     );
 };
+
 
 function createEmptyTimes(timetableData) {//groupTimeTable에도 있음.
     const emptyTimes = timetableData.users[0].days;

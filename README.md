@@ -1,5 +1,7 @@
 # 할 일
 
+## backend와 우선순위 rank 값 기분 결정하기
+
 ## where2meet done따라 when2meet done 활성화 조건걸기
 
 ## 그룹 우상단 메뉴 클릭시 그룹원 관리메뉴(그룹장 여부따라 다른 표기)

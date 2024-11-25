@@ -12,8 +12,6 @@ const TimeGrid = ({days, timeRange, selectedPriority, setEdited}) => {
     const times = timeSet(days);
     const ranks = rankSet(days);
 
-    console.log("개인시간표 : ", days)
-
     useEffect(() => {
         setHourCount(getTimeRange(timeRange));
         setStartHour(getStartHour(timeRange));
@@ -68,13 +66,48 @@ const GridCells = ({days, hourCount, timeSet, rankSet, selectedPriority, setEdit
     let personalTimeData = useSelector((state) => state.personalTimeData);
     let dispatch = useDispatch();
 
+    // useEffect(() => {
+    //     //setTimes(timeSet);
+    //     //setRanks(rankSet)
+    // }, [days, rankSet, timeSet]);
+
+
     useEffect(() => {
-        //setTimes(timeSet);
-        //setRanks(rankSet)
-    }, [days, rankSet, timeSet]);
+        const newTimeSet = new Array(0);
+        days.map((eachDay) => {
+            newTimeSet.push(eachDay.time);
+        })
+        const newRankSet = new Array(0);
+        days.map((eachDay) => {
+            newRankSet.push(eachDay.rank);
+        })
+
+        setTimes(newTimeSet)
+        setRanks(newRankSet)
+    }, [days]);
+
 
     const [isDragging, setIsDragging] = useState(false); // 드래그 상태
     const [checkingRule, setCheckingRule] = useState(true);
+
+    const handleCellClickOne = (dayIndex, hourIndex) => {
+        setEdited(true);
+        let newTimes = [...times];
+        let newRanks = [...ranks];
+        if (newTimes[dayIndex][hourIndex === '1']) {
+            newTimes[dayIndex] = newTimes[dayIndex].substring(0, hourIndex) + '0' + newTimes[dayIndex].substring(hourIndex + 1);
+            newRanks[dayIndex] = newRanks[dayIndex].substring(0, hourIndex) + '0' + newRanks[dayIndex].substring(hourIndex + 1);
+        } else {//false면 check
+            newTimes[dayIndex] = newTimes[dayIndex].substring(0, hourIndex) + '1' + newTimes[dayIndex].substring(hourIndex + 1);
+            newRanks[dayIndex] = newRanks[dayIndex].substring(0, hourIndex) + selectedPriority + newRanks[dayIndex].substring(hourIndex + 1);
+        }
+        setTimes(newTimes);
+        setRanks(newRanks);
+
+        dispatch(updateTimeOnly(newTimes));
+        dispatch(updateRankOnly(newRanks));
+    };
+
     const handleCellClick = (dayIndex, hourIndex) => {
         setEdited(true);
         let newTimes = [...times];
@@ -128,7 +161,6 @@ const GridCells = ({days, hourCount, timeSet, rankSet, selectedPriority, setEdit
                         let cellColor = "#ffffff";
                         const checked = times[dayIndex][hourIndex];
                         const rank = ranks[dayIndex][hourIndex];
-
                         if (checked === "1" && rank === "0") {
                             cellColor = "#FFC553";
                         }
@@ -144,6 +176,7 @@ const GridCells = ({days, hourCount, timeSet, rankSet, selectedPriority, setEdit
                                 key={`${dayIndex}-${hourIndex}`}
                                 className={cellName}
                                 style={{backgroundColor: cellColor, border: '1px dotted #c6c6c6'}}
+                                onClick={()=> handleCellClickOne(dayIndex, hourIndex)}
                                 onMouseDown={() => handleMouseDown(dayIndex, hourIndex)} // 드래그 시작
                                 onMouseEnter={() => handleMouseEnter(dayIndex, hourIndex)} // 드래그 중
                             >

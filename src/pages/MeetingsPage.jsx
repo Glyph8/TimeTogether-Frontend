@@ -332,7 +332,7 @@ function MeetingsPage() {
         <AddPlaceModal onClose={closeModal} onAddPlace={handleAddPlace} />
       )}
       <Header
-        title={"ExampleTeam"}
+        title={meetingTitle}
         onBackClick={() => {
           if (window.history.length > 1) {
             navigate(-1);
