@@ -43,6 +43,8 @@ const MeetingListPage = () => {
     //     }).catch((err) => {
     //         console.log(`MeeingListPage서 회의 리스트 요청실패 ${err}`);
     //     })
+    
+    //여기까지 연결
 
     const whenDataResponse = {
       code: 200,
@@ -100,6 +102,8 @@ const MeetingListPage = () => {
     setWhenData(whenDataResponse.result);
     setWhenProcessData(whenDataResponse.process);
     //여기까지 회의 리스트 더미데이터
+    
+    
   }, [groupId, totalNumber]);
 
   return (

@@ -7,6 +7,7 @@ import axios from "axios";
 const MeetingGroupScheduleItem = ({onMeetingNavigate, meeting, groupId}) => {
     const {meetTitle, meetDTstart, meetDTend, meetType, locationName} = meeting;
     const navigate = useNavigate();
+
     const loadMeetingInfo = () => {
         //const response = await axios.get("기존 시간표 내용 요청");
         console.log("load meetingInfo");

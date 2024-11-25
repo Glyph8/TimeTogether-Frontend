@@ -38,10 +38,7 @@ const TimetableContent = () => {
     const meetTitle = searchParams.get("meetTitle") || "";
     const meetType = searchParams.get("type") || 'OFFLINE';
 
-    // store.subscribe(() => {
-    //     console.log("Redux 상태가 업데이트됨: ", store.getState().personalTimeData); //좀 잦긴하다.
-    // });
-
+    //dummy start
     const response1 = {
         code: 200,
         message: "요청에 성공하였습니다.",
@@ -225,6 +222,12 @@ const TimetableContent = () => {
             },
         ],
     };
+    const timetableData = response1;
+    //dummy end
+
+    //연결시작
+
+    // let timetableData = response1;
     // useEffect(() => {
     //     console.log(`groupId : ${groupId}\ntype : ${meetType}\ntitle : ${meetTitle}`);
     //     // axios.post(`${testip}/group/${groupId}/when/${meetTitle}/${meetType}`, {
@@ -244,7 +247,9 @@ const TimetableContent = () => {
     //     })//로 request 보내고, 받아온 결과로 시간표 출력.
     //
     // }, []);
-    const timetableData = response1;
+
+    // 여기까지 연결
+
     const [days, setDays] = useState([]);
     const [timeRange, setTimeRange] = useState("");
     const [btnColorChange, setBtnColorChange] = useState("add-personal-timeBtn")
