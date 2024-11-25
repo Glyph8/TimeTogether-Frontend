@@ -15,6 +15,7 @@ import LocationSimpleItemList from "../components/LocationSimpleItemList.jsx";
 import axios from "axios";
 import MeetingListPage from "./MeetingListPage.jsx";
 import { useLocation } from "react-router-dom";
+import InGroupModal from "../components/InGroupModal"; // Import the modal component
 
 function MeetingsPage() {
   const { groupId, meetingId } = useParams(); //groupid
@@ -33,7 +34,13 @@ function MeetingsPage() {
 
   const totalNumber = searchParams.get("totalNumber") || 1;
   const meetingTitle = searchParams.get("meetTitle") || "";
-  const isMgr = searchParams.get("isMgr") || false;
+  // const isMgr = searchParams.get("isMgr") || false;
+
+  const [isGroupModalOpen, setIsGroupModalOpen] = useState(false); // Group modal state
+  const handleOpenGroupModal = () => setIsGroupModalOpen(true); // Open modal
+  const handleCloseGroupModal = () => setIsGroupModalOpen(false); // Close modal
+  const { groupName, groupMembers, groupImg, isMgr } = location.state || {};
+  // const [groupName, setGroupName] = useState(passedGroupName || ""); // 네비게이션으로 받은 groupName을 기본값으로 사용
 
   useEffect(() => {
     setIsHost(isMgr);
@@ -338,8 +345,19 @@ function MeetingsPage() {
             navigate("/group"); // 기본 경로 설정
           }
         }}
-        onMenuClick={() => {}}
+        onMenuClick={handleOpenGroupModal}
       />
+      {/* InGroupModal */}
+      <InGroupModal
+        isOpen={isGroupModalOpen}
+        onClose={handleCloseGroupModal}
+        groupImg={groupImg}
+        groupName={groupName}
+        groupMembers={groupMembers || []}
+        isMgr={isMgr}
+        groupId={groupId}
+      />
+
       <TabSelector
         selectedOption={activeTab}
         onSelect={(option) => setActiveTab(option)}

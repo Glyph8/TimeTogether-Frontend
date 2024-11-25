@@ -2,11 +2,28 @@ import React, { useState, useEffect } from "react";
 import MeetingGroupScheduleItem from "../components/MeetingGroupScheduleItem.jsx";
 import { useNavigate } from "react-router-dom";
 
-function MeetList({ groupId, totalNumber, isMgr, whenData, whenProcessData }) {
+function MeetList({
+  groupId,
+  totalNumber,
+  isMgr,
+  whenData,
+  whenProcessData,
+  groupName,
+  groupMembers,
+  groupImg,
+}) {
   const nav = useNavigate();
   const handleNavigate = (meeting) => {
     nav(
-      `/meetings/${groupId}/${meeting.meetId}?totalNumber=${totalNumber}&meetTitle=${meeting.meetTitle}&isMgr=${isMgr}&type=${meeting.meetType}`
+      `/meetings/${groupId}/${meeting.meetId}?totalNumber=${totalNumber}&meetTitle=${meeting.meetTitle}&isMgr=${isMgr}&type=${meeting.meetType}`,
+      {
+        state: {
+          groupName: groupName,
+          groupMembers: groupMembers,
+          groupImg: groupImg,
+          isMgr: isMgr,
+        },
+      }
     );
   };
 
@@ -20,7 +37,7 @@ function MeetList({ groupId, totalNumber, isMgr, whenData, whenProcessData }) {
         paddingBottom: "30px",
       }}
     >
-      {whenData.length === 0 ? (
+      {!whenData || whenData.length === 0 ? (
         <header
           className="group-header"
           style={{ borderBottom: `5px solid #e4e4e4` }}
