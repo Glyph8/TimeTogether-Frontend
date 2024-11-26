@@ -3,7 +3,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 20px;
+  padding: 30px;
   background-color: #fff;
   box-sizing: border-box;
   position: sticky; /*스크롤해도 상단에 고정 */
@@ -13,7 +13,7 @@
 .h-header-title {
   /*padding-left: 40px;*/
   font-weight: bold;
-  font-size: 1.4em;
+  font-size: 1.3rem;
   color: #333;
   text-align: center;
   flex-grow: 1;

@@ -109,11 +109,11 @@ function GroupPage() {
         },
         {
           groupId: 4,
-          groupName: "미야옹",
-          groupIntro: "미야옹 월드",
+          groupName: "멍멍",
+          groupIntro: "멍멍이 월드",
           groupImg:
             "https://image.utoimage.com/preview/cp872722/2021/10/202110001984_500.jpg",
-          groupMembers: "김OO",
+          groupMembers: "멍멍이, 야옹이",
           groupMgrId: "100682045992698191363",
         },
         {

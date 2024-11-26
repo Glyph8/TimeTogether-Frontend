@@ -131,7 +131,7 @@ const MeetingListPage = () => {
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
-          padding: "20px",
+          padding: "35px",
           borderBottom: "1px solid #e0e0e0",
           boxShadow: "0px 4px 10px 0px #0000000a",
           marginBottom: "5px",
