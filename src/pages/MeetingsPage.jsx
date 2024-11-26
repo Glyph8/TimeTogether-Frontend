@@ -35,42 +35,40 @@ function MeetingsPage() {
   const meetingTitle = searchParams.get("meetTitle") || "";
   const isMgr = searchParams.get("isMgr") || false;
 
-
   useEffect(() => {
     setIsHost(isMgr);
   }, [isMgr]);
 
-  useEffect(() => {
-    console.log(totalNumber);
-    const response = {
-      code: 200,
-      message: "요청에 성공하였습니다.",
-      candidates: [
-        {
-          locationId: 101,
-          locationName: "스타벅스 강남점",
-          locationUrl: "https://naver.me/5xyzExample",
-          count: 4,
-        },
-        {
-          locationId: 102,
-          locationName: "투썸 강남점",
-          locationUrl: "https://naver.me/7abcExample",
-          count: 3,
-        },
-        {
-          locationId: 103,
-          locationName: "커피빈 강남점",
-          locationUrl: "https://naver.me/8defExample",
-          count: 2,
-        },
-      ],
-    };
-    setLocations(response.candidates); // 서버 응답 데이터를 상태로 설정
-  }, [totalNumber]);
+  // useEffect(() => {
+  //   console.log(totalNumber);
+  //   const response = {
+  //     code: 200,
+  //     message: "요청에 성공하였습니다.",
+  //     candidates: [
+  //       {
+  //         locationId: 101,
+  //         locationName: "스타벅스 강남점",
+  //         locationUrl: "https://naver.me/5xyzExample",
+  //         count: 4,
+  //       },
+  //       {
+  //         locationId: 102,
+  //         locationName: "투썸 강남점",
+  //         locationUrl: "https://naver.me/7abcExample",
+  //         count: 3,
+  //       },
+  //       {
+  //         locationId: 103,
+  //         locationName: "커피빈 강남점",
+  //         locationUrl: "https://naver.me/8defExample",
+  //         count: 2,
+  //       },
+  //     ],
+  //   };
+  //   setLocations(response.candidates); // 서버 응답 데이터를 상태로 설정
+  // }, [totalNumber]);
 
   useEffect(() => {
-
     let intervalId;
     const fetchMeetingLocations = async () => {
       try {
@@ -84,7 +82,7 @@ function MeetingsPage() {
         );
 
         // 응답 데이터 처리
-        const data = response.data;
+        const data = response.data.data;
         if (data.httpStatus === "OK") {
           setLocations(data); // 상태 업데이트
         } else {
@@ -170,7 +168,7 @@ function MeetingsPage() {
         }
       );
 
-      const data = response.data;
+      const data = response.data.data;
 
       if (data.httpStatus === "OK") {
         console.log(`장소 ${locationId} 투표 성공! UpAndDown: ${UpAndDown}`);
@@ -299,12 +297,12 @@ function MeetingsPage() {
       const data = response.data;
       if (data.httpStatus === "OK") {
         const newPlace = {
-          groupWhereId: data.groupWhereId,
-          groupId: data.groupId,
-          groupLocationName: data.groupLocationName,
-          groupWhereUrl: data.groupWhereUrl,
-          count: data.count,
-          groupMeetingId: data.groupMeetingId,
+          groupWhereId: data.data.groupWhereId,
+          groupId: data.data.groupId,
+          groupLocationName: data.data.groupLocationName,
+          groupWhereUrl: data.data.groupWhereUrl,
+          count: data.data.count,
+          groupMeetingId: data.data.groupMeetingId,
         };
         setLocations((prevLocations) => [...prevLocations, newPlace]); // 상태 업데이트
       } else {

@@ -18,8 +18,8 @@ const LocationSimpleItemList = ({
           url={location.groupWhereUrl}
           attendanceCount={location.count} // 서버에서 받아오는 데이터
           totalMembers={totalNumber} // 그룹의 총 인원 수
-          isSelected={selectedLocationIds === location.locationId}
-          onSelect={() => onSelectLocation(location.locationId)}
+          isSelected={selectedLocationIds === location.groupWhereId}
+          onSelect={() => onSelectLocation(location.groupWhereId)}
         />
       ))}
     </ul>
