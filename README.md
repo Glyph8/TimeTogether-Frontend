@@ -1,7 +1,5 @@
 # 할 일
 
-## backend와 우선순위 rank 값 기준 결정하기
-
 ## where2meet done따라 when2meet done 활성화 조건걸기
 
 ## 그룹 우상단 메뉴 클릭시 그룹원 관리메뉴(그룹장 여부따라 다른 표기)
@@ -10,10 +8,20 @@
 
 ## timetableDTO 적용된 부분 확실히
 
+## when 요청 update 전송데이터 배열에 date time rank 담아서
+
+## 그룹시간표 인원 보여주기 hover로 -> 최종 시간 결정할 방법이.. 없어질듯
 
 ## 연결 대비 연결요청부분과 더미 간단 스왑가능하게 == 변수명만 좀 바꾸면 될듯?
-## colorbar, 그룹시간표 색상 차이 문제 -> 인원수 2명이면 색깔 총 3개여야함. 이게 문제인듯
+
 ## 연결 대비해서 ip 상수화
+
+
+- dummy table 통일
+- "2024-11-13",
+  "2024-11-14",
+  "2024-11-15"
+- grouptimes 0700 1200
 
 
 login, oauth ip주소 설정
@@ -38,14 +46,15 @@ login, oauth ip주소 설정
 - Test2 : 바로 테스트 가능 ::성공 이력O CreateNewMeet.jsx의 버튼 onclick
 
 # /group/{groupId}/when/{title}/{type} 회의 선택 시 반환.
-- [x] MeetingScheduleItem.jsx 클릭이벤트에서 request
-- [ ] TimeTableContent에서 response를 state로 받고, navigate.
+- [x] TimeTableContent.jsx useEffect에서 request
+- [ ] TimeTableContent에서 response를 받아서 GroupTimetable, PersonalTimetable, GroupCellModal로 각각 전달
   {"groupId" : "101","type": "offline","title": "산협프"}
 
 Q. 내 더미데이터로도 가능한지? Test2에 입력한 내용이어야하나?
 - Test3 : MeetingListPage의 Test1의 내용 복귀시켜서 기존 더미데이터 출력 -> 
 - TimeTableContent의 useEffect 주석해제
 - 더미 회의리스트 목록 중 Test2에 기입한 내용으로 title : test 클릭
+
 
 # /group/{groupId}/when/{title}/add
 {"groupId" : "101","type": "offline"}

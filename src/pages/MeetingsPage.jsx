@@ -75,7 +75,7 @@ function MeetingsPage() {
     const fetchMeetingLocations = async () => {
       try {
         const response = await axios.get(
-          `http://192.168.233.218:8080/group/${groupId}/${meetingId}/where/view`,
+          `http://192.168.165.170:8080/group/${groupId}/${meetingId}/where/view`,
           {
             headers: {
               Authorization: `Bearer ${accessToken}`, // 토큰 헤더 추가
@@ -161,7 +161,7 @@ function MeetingsPage() {
   const syncVoteWithServer = async (locationId, UpAndDown) => {
     try {
       const response = await axios.post(
-        `http://192.168.233.218:8080/group/${groupId}/${meetingId}/where/vote/${locationId}/${UpAndDown}`,
+        `http://192.168.165.170:8080/group/${groupId}/${meetingId}/where/vote/${locationId}/${UpAndDown}`,
         {}, // POST 요청 본문이 없으면 빈 객체 전달
         {
           headers: {
@@ -197,7 +197,7 @@ function MeetingsPage() {
 
       // API 요청
       const response = await axios.post(
-        `http://192.168.233.218:8080/group/${groupId}/${meetingId}/where/done/${confirmLocationId}`,
+        `http://192.168.165.170:8080/group/${groupId}/${meetingId}/where/done/${confirmLocationId}`,
         {}, // POST 요청 본문이 없으면 빈 객체 전달
         {
           headers: {
@@ -238,7 +238,7 @@ function MeetingsPage() {
     try {
       // 서버에 삭제 요청
       const response = await axios.delete(
-        `http://192.168.233.218:8080/group/${groupId}/${meetingId}/where/delete/${groupWhereId}`,
+        `http://192.168.165.170:8080/group/${groupId}/${meetingId}/where/delete/${groupWhereId}`,
         {
           headers: {
             Authorization: `Bearer ${accessToken}`, // 필요하면 인증 토큰 추가
@@ -286,7 +286,7 @@ function MeetingsPage() {
 
       // API 호출
       const response = await axios.post(
-        `http://192.168.233.218:8080/group/${groupId}/${meetingId}/where/create`,
+        `http://192.168.165.170:8080/group/${groupId}/${meetingId}/where/create`,
         requestData,
         {
           headers: {

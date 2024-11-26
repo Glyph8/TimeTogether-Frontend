@@ -107,7 +107,6 @@ function GroupCellModal({timetableData}) {
 
     const modalTitle = `${titleDate} (${titleWeekDay}) ${startHour.toString()}:${startMin.toString()}0`
     //"1000 2200"
-    console.log('modalTitle: ', modalTitle)
 
     const dispatch = useDispatch();
 
@@ -122,13 +121,13 @@ function GroupCellModal({timetableData}) {
         .split(",")
         .filter((mem) => mem);
 
+
     const okMembers = members.filter(
         (mem) => mem.split("|").at(1) !== undefined
     );
     const notOkMembers = timetableData.users
         .map((member) => member.userId)
         .filter((id) => !okMembers.some((mem) => mem.includes(id)));
-
 
     return (
         <Overlay className='overay-group-modal'

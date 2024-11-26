@@ -3,7 +3,15 @@ import ColorBar from "./ColorBar.jsx";
 import GroupTimeGrid from "./GroupTimeGrid.jsx";
 import {useNavigate} from "react-router-dom";
 import {useDispatch} from "react-redux";
-import {setFirstDate, setFirstTime, setSecondDate, setSecondTime, setThirdDate, setThirdTime} from "../store.js";
+import {
+    setFirstDataFormat,
+    setFirstDate,
+    setFirstTime,
+    setSecondDate,
+    setSecondTime,
+    setThirdDate,
+    setThirdTime
+} from "../store.js";
 
 
 const GroupTimetable = ({timetableData, timeRange}) => {
@@ -67,19 +75,25 @@ const GroupTimetable = ({timetableData, timeRange}) => {
 
 // 시간대 인덱스를 시간 범위로 변환하는 함수
     const convertIndexToTimeRange = (index, startHour) => {
-        const baseHour = startHour + Math.floor(index / 2); // index를 시간 기준으로 변환
+        let baseHour = startHour + Math.floor(index / 2); // index를 시간 기준으로 변환
         const startMinute = index % 2 === 0 ? "00" : "30"; // 0: 정각, 1: 30분
         const nextHour = startHour + Math.floor((index + 1) / 2);
         const endMinute = (index + 1) % 2 === 0 ? "00" : "30";
 
-        return `${baseHour}:${startMinute}~${nextHour}:${endMinute}`;
+        if(baseHour < 10){
+            return `0${baseHour}:${startMinute}`;
+        }
+        else{
+            return `${baseHour}:${startMinute}`;
+        }
+
+        // return `${baseHour}:${startMinute}~${nextHour}:${endMinute}`;
     };
     useEffect(() => {
         setDays(mergeTimes(timetableData));
         setMemberCount(timetableData.users.length);
         findTopOverlapTimesAndDispatch(timetableData);
     }, [timetableData]);
-
 
 
     return (
@@ -92,6 +106,7 @@ const GroupTimetable = ({timetableData, timeRange}) => {
                         const params = new URLSearchParams(location.search);
                         params.set("type", "OFFLINE"); // 쿼리 파라미터 type의 값을 ONLINE으로 설정
                         const newUrl = `${location.pathname}?${params.toString()}`;
+                        // navigate(newUrl, { replace: true }); // URL 업데이트
                         navigate(newUrl, { replace: true }); // URL 업데이트
                     }
                     if(onOffline === '오프라인') {
@@ -100,6 +115,7 @@ const GroupTimetable = ({timetableData, timeRange}) => {
                         params.set("type", "ONLINE"); // 쿼리 파라미터 type의 값을 ONLINE으로 설정
                         const newUrl = `${location.pathname}?${params.toString()}`;
                         navigate(newUrl, { replace: true }); // URL 업데이트
+                        // navigate(newUrl, { replace: true }); // URL 업데이트
                     }
 
                 }}>{onOffline}</div>
@@ -135,7 +151,7 @@ function createEmptyTimes(timetableData) {
 
 function mergeTimes(timetableData) {
     // 1. 시간표 값을 따라 하나로 합친다
-    // 2. 그룹 시간표의 각 셀에 클릭 시 userID를 보여줘야.
+
     const mergedDays = createEmptyTimes(timetableData);
 
     const users = timetableData.users;

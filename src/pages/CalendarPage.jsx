@@ -382,7 +382,7 @@ function CalendarPage() {
 
     try {
       const response = await axios.get(
-        `http://172.20.10.4:8080/calendar/view/${year}/${month}`,
+        `http://192.168.165.170:8080/calendar/view/${year}/${month}`,
         {
           headers: {
             Authorization: `Bearer ${accessToken}`,

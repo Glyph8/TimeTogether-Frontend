@@ -1,3 +1,4 @@
+
 import GroupTimetable from './GroupTimetable.jsx';
 import PersonalTimetable from '././PersonalTimetable.jsx';
 import './TimetableContent.css';
@@ -27,111 +28,123 @@ Content: null,
 groupName: "와쿠와쿠",
 */
 
-
 const TimetableContent = () => {
     const location = useLocation();
     const accessToken = localStorage.getItem("accessToken");
+    // const accessToken = 1;
     const refreshToken = localStorage.getItem("refreshToken");
     const searchParams = new URLSearchParams(location.search);
 
     const { groupId } = useParams(); //groupId
     const isMgr = searchParams.get("isMgr") || false;
     const meetTitle = searchParams.get("meetTitle") || "";
-    const meetType = searchParams.get("type") || 'OFFLINE';
+    const meetType = searchParams.get("meetType") || "OFFLINE";
 
-    // dummy start
-
-    const response1 = {
-        code: 200,
-        message: "요청에 성공하였습니다.",
-        requestId: "9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d",
-        groupTimes: "07001200", //오전 7시 - 오전 9시
-        users: [
-            {
-                userId: "user1",
-                days: [
-                    {
-                        date: "2024-11-07",
-                        day: "월요일",
-                        time: "10101010",
-                        rank: "10000000",
-                    },
-                    {
-                        date: "2024-11-08",
-                        day: "화요일",
-                        time: "01010101",
-                        rank: "01000000",
-                    },
-                    {
-                        date: "2024-11-09",
-                        day: "수요일",
-                        time: "11100011",
-                        rank: "00100000",
-                    },
-                    {
-                        date: "2024-11-10",
-                        day: "목요일",
-                        time: "00011100",
-                        rank: "00010000",
-                    },
-                    {
-                        date: "2024-11-11",
-                        day: "금요일",
-                        time: "10000100",
-                        rank: "00001000",
-                    },
-                ],
-            },
-            {
-                userId: "user2",
-                days: [
-                    {
-                        date: "2024-10-07",
-                        day: "월요일",
-                        time: "11001100",
-                        rank: "00000100",
-                    },
-                    {
-                        date: "2024-10-08",
-                        day: "화요일",
-                        time: "00110011",
-                        rank: "00000010",
-                    },
-                    {
-                        date: "2024-10-09",
-                        day: "수요일",
-                        time: "11110000",
-                        rank: "00000001",
-                    },
-                    {
-                        date: "2024-10-10",
-                        day: "목요일",
-                        time: "00001111",
-                        rank: "00000000",
-                    },
-                    {
-                        date: "2024-10-11",
-                        day: "금요일",
-                        time: "11111111",
-                        rank: "00000000",
-                    },
-                ],
-            },
-
-        ],
-    };
-    const timetableData = response1;
-
-
-    // dummy end
-    //
+    //http://192.168.165.170:8080/group/1/when/test/OFFLINE
     //연결시작
+    // console.log(`connect start -- groupId : ${groupId}\ntype : ${meetType}\ntitle : ${meetTitle}`);
+    // console.log('[check undifine]', groupId, meetType, meetTitle, accessToken);
 
+    // const [timetableData, setTimetableData] = useState([]);
     // let timetableData;
+
+    //dummyData 불러오기
+    // dummy start
+    // const response1 = {
+    //     code: 200,
+    //     message: "요청에 성공하였습니다.",
+    //     requestId: "9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d",
+    //     groupTimes: "07001200", //오전 7시 - 오전 9시
+    //     type: "OFFLINE",
+    //     users: [
+    //         {
+    //             userId: "user1",
+    //             days: [
+    //                 {
+    //                     date: "2024-11-13",
+    //                     day: "수요일",
+    //                     time: "1010101001",
+    //                     rank: "1000000001",
+    //                 },
+    //                 {
+    //                     date: "2024-11-14",
+    //                     day: "목요일",
+    //                     time: "0101010101",
+    //                     rank: "0100000001",
+    //                 },
+    //                 {
+    //                     date: "2024-11-15",
+    //                     day: "금요일",
+    //                     time: "1110001101",
+    //                     rank: "0010000001",
+    //                 }
+    //             ],
+    //         },
+    //         {
+    //             userId: "user2",
+    //             days: [
+    //                 {
+    //                     date: "2024-10-13",
+    //                     day: "수요일",
+    //                     time: "1100110000",
+    //                     rank: "0000010000",
+    //                 },
+    //                 {
+    //                     date: "2024-10-14",
+    //                     day: "목요일",
+    //                     time: "0011001100",
+    //                     rank: "0000001000",
+    //                 },
+    //                 {
+    //                     date: "2024-10-15",
+    //                     day: "금요일",
+    //                     time: "1111000000",
+    //                     rank: "0000000100",
+    //                 },
+    //             ],
+    //         },
+    //         {
+    //             userId: "user3",
+    //             days: [
+    //                 {
+    //                     date: "2024-10-13",
+    //                     day: "수요일",
+    //                     time: "1000110011",
+    //                     rank: "1000010011",
+    //                 },
+    //                 {
+    //                     date: "2024-10-14",
+    //                     day: "목요일",
+    //                     time: "0111011111",
+    //                     rank: "0000001011",
+    //                 },
+    //                 {
+    //                     date: "2024-10-15",
+    //                     day: "금요일",
+    //                     time: "0000000111",
+    //                     rank: "0000000111",
+    //                 },
+    //             ],
+    //         },
+    //
+    //     ],
+    // };
+    // setTimetableData(response1);
+    // timetableData = response1;
+
     // useEffect(() => {
+    //     if (!groupId || !meetTitle || !accessToken) {
+    //         console.log('필수 데이터가 누락되었습니다.', { groupId, meetTitle, accessToken });
+    //         return; // 필수 데이터가 없는 경우 early return
+    //     }
+    //     else{
+    //         console.log('all defined')
+    //     }
+    //
     //     console.log(`groupId : ${groupId}\ntype : ${meetType}\ntitle : ${meetTitle}`);
     //     // axios.post(`${testip}/group/${groupId}/when/${meetTitle}/${meetType}`, {
-    //     axios.get(`http://172.20.10.4:8080/group/${groupId}/when/${meetTitle}/${meetType}`
+    //     const getTables = axios.get(`kkkkk`
+    //         // axios.get(`http://192.168.165.170:8080/group/${groupId}/when/${meetTitle}/${meetType}`
     //         ,{
     //             headers:
     //                 {
@@ -141,15 +154,26 @@ const TimetableContent = () => {
     //     ).then((res) => {
     //         console.log('요청 시퀀스 후')
     //         console.log('timetableData에서 시간표 요청 성공 : ', res.data);
-    //         timetableData = res.data;
+    //         // timetableData = res.data;
+    //         if (res.data) {
+    //             console.log('timetableData에서 시간표 요청 성공 : ', res.data);
+    //             // setTimetableData(res.data); // 유효한 데이터만 저장
+    //             // setTimetableData(getTables.data); // 유효한 데이터만 저장
+    //             timetableData = (getTables.data); // 유효한 데이터만 저장
+    //         } else {
+    //             console.log('응답이 비어 있습니다.', res);
+    //         }
     //         //시간표 값 전달
     //     }).catch((err)=>{
     //         console.log(`timetableData에서 시간표 요청실패 ${err}`);
+    //
+    //
     //     })//로 request 보내고, 받아온 결과로 시간표 출력.
     //     console.log('요청 시퀀스 후')
-    // }, []);
-
+    // }, [accessToken, groupId, meetTitle, meetType]);
     // 여기까지 연결
+
+    const timetableData = location.state?.timetableData; //MeetingListPage로부터 data 받아옴.
 
     const [days, setDays] = useState([]);
     const [timeRange, setTimeRange] = useState("");
@@ -181,6 +205,16 @@ const TimetableContent = () => {
     };
 
     const stableTimetableData = useMemo(() => {
+        if (!timetableData) return null;
+        return structuredClone(timetableData);
+    }, [timetableData && JSON.stringify(timetableData)]); // 깊은 비교
+
+    const stableTimetableData2 = useMemo(() => {
+        if (!timetableData) return null;
+        return structuredClone(timetableData);
+    }, [timetableData && JSON.stringify(timetableData)]); // 깊은 비교
+
+    const stableTimetableData3 = useMemo(() => {
         if (!timetableData) return null;
         return structuredClone(timetableData);
     }, [timetableData && JSON.stringify(timetableData)]); // 깊은 비교
@@ -220,8 +254,8 @@ const TimetableContent = () => {
 
     useEffect(() => {
         // dispatch(updatePersonalTimeData(returnMyTimeTable(timetableData, myUserId)));
-        if (stableTimetableData) {
-            setDays(returnMyTimeTable(stableTimetableData, myUserId));
+        if (stableTimetableData3) {
+            setDays(returnMyTimeTable(stableTimetableData3, myUserId));
         }
     }, [stableTimetableData, myUserId]);
 
@@ -233,7 +267,7 @@ const TimetableContent = () => {
                 <PersonalTimetable days={days} timeRange={timeRange} priorityOn={priorityOn} setEdited={setIsEdited}/>
                 : null}
 
-            {groupCellModal ? <GroupCellModal timetableData={stableTimetableData}/> : null}
+            {groupCellModal ? <GroupCellModal timetableData={stableTimetableData2}/> : null}
 
             {
                 loadPersonalTime ? <div className="calender-priority-btn">
@@ -250,11 +284,9 @@ const TimetableContent = () => {
                             }
 
                             // `${testip}/group/${groupId}/meet/${meetTitle}/add`
-
                             axios.post(
-
                                 // `http://172.20.10.4:8080/group/${groupId}/when/${meetTitle}/${meetType}/load`, postData,
-                                `http://172.20.10.4:8080/group/${groupId}/when/${meetTitle}/${meetType}/load`, null,
+                                `http://192.168.165.170:8080/group/${groupId}/when/${meetTitle}/${meetType}/load`, null,
                                 {
                                     headers:
                                         {
@@ -323,7 +355,8 @@ const TimetableContent = () => {
 
                     //API : /group/{groupId}/when/{title}/{type}/add
                     // axios.post(`${testip}/group/${groupId}/when/${meetTitle}/${meetType}/add`, null
-                        axios.post(`http://172.20.10.4:8080/group/${groupId}/when/${meetTitle}/${meetType}/add`, null
+                    console.log(`개인시간표 요청 url http://192.168.165.170:8080/group/${groupId}/when/${meetTitle}/${meetType}/add`)
+                    axios.post(`http://192.168.165.170:8080/group/${groupId}/when/${meetTitle}/${meetType}/add`, null
                         , {
                             headers:
                                 {
@@ -349,10 +382,11 @@ const TimetableContent = () => {
                     // console.log("갱신된 timeOnlyData 정보", timeOnlyData);
                     // console.log("갱신된 rankOnlyData 정보", rankOnlyData);
                     // console.log("갱신된 개인시간표 정보", personalTimeData); state변경이 할당한 변수에 안됨.
-                    console.log("갱신된 개인시간표 정보_redux ", store.getState().personalTimeData);
+                    console.log(`저장하기 post update요청 url /group/${groupId}/when/${meetTitle}/${meetType}/update`);
+                    console.log("post요청 body : ", store.getState().personalTimeData);
 
                     // axios.post(`${testip}/group/${groupId}/when/${meetTitle}/${meetType}/update`, myTableData, {
-                    axios.post(`http://172.20.10.4:8080/group/${groupId}/when/${meetTitle}/${meetType}/update`, store.getState().personalTimeData, {
+                    axios.post(`http://192.168.165.170:8080/group/${groupId}/when/${meetTitle}/${meetType}/update`, store.getState().personalTimeData, {
                             headers:
                                 {
                                     Authorization: `Bearer ${accessToken}`
@@ -396,10 +430,11 @@ const TimetableContent = () => {
                             console.log('슬롯번호 : ',selectedSlot)
                             const doneTime = timeSlots[selectedSlot - 1];
                             const startTime = doneTime.time.slice(0,5) + ':00';
-                            console.log("timeTableContent에서 Done 요청", doneTime);
+                            console.log(`timeTableContent에서 Done post 요청, /group/${groupId}/when/${meetTitle}/${meetType}/done`);
+                            console.log(`post 요청 바디 : ${doneTime.date}T${startTime}`)
                             // axios.post(`${testip}/group/${groupId}/when/${meetTitle}/${meetType}/done`, {
-                                    axios.post(`http://172.20.10.4:8080/group/${groupId}/when/${meetTitle}/${meetType}/done`, {
-                                    meetDt: `${doneTime.date}T${startTime}`
+                            axios.post(`http://192.168.165.170:8080/group/${groupId}/when/${meetTitle}/${meetType}/done`, {
+                                    meetDT: `${doneTime.date}T${startTime}`
                                 }, {
                                     headers:
                                         {

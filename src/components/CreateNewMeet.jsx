@@ -222,7 +222,7 @@ function CreateNewMeet({groupId, setMakeNewMeeting}) {
                             //새 회의 생성 연결 성공
                             axios.post(
                                 // `${testip}/group/${groupId}/meet/${newMeetTitle}/add`
-                                `http://172.20.10.4:8080/group/${groupId}/meet/${newMeetTitle}/add`
+                                `http://192.168.165.170:8080/group/${groupId}/meet/${newMeetTitle}/add`
                                 , formatedDate,
                                 {
                                     headers:

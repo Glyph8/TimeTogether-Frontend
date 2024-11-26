@@ -12,7 +12,8 @@ const GroupTimeGrid = ({ days, timeRange, memberCount}) => {
 
     const daySet = daySets(days);
     const dayLabel = dayLabelSet(days);
-    const times = timeSet(days);
+    let times = timeSet(days);
+    // const [times, setTimes] = useState([]);
 
     const startColor = "#e0e0e0";
     const endColor = "#4e00c9";
@@ -21,6 +22,11 @@ const GroupTimeGrid = ({ days, timeRange, memberCount}) => {
         setHourCount(getTimeRange(timeRange));
         setStartHour(getStartHour(timeRange));
     }, [timeRange]);
+
+    // useEffect(() => {
+    //     times = timeSet(days);
+    // }, []);
+    //
 
     return (
         <div className="time-grid" style={{ backgroundColor: '#f4f4f4' }}>
@@ -35,6 +41,7 @@ const GroupTimeGrid = ({ days, timeRange, memberCount}) => {
             </div>
             <div className="grid-content">
                 <GroupTimeScale hourCount={hourCount} startHour={startHour}/>
+                {/*{console.log('grid에서는',times)}*/}
                 <GroupGridCells
                     days = {days} //굳이 days를 통으로 줄 필요가 없는 듯
                     timeSet={times}
@@ -42,6 +49,7 @@ const GroupTimeGrid = ({ days, timeRange, memberCount}) => {
                     daySet = {daySet}
                     groupColorArray = {showGroupColor(startColor, endColor, memberCount)}
                 />
+
             </div>
         </div>
     );
@@ -64,10 +72,16 @@ const GroupTimeScale = ({ hourCount , startHour }) => {
 const GroupGridCells = ({ days, hourCount, timeSet, groupColorArray}) => {
     // const [times, setTimes] = useState([]);
     const [times, setTimes] = useState(timeSet);
+
+    // console.log('times',times)
+    // console.log('timeSEt prop',timeSet)
+
     const daySet = daySets(days);
     const dispatch = useDispatch();
     useEffect(() => {
-        setTimes(timeSet);
+        setTimes([...timeSet]);
+        // console.log(times)
+        // console.log(timeSet)
     }, [timeSet]);
 
     return (
@@ -86,7 +100,7 @@ const GroupGridCells = ({ days, hourCount, timeSet, groupColorArray}) => {
                         let cellColor = "#ffffff";
                         const checked = times[dayIndex][hourIndex];
                         if(Number.parseInt(checked) > 0){
-                            cellColor = groupColorArray[checked];
+                            cellColor = groupColorArray[Number.parseInt(checked)];
                             // cellColor = "#FFC553";
                         }
                         return(
@@ -95,13 +109,14 @@ const GroupGridCells = ({ days, hourCount, timeSet, groupColorArray}) => {
                                 className={cellName}
                                 style={{backgroundColor: cellColor, border: '1px dotted #c6c6c6'}}
                                 onClick={() => {
+                                    console.log('그룹타임그리드 체크드', checked)
+
                                     //그룹 시간표 셀 클릭 시 해당타임 인원 조회
                                     dispatch(setDayIndexData(dayIndex));
                                     dispatch(setHourIndexData(hourIndex));
                                     dispatch(setGroupCellModal(true));
                                 }}
                             >
-
                             </div>
                         )
                     }
@@ -113,6 +128,11 @@ const GroupGridCells = ({ days, hourCount, timeSet, groupColorArray}) => {
 
 
 function showGroupColor(startColor, endColor, memberCount){
+    // memberCount += 1;
+
+    // const startColor = "#e0e0e0";
+    // const endColor = "#4e00c9";
+
     let GroupColorArray = new Array(0);
     const hex = (color) => parseInt(color.slice(1), 16);
     const r1 = (hex(startColor) >> 16) & 0xff;
@@ -123,9 +143,11 @@ function showGroupColor(startColor, endColor, memberCount){
     const g2 = (hex(endColor) >> 8) & 0xff;
     const b2 = hex(endColor) & 0xff;
 
-
     for(let i = 0; i <= memberCount; i++){
-        const factor = i / memberCount;
+        const factor = i / (memberCount);
+        // const factor = i / (memberCount - 1);
+
+        // console.log(`factor = ${i} / ${memberCount} - 1 = ${factor}`)
 
         const r = Math.round(r1 + factor * (r2 - r1));
         const g = Math.round(g1 + factor * (g2 - g1));
@@ -133,7 +155,7 @@ function showGroupColor(startColor, endColor, memberCount){
 
         GroupColorArray.push(`#${((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1)}`);
 
-        //console.log("그룹시간표 컬러",i, GroupColorArray[i]);
+        // console.log("그룹시간표 컬러",i, GroupColorArray[i]);
     }
     return GroupColorArray;
 }
