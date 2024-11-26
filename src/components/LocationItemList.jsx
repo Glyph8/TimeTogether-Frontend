@@ -19,9 +19,9 @@ const LocationItemList = ({
           url={location.groupWhereUrl}
           attendanceCount={location.count} // 서버에서 받아오는 데이터
           totalMembers={totalMembers} // 그룹의 총 인원 수
-          isSelected={selectedLocationIds.includes(location.locationId)}
-          onSelect={() => onSelectLocation(location.locationId)}
-          onDelete={() => onDeleteLocation(location.locationId)}
+          isSelected={selectedLocationIds.includes(location.groupWhereId)}
+          onSelect={() => onSelectLocation(location.groupWhereId)}
+          onDelete={() => onDeleteLocation(location.groupWhereId)}
         />
       ))}
     </ul>
