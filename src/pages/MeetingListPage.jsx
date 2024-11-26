@@ -28,87 +28,144 @@ const MeetingListPage = () => {
     const [whenData, setWhenData] = useState([]);
     const [whenProcessData, setWhenProcessData] = useState([]);
 
-
     useEffect(() => {
-        //GroupCard Click event로 시작
-        const whenDataResponse = axios.get(`http://192.168.165.170:8080/group/${groupId}/meet`, {
-            headers: {
-                Authorization: `Bearer ${accessToken}`,
-            },
-        })
-            .then((res) => {
-                const responseData = res.data.data;
-                console.log('ree', res.data);
-                console.log('meetListPage 회의 리스트 요청 성공', responseData.data);
-                // setWhenData(whenDataResponse.result);
-                // setWhenProcessData(whenDataResponse.meeting);
-                setWhenData(responseData.result);
-                setWhenProcessData(responseData.meeting);
-            }).catch((err) => {
-                console.log(`MeeingListPage서 회의 리스트 요청실패 ${err}`);
-
-                const whenDataResponse2 = {
-                    code: 200,
-                    message: "요청에 성공하였습니다.",
-                    requestId: "9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d",
-                    result: [
-                        {
-                            meetId: 8,
-                            meetDTstart: "2024-10-09 14:30:00",
-                            meetDTend: "2024-10-09 16:30:00",
-                            meetType: "OFFLINE",
-                            meetTitle: "test",
-                            meetContent: null,
-                            groupName: "와쿠와쿠",
-                            locationName: "투썸",
-                            locationUrl: "https://search.naver.com/search.naver?where=nexearch&sm=top_hty&fbm=0&ie=utf8&query=%EA%B1%B4%EB%8C%80+%ED%88%AC%EC%8D%B8+url"
-                        },
-                        {
-                            meetId: 9,
-                            meetDTstart: "2024-10-09 14:30:00",
-                            meetDTend: "2024-10-09 16:30:00",
-                            meetType: "OFFLINE",
-                            meetTitle: "test1",
-                            meetContent: null,
-                            groupName: "와쿠와쿠",
-                            locationName: "K큐브",
-                            locationUrl: "https://search.naver.com/search.naver?where=nexearch&sm=top_hty&fbm=0&ie=utf8&query=%EA%B1%B4%EB%8C%80+%ED%88%AC%EC%8D%B8+url"
-                        }
-                        ,
-                        {
-                            meetId: 10,
-                            meetDTstart: "2024-10-09 13:30:00",
-                            meetDTend: "2024-10-09 16:30:00",
-                            meetType: "OFFLINE",
-                            meetTitle: "final",
-                            meetContent: null,
-                            groupName: "와쿠와쿠",
-                            locationName: "K큐브",
-                            locationUrl: "https://search.naver.com/search.naver?where=nexearch&sm=top_hty&fbm=0&ie=utf8&query=%EA%B1%B4%EB%8C%80+%ED%88%AC%EC%8D%B8+url"
-                        }
-                    ],
-                    meeting: [
-                        {
-                            meetId: 10,
-                            meetTitle: "test",
-                            //meetType: "OFFLINE"
-                        },
-                        {
-                            meetId: 11,
-                            meetTitle: "아키텍쳐 클래스 회의",
-                            //meetType: "OFFLINE"
-                        }
-                    ],
+        const whenDataResponse2 = {
+            code: 200,
+            message: "요청에 성공하였습니다.",
+            requestId: "9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d",
+            result: [
+                {
+                    meetId: 8,
+                    meetDTstart: "2024-10-09 14:30:00",
+                    meetDTend: "2024-10-09 16:30:00",
+                    meetType: "OFFLINE",
+                    meetTitle: "test",
+                    meetContent: null,
+                    groupName: "와쿠와쿠",
+                    locationName: "투썸",
+                    locationUrl: "https://search.naver.com/search.naver?where=nexearch&sm=top_hty&fbm=0&ie=utf8&query=%EA%B1%B4%EB%8C%80+%ED%88%AC%EC%8D%B8+url"
+                },
+                {
+                    meetId: 9,
+                    meetDTstart: "2024-10-09 14:30:00",
+                    meetDTend: "2024-10-09 16:30:00",
+                    meetType: "OFFLINE",
+                    meetTitle: "test1",
+                    meetContent: null,
+                    groupName: "와쿠와쿠",
+                    locationName: "K큐브",
+                    locationUrl: "https://search.naver.com/search.naver?where=nexearch&sm=top_hty&fbm=0&ie=utf8&query=%EA%B1%B4%EB%8C%80+%ED%88%AC%EC%8D%B8+url"
                 }
-                setWhenData(whenDataResponse2.result);
-                setWhenProcessData(whenDataResponse2.meeting);
+                ,
+                {
+                    meetId: 10,
+                    meetDTstart: "2024-10-09 13:30:00",
+                    meetDTend: "2024-10-09 16:30:00",
+                    meetType: "OFFLINE",
+                    meetTitle: "final",
+                    meetContent: null,
+                    groupName: "와쿠와쿠",
+                    locationName: "K큐브",
+                    locationUrl: "https://search.naver.com/search.naver?where=nexearch&sm=top_hty&fbm=0&ie=utf8&query=%EA%B1%B4%EB%8C%80+%ED%88%AC%EC%8D%B8+url"
+                }
+            ],
+            meeting: [
+                {
+                    meetId: 10,
+                    meetTitle: "test",
+                    //meetType: "OFFLINE"
+                },
+                {
+                    meetId: 11,
+                    meetTitle: "아키텍쳐 클래스 회의",
+                    //meetType: "OFFLINE"
+                }
+            ],
+        }
+        setWhenData(whenDataResponse2.result);
+        setWhenProcessData(whenDataResponse2.meeting);
+    }, []);
 
-                //여기까지 회의 리스트 더미데이터
-            })
 
-        //여기까지 연결
-
-    }, [groupId, totalNumber]);
+    // useEffect(() => {
+    //     console.log('Meeting list에서 회의 목록 불러오기');
+    //     //GroupCard Click event로 시작
+    //     // const whenDataResponse = axios.get(`http://192.168.165.170:8080/group/${groupId}/meet`, {
+    //     axios.get(`http://192.168.165.170:8080/group/${groupId}/meet`, {
+    //         headers: {
+    //             Authorization: `Bearer ${accessToken}`,
+    //         },
+    //     })
+    //         .then((res) => {
+    //             const responseData = res.data.data;
+    //             console.log('ree', res.data);
+    //             console.log('meetListPage 회의 리스트 요청 성공', responseData.data);
+    //             // setWhenData(whenDataResponse.result);
+    //             // setWhenProcessData(whenDataResponse.meeting);
+    //             setWhenData(responseData.result);
+    //             setWhenProcessData(responseData.meeting);
+    //         }).catch((err) => {
+    //             console.log(`MeeingListPage서 회의 리스트 요청실패 ${err}`);
+    //
+    //             const whenDataResponse2 = {
+    //                 code: 200,
+    //                 message: "요청에 성공하였습니다.",
+    //                 requestId: "9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d",
+    //                 result: [
+    //                     {
+    //                         meetId: 8,
+    //                         meetDTstart: "2024-10-09 14:30:00",
+    //                         meetDTend: "2024-10-09 16:30:00",
+    //                         meetType: "OFFLINE",
+    //                         meetTitle: "test",
+    //                         meetContent: null,
+    //                         groupName: "와쿠와쿠",
+    //                         locationName: "투썸",
+    //                         locationUrl: "https://search.naver.com/search.naver?where=nexearch&sm=top_hty&fbm=0&ie=utf8&query=%EA%B1%B4%EB%8C%80+%ED%88%AC%EC%8D%B8+url"
+    //                     },
+    //                     {
+    //                         meetId: 9,
+    //                         meetDTstart: "2024-10-09 14:30:00",
+    //                         meetDTend: "2024-10-09 16:30:00",
+    //                         meetType: "OFFLINE",
+    //                         meetTitle: "test1",
+    //                         meetContent: null,
+    //                         groupName: "와쿠와쿠",
+    //                         locationName: "K큐브",
+    //                         locationUrl: "https://search.naver.com/search.naver?where=nexearch&sm=top_hty&fbm=0&ie=utf8&query=%EA%B1%B4%EB%8C%80+%ED%88%AC%EC%8D%B8+url"
+    //                     }
+    //                     ,
+    //                     {
+    //                         meetId: 10,
+    //                         meetDTstart: "2024-10-09 13:30:00",
+    //                         meetDTend: "2024-10-09 16:30:00",
+    //                         meetType: "OFFLINE",
+    //                         meetTitle: "final",
+    //                         meetContent: null,
+    //                         groupName: "와쿠와쿠",
+    //                         locationName: "K큐브",
+    //                         locationUrl: "https://search.naver.com/search.naver?where=nexearch&sm=top_hty&fbm=0&ie=utf8&query=%EA%B1%B4%EB%8C%80+%ED%88%AC%EC%8D%B8+url"
+    //                     }
+    //                 ],
+    //                 meeting: [
+    //                     {
+    //                         meetId: 10,
+    //                         meetTitle: "test",
+    //                         //meetType: "OFFLINE"
+    //                     },
+    //                     {
+    //                         meetId: 11,
+    //                         meetTitle: "아키텍쳐 클래스 회의",
+    //                         //meetType: "OFFLINE"
+    //                     }
+    //                 ],
+    //             }
+    //             setWhenData(whenDataResponse2.result);
+    //             setWhenProcessData(whenDataResponse2.meeting);
+    //             //여기까지 회의 리스트 더미데이터
+    //         })
+    //
+    // }, [groupId, totalNumber]);
 
     return (
         <div className="group-page" style={{overflowY: "auto"}}>

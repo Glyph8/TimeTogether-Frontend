@@ -15,6 +15,8 @@ import {
 
 
 const GroupTimetable = ({timetableData, timeRange}) => {
+    console.log('timetable data props', timetableData);
+
     const [memberCount, setMemberCount] = useState(5);
     // const memberCount = members;
     const [onOffline, setOnOffline] = useState("오프라인");
@@ -80,41 +82,45 @@ const GroupTimetable = ({timetableData, timeRange}) => {
         const nextHour = startHour + Math.floor((index + 1) / 2);
         const endMinute = (index + 1) % 2 === 0 ? "00" : "30";
 
-        if(baseHour < 10){
+        if (baseHour < 10) {
             return `0${baseHour}:${startMinute}`;
-        }
-        else{
+        } else {
             return `${baseHour}:${startMinute}`;
         }
 
         // return `${baseHour}:${startMinute}~${nextHour}:${endMinute}`;
     };
-    useEffect(() => {
-        setDays(mergeTimes(timetableData));
-        setMemberCount(timetableData.users.length);
-        findTopOverlapTimesAndDispatch(timetableData);
-    }, [timetableData]);
 
+    useEffect(() => {
+        // if(!timetableData) {
+        if (Object.keys(timetableData).length !== 0) {
+            console.log('grouptimeTableJSX', timetableData);
+            setDays(mergeTimes(timetableData));
+            setMemberCount(timetableData.users.length);
+            findTopOverlapTimesAndDispatch(timetableData);
+        }
+
+    }, [timetableData]);
 
     return (
         <div className="group-timetable">
             <div className="group-timetable-header">
-                <div className="on-offline" onClick={()=>{
+                <div className="on-offline" onClick={() => {
                     //type변경 요청 API가 필요?
-                    if(onOffline === '온라인') {
+                    if (onOffline === '온라인') {
                         setOnOffline("오프라인");
                         const params = new URLSearchParams(location.search);
                         params.set("type", "OFFLINE"); // 쿼리 파라미터 type의 값을 ONLINE으로 설정
                         const newUrl = `${location.pathname}?${params.toString()}`;
                         // navigate(newUrl, { replace: true }); // URL 업데이트
-                        navigate(newUrl, { replace: true }); // URL 업데이트
+                        navigate(newUrl, {replace: true}); // URL 업데이트
                     }
-                    if(onOffline === '오프라인') {
+                    if (onOffline === '오프라인') {
                         setOnOffline("온라인");
                         const params = new URLSearchParams(location.search);
                         params.set("type", "ONLINE"); // 쿼리 파라미터 type의 값을 ONLINE으로 설정
                         const newUrl = `${location.pathname}?${params.toString()}`;
-                        navigate(newUrl, { replace: true }); // URL 업데이트
+                        navigate(newUrl, {replace: true}); // URL 업데이트
                         // navigate(newUrl, { replace: true }); // URL 업데이트
                     }
 
@@ -157,7 +163,7 @@ function mergeTimes(timetableData) {
     const users = timetableData.users;
 
     users.map((user, i) => {
-        user.days.map((eachDay, j)=>{
+        user.days.map((eachDay, j) => {
             mergedDays[j].time = addTimeDigit(mergedDays[j].time, eachDay.time);
             mergedDays[j].rank = addTimeDigit(mergedDays[j].rank, eachDay.rank);
         })
@@ -179,7 +185,6 @@ function addTimeDigit(str1, str2) {
     }
     return result;
 }
-
 
 
 export default GroupTimetable;
