@@ -366,7 +366,7 @@ function MeetingsPage() {
       <div className="tab-content">
         {activeTab === "언제" && ( //해당 그룹의 모임 리스트 출력
           <>
-            <TimetableContent timetableData={timetableData}></TimetableContent>
+            <TimetableContent></TimetableContent>
           </>
         )}
         {activeTab === "어디서" && (

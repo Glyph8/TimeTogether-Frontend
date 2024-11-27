@@ -107,90 +107,92 @@ const TimetableContent = () => {
             //시간표 값 전달
         }).catch((err) => {
             console.log(`timetableData에서 시간표 요청실패 ${err}`);
+
+            const dummy = {
+                code: 200,
+                message: "요청에 성공하였습니다.",
+                requestId: "9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d",
+                groupTimes: "07001200", //오전 7시 - 오전 9시
+                type: "OFFLINE",
+                users: [
+                    {
+                        userId: "user1",
+                        days: [
+                            {
+                                date: "2024-11-13",
+                                day: "수요일",
+                                time: "1010101001",
+                                rank: "1000000001",
+                            },
+                            {
+                                date: "2024-11-14",
+                                day: "목요일",
+                                time: "0101010101",
+                                rank: "0100000001",
+                            },
+                            {
+                                date: "2024-11-15",
+                                day: "금요일",
+                                time: "1110001101",
+                                rank: "0010000001",
+                            }
+                        ],
+                    },
+                    {
+                        userId: "user2",
+                        days: [
+                            {
+                                date: "2024-10-13",
+                                day: "수요일",
+                                time: "1100110000",
+                                rank: "0000010000",
+                            },
+                            {
+                                date: "2024-10-14",
+                                day: "목요일",
+                                time: "0011001100",
+                                rank: "0000001000",
+                            },
+                            {
+                                date: "2024-10-15",
+                                day: "금요일",
+                                time: "1111000000",
+                                rank: "0000000100",
+                            },
+                        ],
+                    },
+                    {
+                        userId: "user3",
+                        days: [
+                            {
+                                date: "2024-10-13",
+                                day: "수요일",
+                                time: "1000110011",
+                                rank: "1000010011",
+                            },
+                            {
+                                date: "2024-10-14",
+                                day: "목요일",
+                                time: "0111011111",
+                                rank: "0000001011",
+                            },
+                            {
+                                date: "2024-10-15",
+                                day: "금요일",
+                                time: "0000000111",
+                                rank: "0000000111",
+                            },
+                        ],
+                    },
+
+                ],
+            };
+            setTimetableData(dummy);
         })//로 request 보내고, 받아온 결과로 시간표 출력.
 
         console.log('요청 시퀀스 후')
 
-        const dummy = {
-            code: 200,
-            message: "요청에 성공하였습니다.",
-            requestId: "9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d",
-            groupTimes: "07001200", //오전 7시 - 오전 9시
-            type: "OFFLINE",
-            users: [
-                {
-                    userId: "user1",
-                    days: [
-                        {
-                            date: "2024-11-13",
-                            day: "수요일",
-                            time: "1010101001",
-                            rank: "1000000001",
-                        },
-                        {
-                            date: "2024-11-14",
-                            day: "목요일",
-                            time: "0101010101",
-                            rank: "0100000001",
-                        },
-                        {
-                            date: "2024-11-15",
-                            day: "금요일",
-                            time: "1110001101",
-                            rank: "0010000001",
-                        }
-                    ],
-                },
-                {
-                    userId: "user2",
-                    days: [
-                        {
-                            date: "2024-10-13",
-                            day: "수요일",
-                            time: "1100110000",
-                            rank: "0000010000",
-                        },
-                        {
-                            date: "2024-10-14",
-                            day: "목요일",
-                            time: "0011001100",
-                            rank: "0000001000",
-                        },
-                        {
-                            date: "2024-10-15",
-                            day: "금요일",
-                            time: "1111000000",
-                            rank: "0000000100",
-                        },
-                    ],
-                },
-                {
-                    userId: "user3",
-                    days: [
-                        {
-                            date: "2024-10-13",
-                            day: "수요일",
-                            time: "1000110011",
-                            rank: "1000010011",
-                        },
-                        {
-                            date: "2024-10-14",
-                            day: "목요일",
-                            time: "0111011111",
-                            rank: "0000001011",
-                        },
-                        {
-                            date: "2024-10-15",
-                            day: "금요일",
-                            time: "0000000111",
-                            rank: "0000000111",
-                        },
-                    ],
-                },
 
-            ],
-        };
-        setTimetableData(dummy);
     }, [groupId, meetTitle, meetType]);
     // 여기까지 연결
 
@@ -333,8 +335,6 @@ const TimetableContent = () => {
                                 loadCalender(resData.data.groupTableDTO.days);
                                 //dummy 끝
                             })
-
-
                         }
 
                     }}>캘린더 불러오기
