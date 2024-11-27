@@ -574,12 +574,28 @@ function CalendarAddModal({
       setStartDate(editEvent.startDate || format(new Date(), "yyyy-MM-dd"));
       setEndDate(editEvent.endDate || format(new Date(), "yyyy-MM-dd"));
       setIsAllDay(editEvent.isAllDay || false);
-      if (editEvent.time) {
-        const [start, end] = editEvent.time.split(" - ");
-        setStartTime(start || "11:00");
-        setEndTime(end || "23:00");
+
+      //   if (editEvent.time) {
+      //     const [start, end] = editEvent.time.split(" - ");
+      //     setStartTime(start || "11:00");
+      //     setEndTime(end || "23:00");
+      //   } else {
+      //     setStartTime("11:00");
+      //     setEndTime("23:00");
+      //   }
+      // }
+      // T 뒤의 시간값 추출하여 설정
+      if (editEvent.meetDTstart) {
+        const [, startTime] = editEvent.meetDTstart.split("T");
+        setStartTime(startTime.substring(0, 5)); // "HH:MM" 형식
       } else {
         setStartTime("11:00");
+      }
+
+      if (editEvent.meetDTend) {
+        const [, endTime] = editEvent.meetDTend.split("T");
+        setEndTime(endTime.substring(0, 5)); // "HH:MM" 형식
+      } else {
         setEndTime("23:00");
       }
     }

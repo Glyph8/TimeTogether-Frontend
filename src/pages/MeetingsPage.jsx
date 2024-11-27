@@ -35,7 +35,7 @@ function MeetingsPage() {
   const totalNumber = searchParams.get("totalNumber") || 1;
   const meetingTitle = searchParams.get("meetTitle") || "";
 
-  const meetType = searchParams.get("meetType") || 'OFFLINE';
+  const meetType = searchParams.get("meetType") || "OFFLINE";
 
   const [isGroupModalOpen, setIsGroupModalOpen] = useState(false); // Group modal state
   const handleOpenGroupModal = () => setIsGroupModalOpen(true); // Open modal
@@ -366,7 +366,9 @@ function MeetingsPage() {
       <div className="tab-content">
         {activeTab === "언제" && ( //해당 그룹의 모임 리스트 출력
           <>
-            <TimetableContent isPlaceConfirmed={isPlaceConfirmed}></TimetableContent>
+            <TimetableContent
+              isPlaceConfirmed={isPlaceConfirmed}
+            ></TimetableContent>
           </>
         )}
         {activeTab === "어디서" && (
