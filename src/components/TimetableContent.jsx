@@ -191,7 +191,6 @@ const TimetableContent = () => {
             ],
         };
         setTimetableData(dummy);
-        console.log('!!!!', timetableData)
     }, [groupId, meetTitle, meetType]);
     // 여기까지 연결
 
@@ -298,42 +297,44 @@ const TimetableContent = () => {
                                 // loadCalender(resData.data.groupTableDTO.days);
                             }).catch((err) => {
                                 console.log(`TimetableContent에서 캘린더 불러오기 요청실패 ${err}`);
+                                // dummy 시작
+                                const resData = {
+                                    message: "요청에 성공했습니다.",
+                                    httpStatus: "OK",
+                                    requestId:"9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d",
+                                    data: {
+                                        groupTableDTO: {
+                                            groupTimes: "07000900",  // 오전 7시 - 오전 9시
+                                            type: "online",
+                                            days: [
+                                                {
+                                                    date: "2024-11-13",
+                                                    day: "수요일",
+                                                    time: "101011101010101010101010",  // 15분 단위이므로 2시간일때 8개
+                                                    rank: "000022201010101010101010"
+                                                },
+                                                {
+                                                    date: "2024-11-14",
+                                                    day: "목요일",
+                                                    time: "111000001010101010101010",
+                                                    rank: "222000001010101010101010"
+                                                },
+                                                {
+                                                    date: "2024-11-15",
+                                                    day: "금요일",
+                                                    time: "101100001010101010101010",
+                                                    rank: "002200001010101010101010"
+                                                }
+                                            ]
+                                        }
+                                    }
+                                }
+                                // loadCalender(resData.data.users);
+                                loadCalender(resData.data.groupTableDTO.days);
+                                //dummy 끝
                             })
 
-                            //dummy 시작
-                            // const resData = {
-                            //     message: "요청에 성공했습니다.",
-                            //     httpStatus: "OK",
-                            //     requestId:"9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d",
-                            //     data: {
-                            //         groupTableDTO: {
-                            //             groupTimes: "07000900",  // 오전 7시 - 오전 9시
-                            //             type: "online",
-                            //             days: [
-                            //                 {
-                            //                    date: "2024-10-09",
-                            //                    day: "수요일",
-                            //                    time: "101011101010101010101010",  // 15분 단위이므로 2시간일때 8개
-                            //                    rank: "000022201010101010101010"
-                            //                 },
-                            //                 {
-                            //                    date: "2024-10-10",
-                            //                    day: "목요일",
-                            //                    time: "111000001010101010101010",
-                            //                    rank: "222000001010101010101010"
-                            //                 },
-                            //                 {
-                            //                    date: "2024-10-11",
-                            //                    day: "금요일",
-                            //                    time: "101100001010101010101010",
-                            //                    rank: "002200001010101010101010"
-                            //                 }
-                            //             ]
-                            //         }
-                            //     }
-                            // }
-                            // loadCalender(resData.data.groupTableDTO.days);
-                            //dummy 끝
+
                         }
 
                     }}>캘린더 불러오기

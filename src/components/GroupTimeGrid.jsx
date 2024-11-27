@@ -7,7 +7,7 @@ import {useDispatch} from "react-redux";
 import {setDayIndexData, setGroupCellModal, setHourIndexData} from "../store.js";
 
 const GroupTimeGrid = ({days, timeRange, memberCount}) => {
-    console.log('groupTimeGrid data props', days);
+    // console.log('groupTimeGrid data props', days);
 
 
     const [hourCount, setHourCount] = useState(16);
@@ -74,8 +74,8 @@ const GroupTimeScale = ({hourCount, startHour}) => {
 
 const GroupGridCells = ({days, hourCount, timeSet, groupColorArray}) => {
     // const [times, setTimes] = useState([]);
-    console.log('timeSet', timeSet)
-    console.log('days', days)
+    // console.log('timeSet', timeSet)
+    // console.log('days', days)
 
     const [times, setTimes] = useState(timeSet);
 

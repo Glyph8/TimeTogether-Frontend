@@ -15,7 +15,7 @@ import {
 
 
 const GroupTimetable = ({timetableData, timeRange}) => {
-    console.log('timetable data props', timetableData);
+    // console.log('timetable data props', timetableData);
 
     const [memberCount, setMemberCount] = useState(5);
     // const memberCount = members;
