@@ -6,6 +6,8 @@ function ColorBar({memberCount}) {
     const divs = [];
     const [round] = useState(8);
 
+    memberCount += 1;
+
     for (let i = 0; i < memberCount; i++) {
         const ratio = i / (memberCount - 1);
         const color = interpolateColor(startColor, endColor, ratio);
@@ -21,6 +23,8 @@ function ColorBar({memberCount}) {
             roundLeft = 0;
             roundRight = round;
         }
+
+
         divs.push(
             <div
                 key={i}

@@ -4,31 +4,53 @@ import personalTimetable from "./components/PersonalTimetable.jsx";
 let timeSlots = createSlice({
     name: "timeSlots",
     initialState: [
-        {id: 1, label: '1순위', date: '-', time: '-'},
-        {id: 2, label: '2순위', date: '-', time: '-'},
-        {id: 3, label: '3순위', date: '-', time: '-'},
+        {id: 1, label: '1순위', date: '-', time: '-', dataFormat: '-'},
+        {id: 2, label: '2순위', date: '-', time: '-',dataFormat: '-'},
+        {id: 3, label: '3순위', date: '-', time: '-',dataFormat: '-'},
+        {id: 4, label: '선택', data: '-', time: '-', dataFormat: '-'},
     ],
-
 
     reducers:{
         setFirstDate(state, action){
             state[0].date = action.payload;
-            console.log(state[0].date)
         },
         setFirstTime(state, action){
             state[0].time = action.payload;
         },
+        setFirstDataFormat(state, action){
+            state[0].dataFormat = action.payload;
+        },
+
         setSecondDate(state, action){
             state[1].date = action.payload;
         },
         setSecondTime(state, action){
             state[1].time = action.payload;
-        },setThirdDate(state, action){
+        },
+        setSecondDataFormat(state, action){
+            state[1].dataFormat = action.payload;
+        },
+
+        setThirdDate(state, action){
             state[2].date = action.payload;
         },
         setThirdTime(state, action){
             state[2].time = action.payload;
         },
+        setThirdDataFormat(state, action){
+            state[2].dataFormat = action.payload;
+        },
+
+        setChooseDate(state, action){
+            state[3].date = action.payload;
+        },
+        setChooseTime(state, action){
+            state[3].time = action.payload;
+        },
+        setChooseDataFormat(state, action){
+            state[3].dataFormat = action.payload;
+        },
+
     }
 })
 
@@ -39,6 +61,17 @@ let groupCellModal = createSlice({
 
     reducers:{
         setGroupCellModal(state, action){
+            return action.payload;
+        }
+    }
+})
+
+let groupTimesData = createSlice({
+    name : 'groupTimesData',
+    initialState: '07001200',
+
+    reducers:{
+        setGroupTimesData(state, action){
             return action.payload;
         }
     }
@@ -131,9 +164,12 @@ export let {updateRankOnly} = rankOnlyData.actions
 export let {setDayIndexData} = dayIndexData.actions
 export let {setHourIndexData} = hourIndexData.actions
 export let {setGroupCellModal} = groupCellModal.actions
-export let {setFirstDate, setFirstTime,
-    setSecondDate, setSecondTime,
-setThirdDate, setThirdTime} = timeSlots.actions
+export let {setFirstDate, setFirstTime, setFirstDataFormat,
+    setSecondDate, setSecondTime, setSecondDataFormat,
+setThirdDate, setThirdTime, setThirdDataFormat,
+setChooseDate, setChooseTime, setChooseDataFormat} = timeSlots.actions
+export let {setGroupTimesData} = groupTimesData.actions
+
 
 export default configureStore({
     reducer: {
@@ -143,6 +179,7 @@ export default configureStore({
         dayIndexData: dayIndexData.reducer,
         hourIndexData: hourIndexData.reducer,
         groupCellModal: groupCellModal.reducer,
-        timeSlots: timeSlots.reducer
+        timeSlots: timeSlots.reducer,
+        groupTimesData: groupTimesData.reducer,
     },
 });

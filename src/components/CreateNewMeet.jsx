@@ -136,7 +136,8 @@ function CreateNewMeet({groupId, setMakeNewMeeting}) {
             groupTimes: "07002100   ", //오전 7시 - 오전 9시 생성 시 입력한 시간
             users: [
                 {
-                    userId: "emptyTable",
+                    userName: "emptyTable",
+                    // userId: "emptyTable",
                     days: [
                         {
                             date: "2024-10-09", //입력한 날짜
@@ -222,7 +223,7 @@ function CreateNewMeet({groupId, setMakeNewMeeting}) {
                             //새 회의 생성 연결 성공
                             axios.post(
                                 // `${testip}/group/${groupId}/meet/${newMeetTitle}/add`
-                                `http://172.20.10.4:8080/group/${groupId}/meet/${newMeetTitle}/add`
+                                `http://192.168.165.170:8080/group/${groupId}/meet/${newMeetTitle}/add`
                                 , formatedDate,
                                 {
                                     headers:

@@ -83,13 +83,14 @@ function GroupCellModal({timetableData}) {
 
     timetableData.users.map((member, userIndex) => {
         //member.userId 각 user별 이름, 시간표 정보
-        const userId = member.userId;
+        const userName = member.userName;
+        // const userId = member.userId;
         //member.days
         member.days.map((day, dIndex) => {//한 유저의 days정보 원소 day 가 date,day,time,rank를 가진다.
             for (let h = 0; h < day.time.length; h++) {
                 if (day.time[h] === '1') {
-                    // cellMemberArray[dIndex][h] += `,${member.userId}|${day.rank[h]}`;
-                    cellMemberArray[dIndex][h] += `${member.userId}|${day.rank[h]},`;
+                    cellMemberArray[dIndex][h] += `${member.userName}|${day.rank[h]},`;
+                    // cellMemberArray[dIndex][h] += `${member.userId}|${day.rank[h]},`;
                 }
             }
         })
@@ -107,7 +108,6 @@ function GroupCellModal({timetableData}) {
 
     const modalTitle = `${titleDate} (${titleWeekDay}) ${startHour.toString()}:${startMin.toString()}0`
     //"1000 2200"
-    console.log('modalTitle: ', modalTitle)
 
     const dispatch = useDispatch();
 
@@ -122,13 +122,14 @@ function GroupCellModal({timetableData}) {
         .split(",")
         .filter((mem) => mem);
 
+
     const okMembers = members.filter(
         (mem) => mem.split("|").at(1) !== undefined
     );
     const notOkMembers = timetableData.users
-        .map((member) => member.userId)
+        .map((member) => member.userName)
+        // .map((member) => member.userId)
         .filter((id) => !okMembers.some((mem) => mem.includes(id)));
-
 
     return (
         <Overlay className='overay-group-modal'
