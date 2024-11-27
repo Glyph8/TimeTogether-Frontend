@@ -47,7 +47,10 @@ const TimetableContent = ({isPlaceConfirmed}) => {
     const [days, setDays] = useState([]);
     const [timeRange, setTimeRange] = useState("");
     const [btnColorChange, setBtnColorChange] = useState("add-personal-timeBtn")
-    const myUserId = 'user9';
+
+    const myUserName = 'user1';
+    // const myUserId = 'user9';
+
     const [loadPersonalTime, setLoadPersonalTime] = useState(false);
 
     const [priorityOn, setPriorityOn] = useState(false);
@@ -117,7 +120,8 @@ const TimetableContent = ({isPlaceConfirmed}) => {
                 type: "OFFLINE",
                 users: [
                     {
-                        userId: "user1",
+                        userName: "user1",
+                        // userId: "user1",
                         days: [
                             {
                                 date: "2024-11-13",
@@ -140,7 +144,8 @@ const TimetableContent = ({isPlaceConfirmed}) => {
                         ],
                     },
                     {
-                        userId: "user2",
+                        userName: "user2",
+                        // userId: "user2",
                         days: [
                             {
                                 date: "2024-10-13",
@@ -163,7 +168,8 @@ const TimetableContent = ({isPlaceConfirmed}) => {
                         ],
                     },
                     {
-                        userId: "user3",
+                        userName: "user3",
+                        // userId: "user3",
                         days: [
                             {
                                 date: "2024-10-13",
@@ -215,8 +221,10 @@ const TimetableContent = ({isPlaceConfirmed}) => {
         // if (stableTimetableData3) {
         if (Object.keys(stableTimetableData).length !== 0) {
             // if (!stableTimetableData && stableTimetableData.users.length > 0) {
-            setDays(returnMyTimeTable(stableTimetableData3, myUserId));
-            setIsExistPersonal(checkPersonalTime(stableTimetableData, myUserId))
+            setDays(returnMyTimeTable(stableTimetableData3, myUserName));
+            // setDays(returnMyTimeTable(stableTimetableData3, myUserId));
+            setIsExistPersonal(checkPersonalTime(stableTimetableData, myUserName))
+            // setIsExistPersonal(checkPersonalTime(stableTimetableData, myUserId))
             console.log('days', days)
         }
     }, [stableTimetableData]);
@@ -473,10 +481,12 @@ function createEmptyTimes(timetableData) {//groupTimeTable에도 있음.
     return emptyTimes;
 }
 
-function returnMyTimeTable(timetableData, myUserId) {
+function returnMyTimeTable(timetableData, myUserName) {
+// function returnMyTimeTable(timetableData, myUserId) {
     //console.log('개인시간표 불러오기 전 전체 시간표 : ',timetableData, myUserId)
     for (let i = 0; i < timetableData.users.length; i++) {
-        if (timetableData.users[i].userId === myUserId) {
+        if (timetableData.users[i].userName === myUserName) {
+        // if (timetableData.users[i].userId === myUserId) {
             console.log("개인시간표가 있어서 해당 시간표를 로드함.", timetableData.users[i].days);
             return timetableData.users[i].days;
         }
@@ -485,10 +495,12 @@ function returnMyTimeTable(timetableData, myUserId) {
     return createEmptyTimes(timetableData);
 }
 
-function checkPersonalTime(timetableData, myUserId) {
+function checkPersonalTime(timetableData, myUserName) {
+// function checkPersonalTime(timetableData, myUserId) {
     // console.log('checkP', timetableData)
     for (let i = 0; i < timetableData.users.length; i++) {
-        if (timetableData.users[i].userId === myUserId) {
+        if (timetableData.users[i].userName === myUserName) {
+        // if (timetableData.users[i].userId === myUserId) {
             return true;
         }
     }

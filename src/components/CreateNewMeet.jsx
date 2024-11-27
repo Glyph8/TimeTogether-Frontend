@@ -136,7 +136,8 @@ function CreateNewMeet({groupId, setMakeNewMeeting}) {
             groupTimes: "07002100   ", //오전 7시 - 오전 9시 생성 시 입력한 시간
             users: [
                 {
-                    userId: "emptyTable",
+                    userName: "emptyTable",
+                    // userId: "emptyTable",
                     days: [
                         {
                             date: "2024-10-09", //입력한 날짜
