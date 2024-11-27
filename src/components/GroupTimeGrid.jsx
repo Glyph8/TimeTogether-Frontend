@@ -6,13 +6,17 @@ import MeetingsPage from "../pages/MeetingsPage.jsx";
 import {useDispatch} from "react-redux";
 import {setDayIndexData, setGroupCellModal, setHourIndexData} from "../store.js";
 
-const GroupTimeGrid = ({ days, timeRange, memberCount}) => {
+const GroupTimeGrid = ({days, timeRange, memberCount}) => {
+    // console.log('groupTimeGrid data props', days);
+
+
     const [hourCount, setHourCount] = useState(16);
     const [startHour, setStartHour] = useState(9);
 
     const daySet = daySets(days);
     const dayLabel = dayLabelSet(days);
-    const times = timeSet(days);
+    let times = timeSet(days);
+    // const [times, setTimes] = useState([]);
 
     const startColor = "#e0e0e0";
     const endColor = "#4e00c9";
@@ -22,8 +26,13 @@ const GroupTimeGrid = ({ days, timeRange, memberCount}) => {
         setStartHour(getStartHour(timeRange));
     }, [timeRange]);
 
+    // useEffect(() => {
+    //     times = timeSet(days);
+    // }, []);
+    //
+
     return (
-        <div className="time-grid" style={{ backgroundColor: '#f4f4f4' }}>
+        <div className="time-grid" style={{backgroundColor: '#f4f4f4'}}>
             <div className="grid-header">
                 <div className="time-column"></div>
                 {daySet.map((day, index) => (
@@ -35,20 +44,22 @@ const GroupTimeGrid = ({ days, timeRange, memberCount}) => {
             </div>
             <div className="grid-content">
                 <GroupTimeScale hourCount={hourCount} startHour={startHour}/>
+                {/*{console.log('grid에서는',times)}*/}
                 <GroupGridCells
-                    days = {days} //굳이 days를 통으로 줄 필요가 없는 듯
+                    days={days} //굳이 days를 통으로 줄 필요가 없는 듯
                     timeSet={times}
                     hourCount={hourCount}
-                    daySet = {daySet}
-                    groupColorArray = {showGroupColor(startColor, endColor, memberCount)}
+                    daySet={daySet}
+                    groupColorArray={showGroupColor(startColor, endColor, memberCount)}
                 />
+
             </div>
         </div>
     );
 };
 
-const GroupTimeScale = ({ hourCount , startHour }) => {
-    const hours = Array.from({ length: hourCount }, (_, i) => i + startHour);
+const GroupTimeScale = ({hourCount, startHour}) => {
+    const hours = Array.from({length: hourCount}, (_, i) => i + startHour);
 
     return (
         <div className="time-scale">
@@ -61,13 +72,22 @@ const GroupTimeScale = ({ hourCount , startHour }) => {
     );
 };
 
-const GroupGridCells = ({ days, hourCount, timeSet, groupColorArray}) => {
+const GroupGridCells = ({days, hourCount, timeSet, groupColorArray}) => {
     // const [times, setTimes] = useState([]);
+    // console.log('timeSet', timeSet)
+    // console.log('days', days)
+
     const [times, setTimes] = useState(timeSet);
+
+    // console.log('times',times)
+    // console.log('timeSEt prop',timeSet)
+
     const daySet = daySets(days);
     const dispatch = useDispatch();
+
     useEffect(() => {
-        setTimes(timeSet);
+        if (Object.keys(timeSet).length !== 0)
+            setTimes([...timeSet]);
     }, [timeSet]);
 
     return (
@@ -79,40 +99,53 @@ const GroupGridCells = ({ days, hourCount, timeSet, groupColorArray}) => {
             gridTemplateRows: `repeat(${hourCount * 2}, 1fr)`
         }}>
 
-            {Array.from({ length: daySet.length }).map((_, dayIndex) => (
-                // 각 날짜마다 세로로 30분 단위 셀 생성
-                Array.from({ length: hourCount * 2 }).map((_, hourIndex) => {
-                        const cellName = `grid-cell-${daySet[dayIndex]}-${hourIndex}`
-                        let cellColor = "#ffffff";
-                        const checked = times[dayIndex][hourIndex];
-                        if(Number.parseInt(checked) > 0){
-                            cellColor = groupColorArray[checked];
-                            // cellColor = "#FFC553";
-                        }
-                        return(
-                            <div
-                                key={`${dayIndex}-${hourIndex}`}
-                                className={cellName}
-                                style={{backgroundColor: cellColor, border: '1px dotted #c6c6c6'}}
-                                onClick={() => {
-                                    //그룹 시간표 셀 클릭 시 해당타임 인원 조회
-                                    dispatch(setDayIndexData(dayIndex));
-                                    dispatch(setHourIndexData(hourIndex));
-                                    dispatch(setGroupCellModal(true));
-                                }}
-                            >
+            {
+                times.length !== 0 ?
+                    (
+                        Array.from({length: daySet.length}).map((_, dayIndex) => (
+                            // 각 날짜마다 세로로 30분 단위 셀 생성
+                            Array.from({length: hourCount * 2}).map((_, hourIndex) => {
+                                    const cellName = `grid-cell-${daySet[dayIndex]}-${hourIndex}`
+                                    let cellColor = "#ffffff";
+                                    const checked = times[dayIndex][hourIndex];
+                                    if (Number.parseInt(checked) > 0) {
+                                        cellColor = groupColorArray[Number.parseInt(checked)];
+                                        // cellColor = "#FFC553";
+                                    }
+                                    return (
+                                        <div
+                                            key={`${dayIndex}-${hourIndex}`}
+                                            className={cellName}
+                                            style={{backgroundColor: cellColor, border: '1px dotted #c6c6c6'}}
+                                            onClick={() => {
+                                                console.log('그룹타임그리드 체크드', checked)
 
-                            </div>
-                        )
-                    }
-                )
-            ))}
+                                                //그룹 시간표 셀 클릭 시 해당타임 인원 조회
+                                                dispatch(setDayIndexData(dayIndex));
+                                                dispatch(setHourIndexData(hourIndex));
+                                                dispatch(setGroupCellModal(true));
+                                            }}
+                                        >
+                                        </div>
+                                    )
+                                }
+                            )
+                        ))
+
+                    ) : null
+
+            }
         </div>
     );
 };
 
 
-function showGroupColor(startColor, endColor, memberCount){
+function showGroupColor(startColor, endColor, memberCount) {
+    // memberCount += 1;
+
+    // const startColor = "#e0e0e0";
+    // const endColor = "#4e00c9";
+
     let GroupColorArray = new Array(0);
     const hex = (color) => parseInt(color.slice(1), 16);
     const r1 = (hex(startColor) >> 16) & 0xff;
@@ -123,9 +156,11 @@ function showGroupColor(startColor, endColor, memberCount){
     const g2 = (hex(endColor) >> 8) & 0xff;
     const b2 = hex(endColor) & 0xff;
 
+    for (let i = 0; i <= memberCount; i++) {
+        const factor = i / (memberCount);
+        // const factor = i / (memberCount - 1);
 
-    for(let i = 0; i <= memberCount; i++){
-        const factor = i / memberCount;
+        // console.log(`factor = ${i} / ${memberCount} - 1 = ${factor}`)
 
         const r = Math.round(r1 + factor * (r2 - r1));
         const g = Math.round(g1 + factor * (g2 - g1));
@@ -133,7 +168,7 @@ function showGroupColor(startColor, endColor, memberCount){
 
         GroupColorArray.push(`#${((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1)}`);
 
-        //console.log("그룹시간표 컬러",i, GroupColorArray[i]);
+        // console.log("그룹시간표 컬러",i, GroupColorArray[i]);
     }
     return GroupColorArray;
 }

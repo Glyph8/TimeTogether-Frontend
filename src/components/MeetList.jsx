@@ -14,6 +14,9 @@ function MeetList({
 }) {
   const nav = useNavigate();
   const handleNavigate = (meeting) => {
+     if (!meeting.meetType) {
+            meeting.meetType = 'OFFLINE';
+        }
     nav(
       `/meetings/${groupId}/${meeting.meetId}?totalNumber=${totalNumber}&meetTitle=${meeting.meetTitle}&isMgr=${isMgr}&type=${meeting.meetType}`,
       {
@@ -42,7 +45,7 @@ function MeetList({
           className="group-header"
           style={{ borderBottom: `5px solid #e4e4e4` }}
         >
-          <h2>결정된 모임 날짜가 없어요</h2>
+          <h2 >결정된 모임 날짜가 없어요</h2>
         </header>
       ) : null}
       {
@@ -107,6 +110,7 @@ function MeetList({
       ></div>
     </div>
   );
+
 }
 
 export default MeetList;

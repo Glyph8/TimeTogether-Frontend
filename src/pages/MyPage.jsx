@@ -17,7 +17,7 @@ function MyPage() {
   const handleLogout = async () => {
     try {
       const response = await axios.post(
-        "http://192.168.186.162:8080/user/logout",
+        "http://192.168.165.170:8080/user/logout",
         {},
         {
           headers: {
