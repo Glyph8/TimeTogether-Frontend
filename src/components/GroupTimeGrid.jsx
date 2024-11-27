@@ -225,11 +225,19 @@ function getTimeRange(timeRange) {
     const startHour = Number.parseInt(timeRange.slice(0, 4));
     const endHour = Number.parseInt(timeRange.slice(4));
     const hourRange = endHour - startHour;
+
+    // console.log('getTimeRange', typeof hourRange)
+    // console.log('getTimeRange', hourRange)
+    // console.log('getTimeRange', hourRange / 100)
+
     return (hourRange / 100);
 }
 
 function getStartHour(timeRange) {
     const startHour = Number.parseInt(timeRange.slice(0, 4));
+    // console.log('getStartHour', typeof startHour)
+    // console.log('getStartHour', startHour)
+    // console.log('getStartHour', startHour / 100)
     return (startHour / 100);
 }
 

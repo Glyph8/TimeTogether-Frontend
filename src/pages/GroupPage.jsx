@@ -133,7 +133,7 @@ function GroupPage() {
     };
 
     // 더미 데이터를 상태에 설정
-    setGroups(exampleResponse.data);
+    //setGroups(exampleResponse.data);
   }, []);
 
   const openInviteModal = () => setIsInviteModalOpen(true);

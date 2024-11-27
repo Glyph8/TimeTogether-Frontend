@@ -283,8 +283,10 @@ import axios from "axios";
 
 // 로컬 스토리지에 토큰 저장
 function saveTokensToLocalStorage(accessToken, refreshToken) {
+// function saveTokensToLocalStorage(accessToken, refreshToken, userName) {
   localStorage.setItem("accessToken", accessToken);
   localStorage.setItem("refreshToken", refreshToken);
+  // localStorage.setItem("userName", userName)
 }
 
 // JWT의 만료 시간 확인 함수
@@ -349,6 +351,9 @@ function OAuthRedirectHandler() {
     const accessToken = urlParams.get("access_token");
     const refreshToken = urlParams.get("refresh_token");
 
+    // const userName = urlParams.get("userName");
+    // console.log("userName 받아옴 : ", userName)
+
     // access_token과 refresh_token이 모두 있는지 확인
     if (accessToken && refreshToken && !isTokenProcessed) {
       console.log("액세스 토큰 받음:", accessToken);
@@ -356,6 +361,8 @@ function OAuthRedirectHandler() {
 
       // 토큰을 로컬 스토리지에 저장
       saveTokensToLocalStorage(accessToken, refreshToken);
+
+      // saveTokensToLocalStorage(accessToken, refreshToken, userName);
       console.log("토큰 저장 완료");
 
       // 토큰을 체크하고 백엔드에 전송
@@ -368,7 +375,7 @@ function OAuthRedirectHandler() {
       navigate("/group");
     } else if (!accessToken || !refreshToken) {
       console.error("액세스 토큰 또는 리프레시 토큰을 받지 못했습니다.");
-      window.alert("토큰을 받지 못했습니다.");
+      // window.alert("토큰을 받지 못했습니다.");
     }
   }, [navigate, isTokenProcessed]);
 

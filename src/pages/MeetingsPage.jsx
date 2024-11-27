@@ -116,7 +116,8 @@ function MeetingsPage() {
     // 주기적으로 fetchMeetingLocations 실행
 
 
-    intervalId = setInterval(fetchMeetingLocations, 1000); // 1초마다 호출
+    intervalId = setInterval(fetchMeetingLocations, 100000); // 1초마다 호출
+
 
     // 클린업 함수
     return () => clearInterval(intervalId); // 언마운트 시 Interval 해제

@@ -47,8 +47,34 @@ const TimetableContent = ({isPlaceConfirmed}) => {
     const [timeRange, setTimeRange] = useState("");
     const [btnColorChange, setBtnColorChange] = useState("add-personal-timeBtn")
 
+    // const myUserName = localStorage.getItem("userName");
+    // console.log('my name: ', myUserName)
+
     const myUserName = '강동윤';
-    // const myUserId = 'user9';
+
+    // const [myUserName, setMyUserName] = useState('강동윤');
+    // useEffect(() => {
+    //     axios.get(`http://192.168.12.218:8080/user/history/name`
+    //         , {
+    //             headers:
+    //                 {
+    //                     Authorization: `Bearer ${accessToken}`
+    //                 }
+    //         }
+    //     ).then((res) => {
+    //         if (res.data) {
+    //             console.log('timetableData에서 사용자 이름 요청 성공 : ', res.data);
+    //
+    //             setMyUserName(res.data.data)
+    //         } else {
+    //             console.log('응답이 비어 있습니다.', res);
+    //         }
+    //         //시간표 값 전달
+    //     }).catch((err) => {
+    //         console.log(`timetableData에서 이름 요청실패 ${err}`);
+    //     })
+    // }, []);
+    //
 
     const [loadPersonalTime, setLoadPersonalTime] = useState(false);
 
@@ -75,6 +101,8 @@ const TimetableContent = ({isPlaceConfirmed}) => {
 
     // const isExistPersonal = checkPersonalTime(stableTimetableData, myUserId);
     const [isExistPersonal, setIsExistPersonal] = useState(false)
+
+    const [isAdded, setIsAdded] = useState(false);
 
     useEffect(() => {
         // if (!groupId || !meetTitle || !accessToken) {
@@ -111,89 +139,89 @@ const TimetableContent = ({isPlaceConfirmed}) => {
         }).catch((err) => {
             console.log(`timetableData에서 시간표 요청실패 ${err}`);
 
-            const dummy = {
-                code: 200,
-                message: "요청에 성공하였습니다.",
-                requestId: "9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d",
-                groupTimes: "07001200", //오전 7시 - 오전 9시
-                type: "OFFLINE",
-                users: [
-                    {
-                        userName: "user1",
-                        // userId: "user1",
-                        days: [
-                            {
-                                date: "2024-11-13",
-                                day: "수요일",
-                                time: "1010101001",
-                                rank: "1000000001",
-                            },
-                            {
-                                date: "2024-11-14",
-                                day: "목요일",
-                                time: "0101010101",
-                                rank: "0100000001",
-                            },
-                            {
-                                date: "2024-11-15",
-                                day: "금요일",
-                                time: "1110001101",
-                                rank: "0010000001",
-                            }
-                        ],
-                    },
-                    {
-                        userName: "user2",
-                        // userId: "user2",
-                        days: [
-                            {
-                                date: "2024-10-13",
-                                day: "수요일",
-                                time: "1100110000",
-                                rank: "0000010000",
-                            },
-                            {
-                                date: "2024-10-14",
-                                day: "목요일",
-                                time: "0011001100",
-                                rank: "0000001000",
-                            },
-                            {
-                                date: "2024-10-15",
-                                day: "금요일",
-                                time: "1111000000",
-                                rank: "0000000100",
-                            },
-                        ],
-                    },
-                    {
-                        userName: "user3",
-                        // userId: "user3",
-                        days: [
-                            {
-                                date: "2024-10-13",
-                                day: "수요일",
-                                time: "1000110011",
-                                rank: "1000010011",
-                            },
-                            {
-                                date: "2024-10-14",
-                                day: "목요일",
-                                time: "0111011111",
-                                rank: "0000001011",
-                            },
-                            {
-                                date: "2024-10-15",
-                                day: "금요일",
-                                time: "0000000111",
-                                rank: "0000000111",
-                            },
-                        ],
-                    },
-
-                ],
-            };
-            setTimetableData(dummy);
+            // const dummy = {
+            //     code: 200,
+            //     message: "요청에 성공하였습니다.",
+            //     requestId: "9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d",
+            //     groupTimes: "07001200", //오전 7시 - 오전 9시
+            //     type: "OFFLINE",
+            //     users: [
+            //         {
+            //             userName: "user1",
+            //             // userId: "user1",
+            //             days: [
+            //                 {
+            //                     date: "2024-11-13",
+            //                     day: "수요일",
+            //                     time: "1010101001",
+            //                     rank: "1000000001",
+            //                 },
+            //                 {
+            //                     date: "2024-11-14",
+            //                     day: "목요일",
+            //                     time: "0101010101",
+            //                     rank: "0100000001",
+            //                 },
+            //                 {
+            //                     date: "2024-11-15",
+            //                     day: "금요일",
+            //                     time: "1110001101",
+            //                     rank: "0010000001",
+            //                 }
+            //             ],
+            //         },
+            //         {
+            //             userName: "user2",
+            //             // userId: "user2",
+            //             days: [
+            //                 {
+            //                     date: "2024-10-13",
+            //                     day: "수요일",
+            //                     time: "1100110000",
+            //                     rank: "0000010000",
+            //                 },
+            //                 {
+            //                     date: "2024-10-14",
+            //                     day: "목요일",
+            //                     time: "0011001100",
+            //                     rank: "0000001000",
+            //                 },
+            //                 {
+            //                     date: "2024-10-15",
+            //                     day: "금요일",
+            //                     time: "1111000000",
+            //                     rank: "0000000100",
+            //                 },
+            //             ],
+            //         },
+            //         {
+            //             userName: "user3",
+            //             // userId: "user3",
+            //             days: [
+            //                 {
+            //                     date: "2024-10-13",
+            //                     day: "수요일",
+            //                     time: "1000110011",
+            //                     rank: "1000010011",
+            //                 },
+            //                 {
+            //                     date: "2024-10-14",
+            //                     day: "목요일",
+            //                     time: "0111011111",
+            //                     rank: "0000001011",
+            //                 },
+            //                 {
+            //                     date: "2024-10-15",
+            //                     day: "금요일",
+            //                     time: "0000000111",
+            //                     rank: "0000000111",
+            //                 },
+            //             ],
+            //         },
+            //
+            //     ],
+            // };
+            // setTimetableData(dummy);
         })//로 request 보내고, 받아온 결과로 시간표 출력.
 
         console.log('요청 시퀀스 후')
@@ -211,7 +239,7 @@ const TimetableContent = ({isPlaceConfirmed}) => {
             setStableTimetableData(structuredClone(timetableData));
             setStableTimetableData2(structuredClone(timetableData));
             setStableTimetableData3(structuredClone(timetableData));
-            console.log('stable', stableTimetableData);
+            console.log('stable2', stableTimetableData2);
         }
     }, [timetableData]);
 
@@ -312,7 +340,7 @@ const TimetableContent = ({isPlaceConfirmed}) => {
                                 const resData = {
                                     message: "요청에 성공했습니다.",
                                     httpStatus: "OK",
-                                    requestId:"9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d",
+                                    requestId: "9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d",
                                     data: {
                                         groupTableDTO: {
                                             groupTimes: "07000900",  // 오전 7시 - 오전 9시
@@ -355,66 +383,81 @@ const TimetableContent = ({isPlaceConfirmed}) => {
                 </div> : null
             }
 
-            <button onClick={
-                ()=>{
-                    setLoadPersonalTime(true);
-                }
-            }> 수정하기 </button>
-            <button className={btnColorChange} onClick={() => {
-                if (!loadPersonalTime) {//'내 시간표 추가하기' 누른 경우
-                    console.log("내 시간표 추가하기 버튼 클릭")
-                    setLoadPersonalTime(true);
-                    dispatch(updatePersonalTimeData(days)); //개인시간표 store state에 저장
-
-                    //API : /group/{groupId}/when/{title}/{type}/add
-                    // axios.post(`${testip}/group/${groupId}/when/${meetTitle}/${meetType}/add`, null
-                    console.log(`개인시간표 요청 url http://192.168.165.170:8080/group/${groupId}/when/${meetTitle}/${meetType}/add`)
-                    axios.post(`http://192.168.12.218:8080/group/${groupId}/when/${meetTitle}/${meetType}/add`, null
-                        , {
-                            headers:
-                                {
-                                    Authorization: `Bearer ${accessToken}`
-                                }
-                        }
-                    ).then((res) => {
-                        console.log(res.data);
-                        setLoadPersonalTime(true);
-                    }).catch((err) => {
-                        console.log(`timeTableContent에서 내 시간표 생성 요청실패 ${err}`);
-                    })
-                } else {//저장하기 상태에서 클릭하는 경우? 저장되었다는 의미로 버튼 색 변화
-                    //다시 시간표 클릭해서 변동되면 캘린더 버튼 색 변화, 저장하기 색 복귀하도록 할것
-
-                    //setBtnColorChange("save-btn")
-
-                    //API : /group/{groupId}/when/{title}/{type}/update
-                    dispatch(updateTimeValues(timeOnlyData))
-                    dispatch(updateRankValues(rankOnlyData))
-
-                    // console.log("갱신된 timeOnlyData 정보", timeOnlyData);
-                    // console.log("갱신된 rankOnlyData 정보", rankOnlyData);
-                    // console.log("갱신된 개인시간표 정보", personalTimeData); state변경이 할당한 변수에 안됨.
-                    console.log(`저장하기 post update요청 url /group/${groupId}/when/${meetTitle}/${meetType}/update`);
-                    console.log("post요청 body : ", store.getState().personalTimeData);
-
-                    // axios.post(`${testip}/group/${groupId}/when/${meetTitle}/${meetType}/update`, myTableData, {
-                    axios.post(`http://192.168.12.218:8080/group/${groupId}/when/${meetTitle}/${meetType}/update`, store.getState().personalTimeData, {
-                            headers:
-                                {
-                                    Authorization: `Bearer ${accessToken}`
-                                }
-                        }
-                    ).then((res) => {
-                        console.log(res.data);
-                        setLoadPersonalTime(true);
-                    }).catch((err) => {
-                        console.log(`timeTableContent에서 내 시간표 update 요청실패 ${err}`);
-                    })
-                }
-            }}>
+            <button className={btnColorChange}>
                 {
-                    loadPersonalTime ? <p>저장하기</p> : (
-                        isExistPersonal ? <p>내 시간표 수정하기</p> : <p>내 시간표 추가하기</p>
+                    loadPersonalTime ? <p onClick={()=>{
+                        //API : /group/{groupId}/when/{title}/{type}/update
+                        dispatch(updateTimeValues(timeOnlyData))
+                        dispatch(updateRankValues(rankOnlyData))
+                        // console.log("갱신된 timeOnlyData 정보", timeOnlyData);
+                        // console.log("갱신된 rankOnlyData 정보", rankOnlyData);
+                        // console.log("갱신된 개인시간표 정보", personalTimeData); state변경이 할당한 변수에 안됨.
+                        console.log(`저장하기 post update요청 url /group/${groupId}/when/${meetTitle}/${meetType}/update`);
+                        console.log("post요청 body : ", store.getState().personalTimeData);
+
+                        // axios.post(`${testip}/group/${groupId}/when/${meetTitle}/${meetType}/update`, myTableData, {
+                        console.log(`요청 API http://192.168.12.218:8080/group/${groupId}/when/${meetTitle}/${meetType}/update \n${store.getState().personalTimeData}`)
+                        axios.post(`http://192.168.12.218:8080/group/${groupId}/when/${meetTitle}/${meetType}/update`, store.getState().personalTimeData, {
+                                headers:
+                                    {
+                                        Authorization: `Bearer ${accessToken}`
+                                    }
+                            }
+                        ).then((res) => {
+                            console.log(res.data);
+                            setLoadPersonalTime(true);
+
+                            // localStorage.setItem(storedKey, "true");
+                            // window.location.reload()
+                        }).catch((err) => {
+                            console.log(`timeTableContent에서 내 시간표 update 요청실패 ${err}`);
+                        })
+                    }}>저장하기</p> : (
+                        isExistPersonal ? <p onClick={
+                            () => {
+                                console.log('내 시간표 수정하기 클릭 - 개인 시간표 on')
+                                setLoadPersonalTime(true);
+                                dispatch(updatePersonalTimeData(days)); //개인시간표 store state에 저장
+
+                                axios.post(`http://192.168.12.218:8080/group/${groupId}/when/${meetTitle}/${meetType}/add`, null
+                                    , {
+                                        headers:
+                                            {
+                                                Authorization: `Bearer ${accessToken}`
+                                            }
+                                    }
+                                ).then((res) => {
+                                    // console.log(res.data);
+                                    setLoadPersonalTime(true);
+                                }).catch((err) => {
+                                    console.log(`timeTableContent에서 내 수정하기에서 add 요청 실패 - 시간표 생성 요청실패 ${err}`);
+                                })
+                            }
+
+                        }>내 시간표 수정하기</p> : <p onClick={() => {
+                            if (!loadPersonalTime) {//'내 시간표 추가하기' 누른 경우
+                                console.log("내 시간표 추가하기 버튼 클릭")
+                                setLoadPersonalTime(true);
+                                dispatch(updatePersonalTimeData(days)); //개인시간표 store state에 저장
+
+                                //API : /group/{groupId}/when/{title}/{type}/add
+                                // axios.post(`${testip}/group/${groupId}/when/${meetTitle}/${meetType}/add`, null
+                                console.log(`개인시간표 요청 url http://192.168.12.218:8080/group/${groupId}/when/${meetTitle}/${meetType}/add`)
+                                axios.post(`http://192.168.12.218:8080/group/${groupId}/when/${meetTitle}/${meetType}/add`, null
+                                    , {
+                                        headers:
+                                            {
+                                                Authorization: `Bearer ${accessToken}`
+                                            }
+                                    }
+                                ).then((res) => {
+                                    console.log(res.data);
+                                    setLoadPersonalTime(true);
+                                }).catch((err) => {
+                                    console.log(`timeTableContent에서 내 시간표 생성 요청실패 ${err}`);
+                                })
+                            }
+                        }}>내 시간표 추가하기</p>
 
                     )
                 }
@@ -489,8 +532,11 @@ function returnMyTimeTable(timetableData, myUserName) {
 // function returnMyTimeTable(timetableData, myUserId) {
     //console.log('개인시간표 불러오기 전 전체 시간표 : ',timetableData, myUserId)
     for (let i = 0; i < timetableData.users.length; i++) {
+        console.log('순회하며 이름 비교 ',timetableData.users[i].userName);
+        console.log('비교할 내이름 : type-', typeof myUserName);
+        console.log('비교할 내이름 :', myUserName);
         if (timetableData.users[i].userName === myUserName) {
-        // if (timetableData.users[i].userId === myUserId) {
+            // if (timetableData.users[i].userId === myUserId) {
             console.log("개인시간표가 있어서 해당 시간표를 로드함.", timetableData.users[i].days);
             return timetableData.users[i].days;
         }
@@ -504,7 +550,7 @@ function checkPersonalTime(timetableData, myUserName) {
     // console.log('checkP', timetableData)
     for (let i = 0; i < timetableData.users.length; i++) {
         if (timetableData.users[i].userName === myUserName) {
-        // if (timetableData.users[i].userId === myUserId) {
+            // if (timetableData.users[i].userId === myUserId) {
             return true;
         }
     }
