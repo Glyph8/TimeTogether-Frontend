@@ -26,7 +26,9 @@ function GroupPage() {
 
       try {
         const response = await axios.get(
-          "http://192.168.165.170:8080/group/groups/view",
+
+          "http://192.168.186.162:8080/group/groups/view",
+
           {
             headers: {
               Authorization: `Bearer ${accessToken}`,
@@ -72,7 +74,9 @@ function GroupPage() {
   useEffect(() => {
     // 새로운 배열 형식의 더미 응답 데이터
     axios
-      .get("http://192.168.165.170:8080/header/group/groups/view")
+
+      .get("http://192.168.186.162:8080/header/group/groups/view")
+
       .then((response) => {
         console.log(response.data);
       })

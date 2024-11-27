@@ -15,6 +15,7 @@ import LocationSimpleItemList from "../components/LocationSimpleItemList.jsx";
 import axios from "axios";
 import MeetingListPage from "./MeetingListPage.jsx";
 import { useLocation } from "react-router-dom";
+import InGroupModal from "../components/InGroupModal"; // Import the modal component
 
 function MeetingsPage() {
   const { groupId, meetingId } = useParams(); //groupid
@@ -33,154 +34,49 @@ function MeetingsPage() {
 
   const totalNumber = searchParams.get("totalNumber") || 1;
   const meetingTitle = searchParams.get("meetTitle") || "";
-  const isMgr = searchParams.get("isMgr") || false;
+
   const meetType = searchParams.get("meetType") || 'OFFLINE';
-  const [timetableData, setTimetableData] = useState([]);
 
-  // useEffect(() => {
-  //   console.log('timetable용 데이터 요청 시작')
-  //   axios.get(`http://192.168.165.170:8080/group/${groupId}/when/${meetingTitle}/${meetType}`
-  //       , {
-  //         headers:
-  //             {
-  //               Authorization: `Bearer ${accessToken}`
-  //             }
-  //       }
-  //   ).then((res) => {
-  //     console.log('요청 시퀀스 후')
-  //     console.log('timetableData에서 시간표 요청 성공 : ', res.data);
-  //     // timetableData = res.data;
-  //     if (res.data) {
-  //       console.log('timetableData에서 시간표 요청 성공 : ', res.data);
-  //       setTimetableData(res.data)
-  //
-  //     } else {
-  //       console.log('응답이 비어 있습니다.', res);
-  //     }
-  //     //시간표 값 전달
-  //   }).catch((err) => {
-  //     console.log(`timetableData에서 시간표 요청실패 ${err} dummy전달`);
-  //
-  //     const dummy = {
-  //       code: 200,
-  //       message: "요청에 성공하였습니다.",
-  //       requestId: "9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d",
-  //       groupTimes: "07001200", //오전 7시 - 오전 9시
-  //       type: "OFFLINE",
-  //       users: [
-  //         {
-  //           userId: "user1",
-  //           days: [
-  //             {
-  //               date: "2024-11-13",
-  //               day: "수요일",
-  //               time: "1010101001",
-  //               rank: "1000000001",
-  //             },
-  //             {
-  //               date: "2024-11-14",
-  //               day: "목요일",
-  //               time: "0101010101",
-  //               rank: "0100000001",
-  //             },
-  //             {
-  //               date: "2024-11-15",
-  //               day: "금요일",
-  //               time: "1110001101",
-  //               rank: "0010000001",
-  //             }
-  //           ],
-  //         },
-  //         {
-  //           userId: "user2",
-  //           days: [
-  //             {
-  //               date: "2024-10-13",
-  //               day: "수요일",
-  //               time: "1100110000",
-  //               rank: "0000010000",
-  //             },
-  //             {
-  //               date: "2024-10-14",
-  //               day: "목요일",
-  //               time: "0011001100",
-  //               rank: "0000001000",
-  //             },
-  //             {
-  //               date: "2024-10-15",
-  //               day: "금요일",
-  //               time: "1111000000",
-  //               rank: "0000000100",
-  //             },
-  //           ],
-  //         },
-  //         {
-  //           userId: "user3",
-  //           days: [
-  //             {
-  //               date: "2024-10-13",
-  //               day: "수요일",
-  //               time: "1000110011",
-  //               rank: "1000010011",
-  //             },
-  //             {
-  //               date: "2024-10-14",
-  //               day: "목요일",
-  //               time: "0111011111",
-  //               rank: "0000001011",
-  //             },
-  //             {
-  //               date: "2024-10-15",
-  //               day: "금요일",
-  //               time: "0000000111",
-  //               rank: "0000000111",
-  //             },
-  //           ],
-  //         },
-  //
-  //       ],
-  //     };
-  //     setTimetableData(dummy)
-  //
-  //   })
-  // }, [groupId, meetType, meetingTitle]);
-
+  const [isGroupModalOpen, setIsGroupModalOpen] = useState(false); // Group modal state
+  const handleOpenGroupModal = () => setIsGroupModalOpen(true); // Open modal
+  const handleCloseGroupModal = () => setIsGroupModalOpen(false); // Close modal
+  const { groupName, groupMembers, groupImg, isMgr } = location.state || {};
+  // const [groupName, setGroupName] = useState(passedGroupName || ""); // 네비게이션으로 받은 groupName을 기본값으로 사용
 
   useEffect(() => {
     setIsHost(isMgr);
   }, [isMgr]);
 
-  useEffect(() => {
-    console.log(totalNumber);
-    const response = {
-      code: 200,
-      message: "요청에 성공하였습니다.",
-      candidates: [
-        {
-          locationId: 101,
-          locationName: "스타벅스 강남점",
-          locationUrl: "https://naver.me/5xyzExample",
-          count: 4,
-        },
-        {
-          locationId: 102,
-          locationName: "투썸 강남점",
-          locationUrl: "https://naver.me/7abcExample",
-          count: 3,
-        },
-        {
-          locationId: 103,
-          locationName: "커피빈 강남점",
-          locationUrl: "https://naver.me/8defExample",
-          count: 2,
-        },
-      ],
-    };
-    setLocations(response.candidates); // 서버 응답 데이터를 상태로 설정
-  }, [totalNumber]);
+  // useEffect(() => {
+  //   console.log(totalNumber);
+  //   const response = {
+  //     code: 200,
+  //     message: "요청에 성공하였습니다.",
+  //     candidates: [
+  //       {
+  //         locationId: 101,
+  //         locationName: "스타벅스 강남점",
+  //         locationUrl: "https://naver.me/5xyzExample",
+  //         count: 4,
+  //       },
+  //       {
+  //         locationId: 102,
+  //         locationName: "투썸 강남점",
+  //         locationUrl: "https://naver.me/7abcExample",
+  //         count: 3,
+  //       },
+  //       {
+  //         locationId: 103,
+  //         locationName: "커피빈 강남점",
+  //         locationUrl: "https://naver.me/8defExample",
+  //         count: 2,
+  //       },
+  //     ],
+  //   };
+  //   setLocations(response.candidates); // 서버 응답 데이터를 상태로 설정
+  // }, [totalNumber]);
 
   useEffect(() => {
-
     let intervalId;
     const fetchMeetingLocations = async () => {
       try {
@@ -194,7 +90,7 @@ function MeetingsPage() {
         );
 
         // 응답 데이터 처리
-        const data = response.data;
+        const data = response.data.data;
         if (data.httpStatus === "OK") {
           setLocations(data); // 상태 업데이트
         } else {
@@ -280,7 +176,7 @@ function MeetingsPage() {
         }
       );
 
-      const data = response.data;
+      const data = response.data.data;
 
       if (data.httpStatus === "OK") {
         console.log(`장소 ${locationId} 투표 성공! UpAndDown: ${UpAndDown}`);
@@ -409,12 +305,12 @@ function MeetingsPage() {
       const data = response.data;
       if (data.httpStatus === "OK") {
         const newPlace = {
-          groupWhereId: data.groupWhereId,
-          groupId: data.groupId,
-          groupLocationName: data.groupLocationName,
-          groupWhereUrl: data.groupWhereUrl,
-          count: data.count,
-          groupMeetingId: data.groupMeetingId,
+          groupWhereId: data.data.groupWhereId,
+          groupId: data.data.groupId,
+          groupLocationName: data.data.groupLocationName,
+          groupWhereUrl: data.data.groupWhereUrl,
+          count: data.data.count,
+          groupMeetingId: data.data.groupMeetingId,
         };
         setLocations((prevLocations) => [...prevLocations, newPlace]); // 상태 업데이트
       } else {
@@ -450,8 +346,19 @@ function MeetingsPage() {
             navigate("/group"); // 기본 경로 설정
           }
         }}
-        onMenuClick={() => {}}
+        onMenuClick={handleOpenGroupModal}
       />
+      {/* InGroupModal */}
+      <InGroupModal
+        isOpen={isGroupModalOpen}
+        onClose={handleCloseGroupModal}
+        groupImg={groupImg}
+        groupName={groupName}
+        groupMembers={groupMembers || []}
+        isMgr={isMgr}
+        groupId={groupId}
+      />
+
       <TabSelector
         selectedOption={activeTab}
         onSelect={(option) => setActiveTab(option)}

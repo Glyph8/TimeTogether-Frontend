@@ -10,6 +10,10 @@ function MyPage() {
   const accessToken = localStorage.getItem("accessToken"); // 토큰 가져오기
   const navigate = useNavigate(); // 페이지 이동을 위한 useNavigate
 
+  const NavigateToHistoryPage = () => {
+    navigate("/mypage/my-history-page");
+  };
+
   const handleLogout = async () => {
     try {
       const response = await axios.post(
@@ -53,7 +57,7 @@ function MyPage() {
       ) : (
         <>
           <ProfileCard name="최OO 님" />
-          <MyPageItem title="내 모임 기록" onClick={() => {}} />
+          <MyPageItem title="내 모임 기록" onClick={NavigateToHistoryPage} />
           <MyPageItem title="프로필 변경" onClick={() => {}} />
           <MyPageItem title="로그아웃" onClick={handleLogout} />
         </>

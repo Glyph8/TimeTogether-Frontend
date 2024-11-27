@@ -388,8 +388,7 @@ function CalendarPage() {
             Authorization: `Bearer ${accessToken}`,
           },
         }
-      )
-
+      );
 
       console.log(response.data);
       // const { meetingList } = response.data.data;
@@ -422,12 +421,8 @@ function CalendarPage() {
         ];
         const groupId = meeting.id; // 그룹 ID
         const color = colors[groupId % colors.length]; // ID 기반으로 색상 선택
-
-
-        const meetType = 'ONLINE';
         // const meetType = meeting.meetType;
-
-
+        const meetType = "ONLINE";
         // locationMap에서 meeting.id로 location 정보 찾기
         const locationInfo = locationMap[meeting.id] || {};
         const locationName = locationInfo.locationName;
@@ -448,7 +443,7 @@ function CalendarPage() {
             location: locationName, // 병합된 locationName
             locationUrl, // 병합된 locationUrl
 
-            meetType: 'ONLINE',
+            meetType: "ONLINE",
 
             groupName: meeting.groupName || "그룹명 없음", // 그룹 이름
             isAllDay,

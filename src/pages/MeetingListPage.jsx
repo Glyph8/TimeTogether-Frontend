@@ -6,21 +6,25 @@ import {
     Route,
     useLocation,
 } from "react-router-dom";
+import { BiArrowBack } from "react-icons/bi"; // 뒤로 가기 아이콘
+import { GiHamburgerMenu } from "react-icons/gi"; // 햄버거 아이콘
 import MeetingScheduleItemList from "../components/MeetingScheduleItemList.jsx";
 import CreateNewMeet from "../components/CreateNewMeet.jsx";
 import MeetingScheduleItem from "../components/MeetingScheduleItem.jsx";
 import MeetingGroupScheduleItem from "../components/MeetingGroupScheduleItem.jsx";
 import MeetList from "../components/MeetList.jsx";
+import InGroupModal from "../components/InGroupModal";
 import axios from "axios";
 
 const MeetingListPage = () => {
-    const {groupId} = useParams(); //groupId
-    const location = useLocation();
-    const searchParams = new URLSearchParams(location.search);
-    const totalNumber = searchParams.get("totalNumber") || 1;
-    const isMgr = searchParams.get("isMgr") || false;
-    const [makeNewMeeting, setMakeNewMeeting] = useState(false);
-    const navigate = useNavigate();
+
+  const { groupId } = useParams(); //groupId
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const totalNumber = searchParams.get("totalNumber") || 1;
+  // const isMgr = searchParams.get("isMgr") || false;
+  const [makeNewMeeting, setMakeNewMeeting] = useState(false);
+  const navigate = useNavigate();
 
     const accessToken = localStorage.getItem("accessToken");
     const refreshToken = localStorage.getItem("refreshToken");
@@ -86,6 +90,11 @@ const MeetingListPage = () => {
         setWhenProcessData(whenDataResponse2.meeting);
     }, []);
 
+  const [isModalOpen, setIsModalOpen] = useState(false); // 모달 열림/닫힘 상태
+
+  // 전달된 state (groupName, groupMembers 등) 받기
+  const { groupName, groupMembers, groupImg, isMgr } = location.state || {};
+  // const [groupName, setGroupName] = useState(passedGroupName || ""); // 네비게이션으로 받은 groupName을 기본값으로 사용
 
     // useEffect(() => {
     //     console.log('Meeting list에서 회의 목록 불러오기');
@@ -167,38 +176,87 @@ const MeetingListPage = () => {
     //
     // }, [groupId, totalNumber]);
 
-    return (
-        <div className="group-page" style={{overflowY: "auto"}}>
-            <header
-                className="group-header"
-                style={{borderBottom: `5px solid #e4e4e4`}}
-            >
-                <h2>모임 일정</h2>
-            </header>
+  const handleBack = () => {
+    navigate(-1); // 브라우저의 이전 페이지로 이동
+  };
 
-            {makeNewMeeting ? (
-                <CreateNewMeet groupId={groupId} setMakeNewMeeting={setMakeNewMeeting}/>
-            ) : (
-                <>
-                    <MeetList
-                        groupId={groupId}
-                        totalNumber={totalNumber}
-                        isMgr={isMgr}
-                        whenData={whenData}
-                        whenProcessData={whenProcessData}
-                    />
-                    <button
-                        className="new-meet-day-button"
-                        onClick={() => {
-                            setMakeNewMeeting(!makeNewMeeting);
-                        }}
-                    >
-                        모임날짜 추가하기
-                    </button>
-                </>
-            )}
-        </div>
-    );
+  return (
+    <div className="group-page" style={{ overflowY: "auto" }}>
+      <header
+        className="group-header"
+        style={{
+          // borderBottom: `5px solid #e4e4e4`,
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          padding: "20px",
+          borderBottom: "1px solid #e0e0e0",
+          boxShadow: "0px 4px 10px 0px #0000000a",
+          marginBottom: "5px",
+        }}
+      >
+        <BiArrowBack
+          size={25}
+          style={{ cursor: "pointer" }}
+          onClick={handleBack}
+        />
+        <h2 style={{ fontWeight: "600", fontSize: "1.3rem" }}>
+          {" "}
+          {groupName ? `${groupName} 팀` : "모임 일정"}
+        </h2>
+        <GiHamburgerMenu
+          size={24}
+          style={{ cursor: "pointer" }}
+          onClick={() => setIsModalOpen(true)}
+        />
+      </header>
+
+      {makeNewMeeting ? (
+        <CreateNewMeet
+          groupId={groupId}
+          setMakeNewMeeting={setMakeNewMeeting}
+        />
+      ) : (
+        <>
+          <MeetList
+            groupId={groupId}
+            totalNumber={totalNumber}
+            isMgr={isMgr}
+            whenData={whenData}
+            whenProcessData={whenProcessData}
+            groupName={groupName}
+            groupMembers={groupMembers}
+            groupImg={groupImg}
+          />
+          <button
+            className="new-meet-day-button"
+            onClick={() => {
+              setMakeNewMeeting(!makeNewMeeting);
+            }}
+            style={{
+              cursor: "pointer",
+              position: "sticky",
+
+              marginBottom: "25px",
+            }}
+          >
+            모임날짜 추가하기
+          </button>
+        </>
+      )}
+      {/* 그룹 정보 모달 */}
+      <InGroupModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)} // 모달 닫기
+        groupImg={groupImg}
+        groupName={groupName}
+        groupMembers={groupMembers || []} // 멤버 리스트 전달
+        isMgr={isMgr} // isMgr 전달
+        groupId={groupId}
+      />
+    </div>
+  );
+
 };
 
 export default MeetingListPage;
