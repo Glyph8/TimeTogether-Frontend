@@ -42,13 +42,13 @@ let timeSlots = createSlice({
         },
 
         setChooseDate(state, action){
-            state[2].date = action.payload;
+            state[3].date = action.payload;
         },
         setChooseTime(state, action){
-            state[2].time = action.payload;
+            state[3].time = action.payload;
         },
         setChooseDataFormat(state, action){
-            state[2].dataFormat = action.payload;
+            state[3].dataFormat = action.payload;
         },
 
     }
@@ -61,6 +61,17 @@ let groupCellModal = createSlice({
 
     reducers:{
         setGroupCellModal(state, action){
+            return action.payload;
+        }
+    }
+})
+
+let groupTimesData = createSlice({
+    name : 'groupTimesData',
+    initialState: '07001200',
+
+    reducers:{
+        setGroupTimesData(state, action){
             return action.payload;
         }
     }
@@ -157,6 +168,8 @@ export let {setFirstDate, setFirstTime, setFirstDataFormat,
     setSecondDate, setSecondTime, setSecondDataFormat,
 setThirdDate, setThirdTime, setThirdDataFormat,
 setChooseDate, setChooseTime, setChooseDataFormat} = timeSlots.actions
+export let {setGroupTimesData} = groupTimesData.actions
+
 
 export default configureStore({
     reducer: {
@@ -166,6 +179,7 @@ export default configureStore({
         dayIndexData: dayIndexData.reducer,
         hourIndexData: hourIndexData.reducer,
         groupCellModal: groupCellModal.reducer,
-        timeSlots: timeSlots.reducer
+        timeSlots: timeSlots.reducer,
+        groupTimesData: groupTimesData.reducer,
     },
 });

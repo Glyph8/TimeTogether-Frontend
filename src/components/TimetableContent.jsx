@@ -27,7 +27,7 @@ Content: null,
 groupName: "와쿠와쿠",
 */
 
-const TimetableContent = () => {
+const TimetableContent = ({isPlaceConfirmed}) => {
 // const TimetableContent = ({timetableData}) => {
     const location = useLocation();
     const accessToken = localStorage.getItem("accessToken");
@@ -38,7 +38,8 @@ const TimetableContent = () => {
     const {groupId} = useParams(); //groupId
     const isMgr = searchParams.get("isMgr") || false;
     const meetTitle = searchParams.get("meetTitle") || "";
-    const meetType = searchParams.get("meetType") || "OFFLINE";
+    // let meetType = searchParams.get("meetType") || "OFFLINE";
+    const [meetType, setMeetType] = useState("OFFLINE");
 
     // const timetableData = location.state?.timetableData; //MeetingListPage로부터 data 받아옴.
 
@@ -261,7 +262,8 @@ const TimetableContent = () => {
 
     return (
         <div className="timetable-content">
-            <GroupTimetable timetableData={stableTimetableData} timeRange={timeRange}/>
+            {/*<GroupTimetable timetableData={stableTimetableData} timeRange={timeRange}/>*/}
+            <GroupTimetable timetableData={stableTimetableData} timeRange={timeRange} setMeetType={setMeetType}/>
             {loadPersonalTime ?
                 <PersonalTimetable days={days} timeRange={timeRange} priorityOn={priorityOn} setEdited={setIsEdited}/>
                 : null}
@@ -374,7 +376,6 @@ const TimetableContent = () => {
                     //setBtnColorChange("save-btn")
 
                     //API : /group/{groupId}/when/{title}/{type}/update
-
                     dispatch(updateTimeValues(timeOnlyData))
                     dispatch(updateRankValues(rankOnlyData))
 
@@ -423,9 +424,12 @@ const TimetableContent = () => {
                     ))}
                 </div>
                 <button
-                    className={`done-decision-button ${selectedSlot ? 'done-selected' : ''}`}
+                    className={`done-decision-button ${(selectedSlot && (meetType === 'ONLINE' || isPlaceConfirmed)) ? 'done-selected' : ''}`}
                     onClick={() => {
-                        if (selectedSlot !== null && (meetType === 'ONLINE' || true)) {//이 자리에 장소 결정완료 상태값
+
+                        console.log('meetyType: ', meetType)
+
+                        if (selectedSlot !== null && (meetType === 'ONLINE' || isPlaceConfirmed)) {//이 자리에 장소 결정완료 상태값
                             console.log('슬롯번호 : ', selectedSlot)
                             const doneTime = timeSlots[selectedSlot - 1];
                             const startTime = doneTime.time.slice(0, 5) + ':00';

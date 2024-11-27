@@ -4,11 +4,10 @@ import PropTypes from 'prop-types';
 import GroupCellModal from "./GroupCellModal.jsx";
 import MeetingsPage from "../pages/MeetingsPage.jsx";
 import {useDispatch} from "react-redux";
-import {setDayIndexData, setGroupCellModal, setHourIndexData} from "../store.js";
+import store, {setChooseDate, setChooseTime, setDayIndexData, setGroupCellModal, setHourIndexData} from "../store.js";
 
 const GroupTimeGrid = ({days, timeRange, memberCount}) => {
     // console.log('groupTimeGrid data props', days);
-
 
     const [hourCount, setHourCount] = useState(16);
     const [startHour, setStartHour] = useState(9);
@@ -51,6 +50,7 @@ const GroupTimeGrid = ({days, timeRange, memberCount}) => {
                     hourCount={hourCount}
                     daySet={daySet}
                     groupColorArray={showGroupColor(startColor, endColor, memberCount)}
+                    startHour={startHour}
                 />
 
             </div>
@@ -72,7 +72,7 @@ const GroupTimeScale = ({hourCount, startHour}) => {
     );
 };
 
-const GroupGridCells = ({days, hourCount, timeSet, groupColorArray}) => {
+const GroupGridCells = ({days, hourCount, timeSet, groupColorArray, startHour}) => {
     // const [times, setTimes] = useState([]);
     // console.log('timeSet', timeSet)
     // console.log('days', days)
@@ -119,6 +119,27 @@ const GroupGridCells = ({days, hourCount, timeSet, groupColorArray}) => {
                                             style={{backgroundColor: cellColor, border: '1px dotted #c6c6c6'}}
                                             onClick={() => {
                                                 console.log('그룹타임그리드 체크드', checked)
+                                                // days[dayIndex][hourIndex]
+
+                                                console.log('days', days)
+
+                                                const convertIndexToTimeRange = (index, startHour) => {
+                                                    let baseHour = startHour + Math.floor(index / 2); // index를 시간 기준으로 변환
+                                                    const startMinute = index % 2 === 0 ? "00" : "30"; // 0: 정각, 1: 30분
+                                                    const nextHour = startHour + Math.floor((index + 1) / 2);
+                                                    const endMinute = (index + 1) % 2 === 0 ? "00" : "30";
+
+                                                    if (baseHour < 10) {
+                                                        return `0${baseHour}:${startMinute}`;
+                                                    } else {
+                                                        return `${baseHour}:${startMinute}`;
+                                                    }
+                                                };
+
+                                                dispatch(setChooseDate(days[dayIndex].date));
+                                                dispatch(setChooseTime(convertIndexToTimeRange(hourIndex, startHour)));
+
+                                                console.log(store.getState().timeSlots)
 
                                                 //그룹 시간표 셀 클릭 시 해당타임 인원 조회
                                                 dispatch(setDayIndexData(dayIndex));

@@ -14,7 +14,7 @@ import {
 } from "../store.js";
 
 
-const GroupTimetable = ({timetableData, timeRange}) => {
+const GroupTimetable = ({timetableData, timeRange, setMeetType}) => {
     // console.log('timetable data props', timetableData);
 
     const [memberCount, setMemberCount] = useState(5);
@@ -87,7 +87,6 @@ const GroupTimetable = ({timetableData, timeRange}) => {
         } else {
             return `${baseHour}:${startMinute}`;
         }
-
         // return `${baseHour}:${startMinute}~${nextHour}:${endMinute}`;
     };
 
@@ -113,6 +112,7 @@ const GroupTimetable = ({timetableData, timeRange}) => {
                         params.set("type", "OFFLINE"); // 쿼리 파라미터 type의 값을 ONLINE으로 설정
                         const newUrl = `${location.pathname}?${params.toString()}`;
                         // navigate(newUrl, { replace: true }); // URL 업데이트
+                        setMeetType('OFFLINE')
                         navigate(newUrl, {replace: true}); // URL 업데이트
                     }
                     if (onOffline === '오프라인') {
@@ -120,6 +120,7 @@ const GroupTimetable = ({timetableData, timeRange}) => {
                         const params = new URLSearchParams(location.search);
                         params.set("type", "ONLINE"); // 쿼리 파라미터 type의 값을 ONLINE으로 설정
                         const newUrl = `${location.pathname}?${params.toString()}`;
+                        setMeetType('ONLINE')
                         navigate(newUrl, {replace: true}); // URL 업데이트
                         // navigate(newUrl, { replace: true }); // URL 업데이트
                     }
