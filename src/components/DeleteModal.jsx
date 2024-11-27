@@ -23,7 +23,7 @@ const DeleteModal = ({
         : `/group/${groupId}/leave`; // 일반 사용자일 경우 그룹 나가기
       console.log(endpoint);
       const response = await axios.delete(
-        `http://192.168.186.162:8080${endpoint}`,
+        `http://192.168.12.218:8080${endpoint}`,
         {
           headers: {
             Authorization: `Bearer ${accessToken}`,

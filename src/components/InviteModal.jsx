@@ -15,7 +15,7 @@ const InviteModal = ({ isOpen, onClose }) => {
   const handleSubmit = async () => {
     try {
       const response = await axios.post(
-        `http://192.168.233.218:8080/group/invited/${inviteCode}`,
+        `http://192.168.12.218:8080/group/invited/${inviteCode}`,
         {}, // POST 요청 본문이 없을 경우 빈 객체 전달
         {
           headers: {

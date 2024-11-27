@@ -100,7 +100,7 @@ const MeetingListPage = () => {
         console.log('Meeting list에서 회의 목록 불러오기');
         //GroupCard Click event로 시작
         // const whenDataResponse = axios.get(`http://192.168.165.170:8080/group/${groupId}/meet`, {
-        axios.get(`http://192.168.165.170:8080/group/${groupId}/meet`, {
+        axios.get(`http://192.168.12.218:8080/group/${groupId}/meet`, {
             headers: {
                 Authorization: `Bearer ${accessToken}`,
             },

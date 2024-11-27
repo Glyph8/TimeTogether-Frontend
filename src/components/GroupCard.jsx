@@ -39,26 +39,12 @@ const GroupCard = ({ group, onDelete }) => {
     };
   }, []);
 
-  // const totalNumber = group.groupMembers
-  //   ? group.groupMembers.split(",").length + 1
-  //   : 1;
+  const totalNumber = group.userNameResponseList
+    // ? group.userNameResponseList.split(",").length + 1
+    ? group.userNameResponseList.length + 1
+    : 1;
 
-  const totalNumber = 4;
-
-  const loadMeetings = async (groupId) => {
-    axios
-      .get(`group/${groupId}/meet`)
-      .then((res) => {
-        const responseData = res.data.data.meetTableDTO;
-        console.log(responseData);
-        navigate(`/meetings/${group.groupId}?totalNumber=${totalNumber}`, {
-          state: responseData,
-        });
-      })
-      .catch((err) => {
-        console.log(`GroupCard에서 회의 리스트 요청실패 ${err}`);
-      });
-  };
+  // const totalNumber = 4;
 
   return (
     <div

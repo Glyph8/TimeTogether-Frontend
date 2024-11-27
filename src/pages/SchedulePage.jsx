@@ -17,7 +17,7 @@ const SchedulePage = () => {
     const fetchGroups = async () => {
       try {
         // GET 요청
-        const response = await axios.get("/group/groups/view", {
+        const response = await axios.get("http://192.168.12.218:8080/group/groups/view", {
           headers: {
             Authorization: `Bearer ${accessToken}`, // 토큰 추가
           },

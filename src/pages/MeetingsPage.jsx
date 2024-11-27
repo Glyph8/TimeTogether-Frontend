@@ -79,22 +79,27 @@ function MeetingsPage() {
   useEffect(() => {
     let intervalId;
     const fetchMeetingLocations = async () => {
+      console.log(`http://192.168.12.218:8080/group/${groupId}/${meetingId}/where/view`)
       try {
         const response = await axios.get(
-          `http://192.168.165.170:8080/group/${groupId}/${meetingId}/where/view`,
+          `http://192.168.12.218:8080/group/${groupId}/${meetingId}/where/view`,
           {
             headers: {
               Authorization: `Bearer ${accessToken}`, // 토큰 헤더 추가
             },
           }
         );
-
         // 응답 데이터 처리
         const data = response.data.data;
-        if (data.httpStatus === "OK") {
-          setLocations(data); // 상태 업데이트
+
+        const apiData = response.data;
+
+        // if (data.httpStatus === "OK") {
+        if (apiData.httpStatus === "OK") {
+          setLocations(apiData.data); // 상태 업데이트
         } else {
           throw new Error(data.message || "데이터 로드에 실패했습니다.");
+          // setLocations(data);
         }
       } catch (error) {
         // 에러 처리
@@ -103,12 +108,14 @@ function MeetingsPage() {
             error.response.data.message || "API 오류가 발생했습니다."
           );
         } else {
-          console.error("알 수 없는 오류가 발생했습니다.");
+          console.error(`${error} 알 수 없는 오류가 발생했습니다.`);
         }
       }
     };
 
     // 주기적으로 fetchMeetingLocations 실행
+
+
     intervalId = setInterval(fetchMeetingLocations, 1000); // 1초마다 호출
 
     // 클린업 함수
@@ -167,7 +174,7 @@ function MeetingsPage() {
   const syncVoteWithServer = async (locationId, UpAndDown) => {
     try {
       const response = await axios.post(
-        `http://192.168.165.170:8080/group/${groupId}/${meetingId}/where/vote/${locationId}/${UpAndDown}`,
+        `http://192.168.12.218:8080/group/${groupId}/${meetingId}/where/vote/${locationId}/${UpAndDown}`,
         {}, // POST 요청 본문이 없으면 빈 객체 전달
         {
           headers: {
@@ -201,16 +208,23 @@ function MeetingsPage() {
         return;
       }
 
+
+      console.log('confrimLo',confirmLocationId)
       // API 요청
       const response = await axios.post(
-        `http://192.168.165.170:8080/group/${groupId}/${meetingId}/where/done/${confirmLocationId}`,
+        `http://192.168.12.218:8080/group/${groupId}/${meetingId}/where/done/${confirmLocationId}`,
         {}, // POST 요청 본문이 없으면 빈 객체 전달
         {
           headers: {
             Authorization: `Bearer ${accessToken}`, // 인증 헤더 추가
           },
         }
-      );
+      ).then((res)=>{
+        console.log('confrimLo Response',res.data)
+      })
+          .catch((err)=>{
+        console.log(`${err}`)
+      });
 
       const data = response.data;
 
@@ -244,7 +258,7 @@ function MeetingsPage() {
     try {
       // 서버에 삭제 요청
       const response = await axios.delete(
-        `http://192.168.165.170:8080/group/${groupId}/${meetingId}/where/delete/${groupWhereId}`,
+        `http://192.168.12.218:8080/group/${groupId}/${meetingId}/where/delete/${groupWhereId}`,
         {
           headers: {
             Authorization: `Bearer ${accessToken}`, // 필요하면 인증 토큰 추가
@@ -292,7 +306,7 @@ function MeetingsPage() {
 
       // API 호출
       const response = await axios.post(
-        `http://192.168.165.170:8080/group/${groupId}/${meetingId}/where/create`,
+        `http://192.168.12.218:8080/group/${groupId}/${meetingId}/where/create`,
         requestData,
         {
           headers: {

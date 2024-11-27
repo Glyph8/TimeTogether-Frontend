@@ -146,14 +146,16 @@ const GroupTimetable = ({timetableData, timeRange, setMeetType}) => {
 
 function createEmptyTimes(timetableData) {
     const stableTimetableData = structuredClone(timetableData);
-
-    let emptyTimes = stableTimetableData.users[0].days;
-    // let emptyTimes = [...timetableData.users[0].days];
-    emptyTimes.map((eachDay) => {
-        eachDay.rank = '0'.repeat(eachDay.rank.length);
-        eachDay.time = '0'.repeat(eachDay.time.length);
-    })
-    return emptyTimes;
+    console.log('create', stableTimetableData)
+    if(Object.keys(stableTimetableData).length !== 0) {
+        let emptyTimes = stableTimetableData.users[0].days;
+        // let emptyTimes = [...timetableData.users[0].days];
+        emptyTimes.map((eachDay) => {
+            eachDay.rank = '0'.repeat(eachDay.rank.length);
+            eachDay.time = '0'.repeat(eachDay.time.length);
+        })
+        return emptyTimes;
+    }
 }
 
 function mergeTimes(timetableData) {

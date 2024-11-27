@@ -43,12 +43,11 @@ const TimetableContent = ({isPlaceConfirmed}) => {
 
     // const timetableData = location.state?.timetableData; //MeetingListPage로부터 data 받아옴.
 
-
     const [days, setDays] = useState([]);
     const [timeRange, setTimeRange] = useState("");
     const [btnColorChange, setBtnColorChange] = useState("add-personal-timeBtn")
 
-    const myUserName = 'user1';
+    const myUserName = '강동윤';
     // const myUserId = 'user9';
 
     const [loadPersonalTime, setLoadPersonalTime] = useState(false);
@@ -88,7 +87,7 @@ const TimetableContent = ({isPlaceConfirmed}) => {
         console.log(`groupId : ${groupId}\ntype : ${meetType}\ntitle : ${meetTitle}`);
         // axios.post(`${testip}/group/${groupId}/when/${meetTitle}/${meetType}`, {
         // const getTables = axios.get(`kkkkk`
-        axios.get(`http://192.168.165.170:8080/group/${groupId}/when/${meetTitle}/${meetType}`
+        axios.get(`http://192.168.12.218:8080/group/${groupId}/when/${meetTitle}/${meetType}`
             , {
                 headers:
                     {
@@ -102,7 +101,7 @@ const TimetableContent = ({isPlaceConfirmed}) => {
             // timetableData = res.data;
             if (res.data) {
                 console.log('timetableData에서 시간표 요청 성공 : ', res.data);
-                setTimetableData(res.data); // 유효한 데이터만 저장
+                setTimetableData(res.data.data); // 유효한 데이터만 저장
                 // setTimetableData(getTables.data); // 유효한 데이터만 저장
                 // timetableData = (getTables.data); // 유효한 데이터만 저장
             } else {
@@ -295,7 +294,7 @@ const TimetableContent = ({isPlaceConfirmed}) => {
                             // `${testip}/group/${groupId}/meet/${meetTitle}/add`
                             axios.post(
                                 // `http://172.20.10.4:8080/group/${groupId}/when/${meetTitle}/${meetType}/load`, postData,
-                                `http://192.168.165.170:8080/group/${groupId}/when/${meetTitle}/${meetType}/load`, null,
+                                `http://192.168.12.218:8080/group/${groupId}/when/${meetTitle}/${meetType}/load`, null,
                                 {
                                     headers:
                                         {
@@ -356,6 +355,11 @@ const TimetableContent = ({isPlaceConfirmed}) => {
                 </div> : null
             }
 
+            <button onClick={
+                ()=>{
+                    setLoadPersonalTime(true);
+                }
+            }> 수정하기 </button>
             <button className={btnColorChange} onClick={() => {
                 if (!loadPersonalTime) {//'내 시간표 추가하기' 누른 경우
                     console.log("내 시간표 추가하기 버튼 클릭")
@@ -365,7 +369,7 @@ const TimetableContent = ({isPlaceConfirmed}) => {
                     //API : /group/{groupId}/when/{title}/{type}/add
                     // axios.post(`${testip}/group/${groupId}/when/${meetTitle}/${meetType}/add`, null
                     console.log(`개인시간표 요청 url http://192.168.165.170:8080/group/${groupId}/when/${meetTitle}/${meetType}/add`)
-                    axios.post(`http://192.168.165.170:8080/group/${groupId}/when/${meetTitle}/${meetType}/add`, null
+                    axios.post(`http://192.168.12.218:8080/group/${groupId}/when/${meetTitle}/${meetType}/add`, null
                         , {
                             headers:
                                 {
@@ -394,7 +398,7 @@ const TimetableContent = ({isPlaceConfirmed}) => {
                     console.log("post요청 body : ", store.getState().personalTimeData);
 
                     // axios.post(`${testip}/group/${groupId}/when/${meetTitle}/${meetType}/update`, myTableData, {
-                    axios.post(`http://192.168.165.170:8080/group/${groupId}/when/${meetTitle}/${meetType}/update`, store.getState().personalTimeData, {
+                    axios.post(`http://192.168.12.218:8080/group/${groupId}/when/${meetTitle}/${meetType}/update`, store.getState().personalTimeData, {
                             headers:
                                 {
                                     Authorization: `Bearer ${accessToken}`
@@ -444,7 +448,7 @@ const TimetableContent = ({isPlaceConfirmed}) => {
                             console.log(`timeTableContent에서 Done post 요청, /group/${groupId}/when/${meetTitle}/${meetType}/done`);
                             console.log(`post 요청 바디 : ${doneTime.date}T${startTime}`)
                             // axios.post(`${testip}/group/${groupId}/when/${meetTitle}/${meetType}/done`, {
-                            axios.post(`http://192.168.165.170:8080/group/${groupId}/when/${meetTitle}/${meetType}/done`, {
+                            axios.post(`http://192.168.12.218:8080/group/${groupId}/when/${meetTitle}/${meetType}/done`, {
                                     meetDT: `${doneTime.date}T${startTime}`
                                 }, {
                                     headers:

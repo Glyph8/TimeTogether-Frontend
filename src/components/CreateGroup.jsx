@@ -229,7 +229,7 @@ const CreateGroup = () => {
 
     try {
       const response = await axios.post(
-        "http://192.168.165.170:8080/group/create",
+        "http://192.168.12.218:8080/group/create",
         {
           groupName: groupName,
           groupIntro: groupIntro,

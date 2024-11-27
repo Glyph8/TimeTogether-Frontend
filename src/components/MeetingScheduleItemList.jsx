@@ -78,7 +78,7 @@ const MeetingScheduleItemList = ({ groupId, searchText }) => {
 
         if (!searchText.trim()) {
           // searchText가 비어있는 경우 기본 데이터 요청
-          response = await axios.get(`/meet/list/${groupId}/find`, {
+          response = await axios.get(`http://192.168.12.218:8080/meet/list/${groupId}/find`, {
             headers: {
               Authorization: `Bearer ${accessToken}`,
             },
@@ -86,7 +86,7 @@ const MeetingScheduleItemList = ({ groupId, searchText }) => {
         } else {
           // searchText가 있는 경우 검색 결과 요청
           response = await axios.get(
-            `/meet/list/${groupId}/${searchText}/search`,
+            `http://192.168.12.218:8080/meet/list/${groupId}/${searchText}/search`,
             {
               headers: {
                 Authorization: `Bearer ${accessToken}`,
@@ -96,15 +96,12 @@ const MeetingScheduleItemList = ({ groupId, searchText }) => {
         }
 
         // 데이터 처리
-        setMeetings(response.data.data.result);
+        console.log(response.data)
+        setMeetings(response.data.data);
       } catch (error) {
         console.error(
           "데이터 로드 실패:",
           error.response?.data?.message || error.message
-        );
-        setErrorMessage(
-          error.response?.data?.message ||
-            "데이터를 로드하는 중 오류가 발생했습니다."
         );
       } finally {
         setLoading(false); // 로딩 상태 해제
@@ -118,7 +115,10 @@ const MeetingScheduleItemList = ({ groupId, searchText }) => {
     return <div>로딩 중...</div>;
   }
 
-  if (meetings.length === 0) {
+  console.log('!!', meetings)
+  // if (Object.keys(meetings).length === 0) {
+  if(!meetings){
+  // if (meetings.length === 0) {
     return <div>미팅 일정이 없습니다.</div>;
   }
 

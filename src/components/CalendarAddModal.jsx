@@ -574,14 +574,24 @@ function CalendarAddModal({
       setStartDate(editEvent.startDate || format(new Date(), "yyyy-MM-dd"));
       setEndDate(editEvent.endDate || format(new Date(), "yyyy-MM-dd"));
       setIsAllDay(editEvent.isAllDay || false);
-      if (editEvent.time) {
-        const [start, end] = editEvent.time.split(" - ");
-        setStartTime(start || "11:00");
-        setEndTime(end || "23:00");
+
+
+      // `meetDTstart`의 시간 값 설정
+      if (editEvent.meetDTstart) {
+        const [, startTime] = editEvent.meetDTstart.split("T"); // T 뒤의 시간 추출
+        setStartTime(startTime.substring(0, 5)); // "HH:MM" 형식
       } else {
         setStartTime("11:00");
+      }
+
+      // `meetDTend`의 시간 값 설정
+      if (editEvent.meetDTend) {
+        const [, endTime] = editEvent.meetDTend.split("T"); // T 뒤의 시간 추출
+        setEndTime(endTime.substring(0, 5)); // "HH:MM" 형식
+      } else {
         setEndTime("23:00");
       }
+
     }
   }, [editEvent]);
 
@@ -631,7 +641,7 @@ function CalendarAddModal({
       const accessToken = localStorage.getItem("accessToken");
       if (editEvent) {
         const response = await axios.patch(
-          `http://192.168.165.170:8080/calendar/update/${editEvent.id}`,
+          `http://192.168.12.218:8080/calendar/update/${editEvent.id}`,
           eventData2,
           {
             headers: {
@@ -644,7 +654,7 @@ function CalendarAddModal({
       } else {
         console.log("보낸내용: ", eventData1);
         const response = await axios.post(
-          `http://192.168.165.170:8080/calendar/create`,
+          `http://192.168.12.218:8080/calendar/create`,
           eventData1,
           {
             headers: {
@@ -674,7 +684,7 @@ function CalendarAddModal({
     if (!editEvent?.id) return;
     try {
       const response = await axios.delete(
-        `http://192.168.165.170:8080/calendar/delete/${editEvent.id}`,
+        `http://192.168.12.218:8080/calendar/delete/${editEvent.id}`,
         {
           headers: {
             Authorization: `Bearer ${accessToken}`,

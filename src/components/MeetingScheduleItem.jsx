@@ -5,6 +5,8 @@ import axios from "axios";
 const MeetingScheduleItem = ({ meeting, groupId }) => {
   const { meetDTstart, meetDTend, meetType, locationName } = meeting;
 
+
+
   return (
     <div className="meeting-item">
       <div className="meeting-header">
@@ -13,7 +15,7 @@ const MeetingScheduleItem = ({ meeting, groupId }) => {
             meetType === "온라인" ? "online" : "offline"
           }`}
         >
-          {meetType}
+          {meetType === 'ONLINE' ? '온라인' : '오프라인'}
         </div>
 
         <div className="meeting-time">
