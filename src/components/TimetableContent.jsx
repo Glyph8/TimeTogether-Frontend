@@ -3,7 +3,7 @@ import PersonalTimetable from '././PersonalTimetable.jsx';
 import './TimetableContent.css';
 
 import {useEffect, useMemo, useState} from "react";
-import {useLocation, useParams} from "react-router-dom";
+import {replace, useLocation, useNavigate, useParams} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import axios from "axios";
 import store, {
@@ -27,8 +27,8 @@ Content: null,
 groupName: "와쿠와쿠",
 */
 
-const TimetableContent = ({isPlaceConfirmed}) => {
-// const TimetableContent = ({timetableData}) => {
+const TimetableContent = ({isPlaceConfirmed, meetType, setMeetType}) => {
+// const TimetableContent = ({isPlaceConfirmed}) => {
     const location = useLocation();
     const accessToken = localStorage.getItem("accessToken");
     // const accessToken = 1;
@@ -39,7 +39,8 @@ const TimetableContent = ({isPlaceConfirmed}) => {
     const isMgr = searchParams.get("isMgr") || false;
     const meetTitle = searchParams.get("meetTitle") || "";
     // let meetType = searchParams.get("meetType") || "OFFLINE";
-    const [meetType, setMeetType] = useState("OFFLINE");
+
+    // const [meetType, setMeetType] = useState("OFFLINE");
 
     // const timetableData = location.state?.timetableData; //MeetingListPage로부터 data 받아옴.
 
@@ -84,7 +85,7 @@ const TimetableContent = ({isPlaceConfirmed}) => {
     let timeOnlyData = useSelector(state => state.timeOnlyData);
     let rankOnlyData = useSelector(state => state.rankOnlyData);
     let dispatch = useDispatch();
-
+    const navigate = useNavigate();
     const groupCellModal = useSelector(state => state.groupCellModal)
 
     let [isEdited, setIsEdited] = useState(false);
@@ -111,6 +112,90 @@ const TimetableContent = ({isPlaceConfirmed}) => {
         // } else {
         //     console.log('all defined')
         // }
+        const dummy = {
+            code: 200,
+            message: "요청에 성공하였습니다.",
+            requestId: "9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d",
+            groupTimes: "11002330", //오전 7시 - 오전 9시
+            type: "OFFLINE",
+            users: [
+                {
+                    userName: "user1",
+                    // userId: "user1",
+                    days: [
+                        {
+                            date: "2024-12-25",
+                            day: "수요일",
+                            time: "1010101001",
+                            rank: "1000000001",
+                        },
+                        {
+                            date: "2024-12-26",
+                            day: "목요일",
+                            time: "0101010101",
+                            rank: "0100000001",
+                        },
+                        {
+                            date: "2024-12-27",
+                            day: "금요일",
+                            time: "1110001101",
+                            rank: "0010000001",
+                        }
+                    ],
+                },
+                {
+                    userName: "user2",
+                    // userId: "user2",
+                    days: [
+                        {
+                            date: "2024-12-25",
+                            day: "수요일",
+                            time: "1100110000",
+                            rank: "0000010000",
+                        },
+                        {
+                            date: "2024-12-26",
+                            day: "목요일",
+                            time: "0011001100",
+                            rank: "0000001000",
+                        },
+                        {
+                            date: "2024-12-27",
+                            day: "금요일",
+                            time: "1111000000",
+                            rank: "0000000100",
+                        },
+                    ],
+                },
+                {
+                    userName: "user3",
+                    // userId: "user3",
+                    days: [
+                        {
+                            date: "2024-12-25",
+                            day: "수요일",
+                            time: "1000110011",
+                            rank: "1000010011",
+                        },
+                        {
+                            date: "2024-12-26",
+                            day: "목요일",
+                            time: "0111011111",
+                            rank: "0000001011",
+                        },
+                        {
+                            date: "2024-12-27",
+                            day: "금요일",
+                            time: "0000000111",
+                            rank: "0000000111",
+                        },
+                    ],
+                },
+
+            ],
+        };
+        setTimetableData(dummy);
+
 
         console.log(`groupId : ${groupId}\ntype : ${meetType}\ntitle : ${meetTitle}`);
         // axios.post(`${testip}/group/${groupId}/when/${meetTitle}/${meetType}`, {
@@ -123,12 +208,10 @@ const TimetableContent = ({isPlaceConfirmed}) => {
                     }
             }
         ).then((res) => {
-            console.log('요청 시퀀스 후')
-
             console.log('timetableData에서 시간표 요청 성공 : ', res.data);
             // timetableData = res.data;
             if (res.data) {
-                console.log('timetableData에서 시간표 요청 성공 : ', res.data);
+                console.log('timetableData에서 시간표 요청 성공 유효한 데이터 로드 : ', res.data);
                 setTimetableData(res.data.data); // 유효한 데이터만 저장
                 // setTimetableData(getTables.data); // 유효한 데이터만 저장
                 // timetableData = (getTables.data); // 유효한 데이터만 저장
@@ -139,89 +222,7 @@ const TimetableContent = ({isPlaceConfirmed}) => {
         }).catch((err) => {
             console.log(`timetableData에서 시간표 요청실패 ${err}`);
 
-            // const dummy = {
-            //     code: 200,
-            //     message: "요청에 성공하였습니다.",
-            //     requestId: "9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d",
-            //     groupTimes: "07001200", //오전 7시 - 오전 9시
-            //     type: "OFFLINE",
-            //     users: [
-            //         {
-            //             userName: "user1",
-            //             // userId: "user1",
-            //             days: [
-            //                 {
-            //                     date: "2024-11-13",
-            //                     day: "수요일",
-            //                     time: "1010101001",
-            //                     rank: "1000000001",
-            //                 },
-            //                 {
-            //                     date: "2024-11-14",
-            //                     day: "목요일",
-            //                     time: "0101010101",
-            //                     rank: "0100000001",
-            //                 },
-            //                 {
-            //                     date: "2024-11-15",
-            //                     day: "금요일",
-            //                     time: "1110001101",
-            //                     rank: "0010000001",
-            //                 }
-            //             ],
-            //         },
-            //         {
-            //             userName: "user2",
-            //             // userId: "user2",
-            //             days: [
-            //                 {
-            //                     date: "2024-10-13",
-            //                     day: "수요일",
-            //                     time: "1100110000",
-            //                     rank: "0000010000",
-            //                 },
-            //                 {
-            //                     date: "2024-10-14",
-            //                     day: "목요일",
-            //                     time: "0011001100",
-            //                     rank: "0000001000",
-            //                 },
-            //                 {
-            //                     date: "2024-10-15",
-            //                     day: "금요일",
-            //                     time: "1111000000",
-            //                     rank: "0000000100",
-            //                 },
-            //             ],
-            //         },
-            //         {
-            //             userName: "user3",
-            //             // userId: "user3",
-            //             days: [
-            //                 {
-            //                     date: "2024-10-13",
-            //                     day: "수요일",
-            //                     time: "1000110011",
-            //                     rank: "1000010011",
-            //                 },
-            //                 {
-            //                     date: "2024-10-14",
-            //                     day: "목요일",
-            //                     time: "0111011111",
-            //                     rank: "0000001011",
-            //                 },
-            //                 {
-            //                     date: "2024-10-15",
-            //                     day: "금요일",
-            //                     time: "0000000111",
-            //                     rank: "0000000111",
-            //                 },
-            //             ],
-            //         },
-            //
-            //     ],
-            // };
-            // setTimetableData(dummy);
+
         })//로 request 보내고, 받아온 결과로 시간표 출력.
 
         console.log('요청 시퀀스 후')
@@ -298,7 +299,7 @@ const TimetableContent = ({isPlaceConfirmed}) => {
     return (
         <div className="timetable-content">
             {/*<GroupTimetable timetableData={stableTimetableData} timeRange={timeRange}/>*/}
-            <GroupTimetable timetableData={stableTimetableData} timeRange={timeRange} setMeetType={setMeetType}/>
+            <GroupTimetable timetableData={stableTimetableData} timeRange={timeRange} setMeetType={setMeetType} meetType={meetType}/>
             {loadPersonalTime ?
                 <PersonalTimetable days={days} timeRange={timeRange} priorityOn={priorityOn} setEdited={setIsEdited}/>
                 : null}
@@ -408,30 +409,17 @@ const TimetableContent = ({isPlaceConfirmed}) => {
                             setLoadPersonalTime(true);
 
                             // localStorage.setItem(storedKey, "true");
-                            // window.location.reload()
+                            window.location.reload()
                         }).catch((err) => {
                             console.log(`timeTableContent에서 내 시간표 update 요청실패 ${err}`);
                         })
                     }}>저장하기</p> : (
-                        isExistPersonal ? <p onClick={
+                        isAdded ? <p onClick={
+                        // isExistPersonal ? <p onClick={
                             () => {
                                 console.log('내 시간표 수정하기 클릭 - 개인 시간표 on')
                                 setLoadPersonalTime(true);
                                 dispatch(updatePersonalTimeData(days)); //개인시간표 store state에 저장
-
-                                axios.post(`http://192.168.12.218:8080/group/${groupId}/when/${meetTitle}/${meetType}/add`, null
-                                    , {
-                                        headers:
-                                            {
-                                                Authorization: `Bearer ${accessToken}`
-                                            }
-                                    }
-                                ).then((res) => {
-                                    // console.log(res.data);
-                                    setLoadPersonalTime(true);
-                                }).catch((err) => {
-                                    console.log(`timeTableContent에서 내 수정하기에서 add 요청 실패 - 시간표 생성 요청실패 ${err}`);
-                                })
                             }
 
                         }>내 시간표 수정하기</p> : <p onClick={() => {
@@ -453,6 +441,7 @@ const TimetableContent = ({isPlaceConfirmed}) => {
                                 ).then((res) => {
                                     console.log(res.data);
                                     setLoadPersonalTime(true);
+                                    setIsAdded(true);
                                 }).catch((err) => {
                                     console.log(`timeTableContent에서 내 시간표 생성 요청실패 ${err}`);
                                 })
@@ -501,9 +490,16 @@ const TimetableContent = ({isPlaceConfirmed}) => {
                                 }
                             ).then((res) => {
                                 console.log("회의 결정 요청 성공 ", res.data);
-                                setLoadPersonalTime(true);
+                                // setLoadPersonalTime(true); //내 시간표 나타남
+                                navigate(`/meeting-list/${groupId}/`, {replace : true})//?totalNumber=${totalNumber}&isMgr=${group.mgr}`)
+
                             }).catch((err) => {
                                 console.log(`timeTableContent에서 회의 결정 요청실패 ${err}`);
+
+                                alert('회의 결정 요청에 실패하였습니다.')
+                                //navigate(`/meeting-list/${groupId}/`, {replace : true})//?totalNumber=${totalNumber}&isMgr=${group.mgr}`)
+                                //navigate(-1);
+                                //window.location.reload()
                             })
                         }
                     }
@@ -532,9 +528,7 @@ function returnMyTimeTable(timetableData, myUserName) {
 // function returnMyTimeTable(timetableData, myUserId) {
     //console.log('개인시간표 불러오기 전 전체 시간표 : ',timetableData, myUserId)
     for (let i = 0; i < timetableData.users.length; i++) {
-        console.log('순회하며 이름 비교 ',timetableData.users[i].userName);
-        console.log('비교할 내이름 : type-', typeof myUserName);
-        console.log('비교할 내이름 :', myUserName);
+        // console.log('순회하며 이름 비교 ',timetableData.users[i].userName, myUserName);
         if (timetableData.users[i].userName === myUserName) {
             // if (timetableData.users[i].userId === myUserId) {
             console.log("개인시간표가 있어서 해당 시간표를 로드함.", timetableData.users[i].days);

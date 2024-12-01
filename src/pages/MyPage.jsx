@@ -57,7 +57,7 @@ function MyPage() {
         </>
       ) : (
         <>
-          <ProfileCard name="최OO 님" />
+          <ProfileCard name="강동윤 님" />
           <MyPageItem title="내 모임 기록" onClick={NavigateToHistoryPage} />
           <MyPageItem title="프로필 변경" onClick={() => {}} />
           <MyPageItem title="로그아웃" onClick={handleLogout} />

@@ -131,9 +131,8 @@ function GroupPage() {
         },
       ],
     };
-
     // 더미 데이터를 상태에 설정
-    //setGroups(exampleResponse.data);
+    setGroups(exampleResponse.data); //### 더미코드 주석처리필요
   }, []);
 
   const openInviteModal = () => setIsInviteModalOpen(true);

@@ -57,6 +57,18 @@
     color: #666;
 }
 
+.time-slot-half {
+    height: 24px;
+    display: flex;
+    align-items: start;
+    /*align-items: center;*/
+    justify-content: end;
+    /*justify-content: center;*/
+    margin-right: 7px;
+    font-size: 14px;
+    color: #666;
+}
+
 .grid-cells {
     flex: 1;
     display: grid;
