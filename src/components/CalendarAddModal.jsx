@@ -542,10 +542,16 @@ function CalendarAddModal({
       setStartDate(editEvent.startDate || format(new Date(), "yyyy-MM-dd"));
       setEndDate(editEvent.endDate || format(new Date(), "yyyy-MM-dd"));
       setIsAllDay(editEvent.isAllDay || false);
-
+      // `editEvent`에서 시간 정보를 추출하여 startTime, endTime 설정
+      const startTime = editEvent.meetDTstart
+        ? editEvent.meetDTstart.split("T")[1].substring(0, 5)
+        : "11:00"; // "HH:MM"
+      const endTime = editEvent.meetDTend
+        ? editEvent.meetDTend.split("T")[1].substring(0, 5)
+        : "23:00"; // "HH:MM"
       // `startTime`과 `endTime` 상태 설정
-      setStartTime(editEvent.startTime || "11:00");
-      setEndTime(editEvent.endTime || "23:00");
+      setStartTime(startTime);
+      setEndTime(endTime);
     }
   }, [editEvent]);
 
@@ -650,6 +656,7 @@ function CalendarAddModal({
       closeModal();
       refreshCalendar();
     } catch (error) {
+      console.log(`http://${ip}/calendar/delete/${editEvent.id}`);
       console.error("Failed to delete event:", error);
       alert("일정 삭제에 실패했습니다.");
     }

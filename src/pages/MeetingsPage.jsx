@@ -48,7 +48,6 @@ function MeetingsPage() {
   // const [groupName, setGroupName] = useState(passedGroupName || ""); // 네비게이션으로 받은 groupName을 기본값으로 사용
 
   useEffect(() => {
-    console.log("온오프라인 변경", searchParams.get("type"));
     setMeetType(searchParams.get("type"));
   }, [searchParams]);
 
@@ -88,10 +87,12 @@ function MeetingsPage() {
   useEffect(() => {
     let intervalId;
     const fetchMeetingLocations = async () => {
-      console.log(`http://${ip}:8080/group/${groupId}/${meetingId}/where/view`);
+      console.log(
+        `http://${ip}:8080/group/${groupId}/${meetingId - 2}/where/view`
+      );
       try {
         const response = await axios.get(
-          `http://${ip}:8080/group/${groupId}/${meetingId}/where/view`,
+          `http://${ip}:8080/group/${groupId}/${meetingId - 2}/where/view`,
           {
             headers: {
               Authorization: `Bearer ${accessToken}`, // 토큰 헤더 추가
@@ -105,6 +106,7 @@ function MeetingsPage() {
 
         // if (data.httpStatus === "OK") {
         if (apiData.httpStatus === "OK") {
+          console.log(apiData);
           setLocations(apiData.data); // 상태 업데이트
         } else {
           throw new Error(data.message || "데이터 로드에 실패했습니다.");
@@ -123,8 +125,8 @@ function MeetingsPage() {
     };
 
     // 주기적으로 fetchMeetingLocations 실행
-
-    intervalId = setInterval(fetchMeetingLocations, 3000); // 1초마다 호출
+    fetchMeetingLocations();
+    intervalId = setInterval(fetchMeetingLocations, 1000000); // 1초마다 호출
 
     // 클린업 함수
     return () => clearInterval(intervalId); // 언마운트 시 Interval 해제
@@ -183,7 +185,9 @@ function MeetingsPage() {
   const syncVoteWithServer = async (locationId, UpAndDown) => {
     try {
       const response = await axios.post(
-        `http://${ip}:8080/group/${groupId}/${meetingId}/where/vote/${locationId}/${UpAndDown}`,
+        `http://${ip}:8080/group/${groupId}/${
+          meetingId - 2
+        }/where/vote/${locationId}/${UpAndDown}`,
         {}, // POST 요청 본문이 없으면 빈 객체 전달
         {
           headers: {
@@ -221,7 +225,9 @@ function MeetingsPage() {
       // API 요청
       const response = await axios
         .post(
-          `http://${ip}:8080/group/${groupId}/${meetingId}/where/done/${confirmLocationId}`,
+          `http://${ip}:8080/group/${groupId}/${
+            meetingId - 2
+          }/where/done/${confirmLocationId}`,
           {}, // POST 요청 본문이 없으면 빈 객체 전달
           {
             headers: {
@@ -272,7 +278,9 @@ function MeetingsPage() {
     try {
       // 서버에 삭제 요청
       const response = await axios.delete(
-        `http://${ip}:8080/group/${groupId}/${meetingId}/where/delete/${groupWhereId}`,
+        `http://${ip}:8080/group/${groupId}/${
+          meetingId - 2
+        }/where/delete/${groupWhereId}`,
         {
           headers: {
             Authorization: `Bearer ${accessToken}`, // 필요하면 인증 토큰 추가
@@ -320,7 +328,7 @@ function MeetingsPage() {
 
       // API 호출
       const response = await axios.post(
-        `http://${ip}:8080/group/${groupId}/${meetingId}/where/create`,
+        `http://${ip}:8080/group/${groupId}/${meetingId - 2}/where/create`,
         requestData,
         {
           headers: {
