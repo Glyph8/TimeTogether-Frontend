@@ -121,7 +121,8 @@ const GroupGridCells = ({days, hourCount, timeSet, groupColorArray, startHour, e
             setTimes([...timeSet]);
     }, [timeSet]);
 
-    let hourCellCount = (hourCount * 2);
+    // let hourCellCount = (hourCount * 2);
+    let hourCellCount = Math.floor(endHour - startHour) * 2;
 
     if (!Number.isInteger(startHour)) {//시작시간이 1시간 단위가 아닌 경우
         hourCellCount += 1;

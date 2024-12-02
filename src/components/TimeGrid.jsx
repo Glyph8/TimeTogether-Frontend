@@ -113,7 +113,7 @@ const TimeScale = ({hourCount, startHour, endHour}) => {
         ;
 };
 
-const GridCells = ({days, startHour,hourCount, timeSet, rankSet, selectedPriority, setEdited}) => {
+const GridCells = ({days, startHour, endHour, hourCount, timeSet, rankSet, selectedPriority, setEdited}) => {
     // const [times, setTimes] = useState([]);
     const [times, setTimes] = useState(timeSet);
     const [ranks, setRanks] = useState(rankSet);
@@ -201,7 +201,8 @@ const GridCells = ({days, startHour,hourCount, timeSet, rankSet, selectedPriorit
     }
 
 
-    let hourCellCount = (hourCount * 2);
+    // let hourCellCount = (hourCount * 2);
+    let hourCellCount = Math.floor(endHour - startHour) * 2;
 
     if (!Number.isInteger(startHour)) {//시작시간이 1시간 단위가 아닌 경우
         hourCellCount += 1;

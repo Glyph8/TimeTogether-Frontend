@@ -116,7 +116,7 @@ const TimetableContent = ({isPlaceConfirmed, meetType, setMeetType}) => {
             code: 200,
             message: "요청에 성공하였습니다.",
             requestId: "9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d",
-            groupTimes: "11302330", //오전 7시 - 오전 9시
+            groupTimes: "11002330", //오전 7시 - 오전 9시
             type: "OFFLINE",
             users: [
                 {
