@@ -16,6 +16,7 @@ import axios from "axios";
 import MeetingListPage from "./MeetingListPage.jsx";
 import { useLocation } from "react-router-dom";
 import InGroupModal from "../components/InGroupModal"; // Import the modal component
+const ip = localStorage.getItem("ip");
 
 function MeetingsPage() {
   const { groupId, meetingId } = useParams(); //groupid
@@ -35,13 +36,20 @@ function MeetingsPage() {
   const totalNumber = searchParams.get("totalNumber") || 1;
   const meetingTitle = searchParams.get("meetTitle") || "";
 
-  const meetType = searchParams.get("meetType") || "OFFLINE";
+  const [meetType, setMeetType] = useState(
+    searchParams.get("meetType") || "OFFLINE"
+  );
+  // const meetType = searchParams.get("meetType") || 'OFFLINE';
 
   const [isGroupModalOpen, setIsGroupModalOpen] = useState(false); // Group modal state
   const handleOpenGroupModal = () => setIsGroupModalOpen(true); // Open modal
   const handleCloseGroupModal = () => setIsGroupModalOpen(false); // Close modal
   const { groupName, groupMembers, groupImg, isMgr } = location.state || {};
   // const [groupName, setGroupName] = useState(passedGroupName || ""); // 네비게이션으로 받은 groupName을 기본값으로 사용
+
+  useEffect(() => {
+    setMeetType(searchParams.get("type"));
+  }, [searchParams]);
 
   useEffect(() => {
     setIsHost(isMgr);
@@ -79,22 +87,30 @@ function MeetingsPage() {
   useEffect(() => {
     let intervalId;
     const fetchMeetingLocations = async () => {
+      console.log(
+        `http://${ip}:8080/group/${groupId}/${meetingId - 2}/where/view`
+      );
       try {
         const response = await axios.get(
-          `http://192.168.165.170:8080/group/${groupId}/${meetingId}/where/view`,
+          `http://${ip}:8080/group/${groupId}/${meetingId - 2}/where/view`,
           {
             headers: {
               Authorization: `Bearer ${accessToken}`, // 토큰 헤더 추가
             },
           }
         );
-
         // 응답 데이터 처리
         const data = response.data.data;
-        if (data.httpStatus === "OK") {
-          setLocations(data); // 상태 업데이트
+
+        const apiData = response.data;
+
+        // if (data.httpStatus === "OK") {
+        if (apiData.httpStatus === "OK") {
+          console.log(apiData);
+          setLocations(apiData.data); // 상태 업데이트
         } else {
           throw new Error(data.message || "데이터 로드에 실패했습니다.");
+          // setLocations(data);
         }
       } catch (error) {
         // 에러 처리
@@ -103,13 +119,14 @@ function MeetingsPage() {
             error.response.data.message || "API 오류가 발생했습니다."
           );
         } else {
-          console.error("알 수 없는 오류가 발생했습니다.");
+          console.error(`${error} 알 수 없는 오류가 발생했습니다.`);
         }
       }
     };
 
     // 주기적으로 fetchMeetingLocations 실행
-    intervalId = setInterval(fetchMeetingLocations, 1000); // 1초마다 호출
+    fetchMeetingLocations();
+    intervalId = setInterval(fetchMeetingLocations, 1000000); // 1초마다 호출
 
     // 클린업 함수
     return () => clearInterval(intervalId); // 언마운트 시 Interval 해제
@@ -141,33 +158,36 @@ function MeetingsPage() {
       // 서버와 동기화
       await syncVoteWithServer(locationId, isSelected ? 0 : 1);
     } catch (error) {
-      console.error("투표 요청 실패:", error.message);
-
-      // 서버 요청 실패 시 로컬 상태 복구
-      setSelectedLocationIds(
-        (prevSelected) =>
-          isSelected
-            ? [...prevSelected, locationId] // 복구: 선택 복원
-            : prevSelected.filter((id) => id !== locationId) // 복구: 선택 해제
-      );
-
-      setLocations((prevLocations) =>
-        prevLocations.map((location) =>
-          location.groupWhereId === locationId
-            ? {
-                ...location,
-                count: isSelected ? location.count + 1 : location.count - 1, // 복구: count 원래대로
-              }
-            : location
-        )
-      );
+      // console.error("투표 요청 실패:", error.message);
+      //
+      // console.log()
+      // // 서버 요청 실패 시 로컬 상태 복구
+      // setSelectedLocationIds(
+      //   (prevSelected) =>
+      //     isSelected
+      //       ? [...prevSelected, locationId] // 복구: 선택 복원
+      //       : prevSelected.filter((id) => id !== locationId) // 복구: 선택 해제
+      // );
+      //
+      // setLocations((prevLocations) =>
+      //   prevLocations.map((location) =>
+      //     location.groupWhereId === locationId
+      //       ? {
+      //           ...location,
+      //           count: isSelected ? location.count + 1 : location.count - 1, // 복구: count 원래대로
+      //         }
+      //       : location
+      //   )
+      // );
     }
   };
 
   const syncVoteWithServer = async (locationId, UpAndDown) => {
     try {
       const response = await axios.post(
-        `http://192.168.165.170:8080/group/${groupId}/${meetingId}/where/vote/${locationId}/${UpAndDown}`,
+        `http://${ip}:8080/group/${groupId}/${
+          meetingId - 2
+        }/where/vote/${locationId}/${UpAndDown}`,
         {}, // POST 요청 본문이 없으면 빈 객체 전달
         {
           headers: {
@@ -201,34 +221,48 @@ function MeetingsPage() {
         return;
       }
 
+      console.log("confrimLo", confirmLocationId);
       // API 요청
-      const response = await axios.post(
-        `http://192.168.165.170:8080/group/${groupId}/${meetingId}/where/done/${confirmLocationId}`,
-        {}, // POST 요청 본문이 없으면 빈 객체 전달
-        {
-          headers: {
-            Authorization: `Bearer ${accessToken}`, // 인증 헤더 추가
-          },
-        }
-      );
+      const response = await axios
+        .post(
+          `http://${ip}:8080/group/${groupId}/${
+            meetingId - 2
+          }/where/done/${confirmLocationId}`,
+          {}, // POST 요청 본문이 없으면 빈 객체 전달
+          {
+            headers: {
+              Authorization: `Bearer ${accessToken}`, // 인증 헤더 추가
+            },
+          }
+        )
+        .then((res) => {
+          console.log("confrimLo Response", res.data);
+          if (res.data.httpStatus === "OK") {
+            alert("장소가 확정되었습니다!");
+            setConfirmLocationId(confirmLocationId); // 성공한 whereId 저장
+            setIsPlaceConfirmed(false);
+          } else {
+            throw new Error(data.message || "장소 확정에 실패했습니다.");
+          }
+        })
+        .catch((err) => {
+          console.log(`${err}`);
+        });
 
       const data = response.data;
-
-      if (data.httpStatus === "OK") {
-        alert("장소가 확정되었습니다!");
-        setConfirmLocationId(confirmLocationId); // 성공한 whereId 저장
-        setIsPlaceConfirmed(false);
-      } else {
-        throw new Error(data.message || "장소 확정에 실패했습니다.");
-      }
+      // if (data.httpStatus === "OK") {
+      //   alert("장소가 확정되었습니다!");
+      //   setConfirmLocationId(confirmLocationId); // 성공한 whereId 저장
+      //   setIsPlaceConfirmed(false);
+      // } else {
+      //   throw new Error(data.message || "장소 확정에 실패했습니다.");
+      // }
     } catch (error) {
       // 에러 처리
       if (error.response && error.response.data) {
-        alert(
-          error.response.data.message || "API 요청 중 오류가 발생했습니다."
-        );
+        // alert(error.response.data.message || "API 요청 중 오류가 발생했습니다.");
       } else {
-        alert("알 수 없는 오류가 발생했습니다.");
+        // alert("알 수 없는 오류가 발생했습니다.");
       }
     }
   };
@@ -244,7 +278,9 @@ function MeetingsPage() {
     try {
       // 서버에 삭제 요청
       const response = await axios.delete(
-        `http://192.168.165.170:8080/group/${groupId}/${meetingId}/where/delete/${groupWhereId}`,
+        `http://${ip}:8080/group/${groupId}/${
+          meetingId - 2
+        }/where/delete/${groupWhereId}`,
         {
           headers: {
             Authorization: `Bearer ${accessToken}`, // 필요하면 인증 토큰 추가
@@ -292,7 +328,7 @@ function MeetingsPage() {
 
       // API 호출
       const response = await axios.post(
-        `http://192.168.165.170:8080/group/${groupId}/${meetingId}/where/create`,
+        `http://${ip}:8080/group/${groupId}/${meetingId - 2}/where/create`,
         requestData,
         {
           headers: {
@@ -362,13 +398,17 @@ function MeetingsPage() {
       <TabSelector
         selectedOption={activeTab}
         onSelect={(option) => setActiveTab(option)}
+        meetType={meetType}
       />
       <div className="tab-content">
         {activeTab === "언제" && ( //해당 그룹의 모임 리스트 출력
           <>
             <TimetableContent
-              isPlaceConfirmed={isPlaceConfirmed}
+              isPlaceConfirmed={confirmLocationId}
+              meetType={meetType}
+              setMeetType={setMeetType}
             ></TimetableContent>
+            {/*<TimetableContent isPlaceConfirmed={isPlaceConfirmed}></TimetableContent>*/}
           </>
         )}
         {activeTab === "어디서" && (

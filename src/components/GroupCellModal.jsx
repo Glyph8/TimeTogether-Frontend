@@ -68,6 +68,9 @@ const Section = styled.div`
 `;
 
 function GroupCellModal({timetableData}) {
+
+    console.log('셀모달', timetableData)
+
     const okMember = ['user1'];
     const notOkMember = ['user2'];
 

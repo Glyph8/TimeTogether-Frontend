@@ -7,6 +7,8 @@ import {updatePersonalTimeData, updateRankOnly, updateTimeOnly} from "../store.j
 const TimeGrid = ({days, timeRange, selectedPriority, setEdited}) => {
     const [hourCount, setHourCount] = useState(16);
     const [startHour, setStartHour] = useState(9);
+    const [endHour, setEndHour] = useState(24);
+
     const daySet = daySets(days);
     const dayLabel = dayLabelSet(days);
     const times = timeSet(days);
@@ -15,6 +17,7 @@ const TimeGrid = ({days, timeRange, selectedPriority, setEdited}) => {
     useEffect(() => {
         setHourCount(getTimeRange(timeRange));
         setStartHour(getStartHour(timeRange));
+        setEndHour(getEndHour(timeRange));
     }, [days, timeRange]);
 
     return (
@@ -29,7 +32,7 @@ const TimeGrid = ({days, timeRange, selectedPriority, setEdited}) => {
                 ))}
             </div>
             <div className="grid-content">
-                <TimeScale hourCount={hourCount} startHour={startHour}/>
+                <TimeScale hourCount={hourCount} startHour={startHour} endHour={endHour}/>
                 <GridCells
                     days={days} //굳이 days를 통으로 줄 필요가 없는 듯
                     timeSet={times}
@@ -37,27 +40,80 @@ const TimeGrid = ({days, timeRange, selectedPriority, setEdited}) => {
                     hourCount={hourCount}
                     selectedPriority={selectedPriority}
                     setEdited={setEdited}
+                    startHour={startHour}
+                    endHour={endHour}
                 />
             </div>
         </div>
     );
 };
 
-const TimeScale = ({hourCount, startHour}) => {
-    const hours = Array.from({length: hourCount}, (_, i) => i + startHour);
+const TimeScale = ({hourCount, startHour, endHour}) => {
+    // const hours = Array.from({length: hourCount}, (_, i) => i + startHour);
+    //
+    // return (
+    //     <div className="time-scale">
+    //         {hours.map(hour => (
+    //             <div key={hour} className="time-slot">
+    //                 {hour}
+    //             </div>
+    //         ))}
+    //     </div>
+    // );
+    const hours = [];
+    let currentHour = Math.floor(startHour); // 시작 시간의 시간 부분
+    let currentMinutes = startHour % 1 === 0.3 ? 30 : 0; // 시작 시간의 분 부분 (30분 단위)
+
+// 반복문: 현재 시간이 끝 시간을 초과하지 않을 때까지 진행
+    while (currentHour < endHour ||
+    (currentHour === Math.floor(endHour) &&
+        currentMinutes <= (endHour % 1 === 0.3 ? 30 : 0))) {
+        // 시작 시간의 첫 시간에 대해 30분만 포함
+        if ((currentHour === Math.floor(startHour) && currentMinutes === 30) ||
+            (currentHour > Math.floor(startHour))) {
+            const hourString = currentHour.toString().padStart(2, '0');
+            const minuteString = currentMinutes.toString().padStart(2, '0');
+            hours.push(`${hourString}:${minuteString}`);
+        }
+
+        // 30분 단위로 증가
+        currentMinutes += 30;
+        if (currentMinutes === 60) {
+            currentMinutes = 0;
+            currentHour += 1;
+        }
+    }
+
+    console.log('hours', hours)
 
     return (
         <div className="time-scale">
-            {hours.map(hour => (
-                <div key={hour} className="time-slot">
-                    {hour}:00
-                </div>
-            ))}
+            {hours.map((hour, index) =>
+                    (
+                        (hour.toString().slice(3,4) !== '3' || index === 0 || index === hours.length-1) ? (
+                                <div key={hour} className="time-slot-half">
+                                    {hour}
+                                </div>
+                            ) :
+                            (
+                                <div key={hour} className="time-slot-half">
+                                    {/*{hour}*/}
+                                </div>
+                            )
+                    )
+                //         <div key={hour} className="time-slot">
+                //     {hour.toString().length < 4 ? hour + ':00' : hour}
+                //     {/*{hour}:00*/}
+                // </div>
+            )
+            }
+
         </div>
-    );
+    )
+        ;
 };
 
-const GridCells = ({days, hourCount, timeSet, rankSet, selectedPriority, setEdited}) => {
+const GridCells = ({days, startHour, endHour, hourCount, timeSet, rankSet, selectedPriority, setEdited}) => {
     // const [times, setTimes] = useState([]);
     const [times, setTimes] = useState(timeSet);
     const [ranks, setRanks] = useState(rankSet);
@@ -145,18 +201,33 @@ const GridCells = ({days, hourCount, timeSet, rankSet, selectedPriority, setEdit
     }
 
 
+    // let hourCellCount = (hourCount * 2);
+    let hourCellCount = Math.floor(endHour - startHour) * 2;
+
+    if (!Number.isInteger(startHour)) {//시작시간이 1시간 단위가 아닌 경우
+        hourCellCount += 1;
+    }
+    if (!Number.isInteger(hourCount)) {//시간구간이 1시간 단위가 아닌 경우
+        hourCellCount += 1;
+    }
+
+
+
+
     return (
         <div className="grid-cells" style={{
             borderRadius: '5px',
             display: 'grid',
             gridTemplateColumns: `repeat(${daySet.length}, 1fr)`,
             gridAutoFlow: 'column', //세로(시간 순)부터 셀 채우기
-            gridTemplateRows: `repeat(${hourCount * 2}, 1fr)`
+            gridTemplateRows: `repeat(${hourCellCount}, 1fr)`
+            // gridTemplateRows: `repeat(${hourCount * 2}, 1fr)`
         }} onMouseUp={handleMouseUp}>
 
             {Array.from({length: daySet.length}).map((_, dayIndex) => (
                 // 각 날짜마다 세로로 30분 단위 셀 생성
-                Array.from({length: hourCount * 2}).map((_, hourIndex) => {
+                Array.from({length: hourCellCount}).map((_, hourIndex) => {
+                // Array.from({length: hourCount * 2}).map((_, hourIndex) => {
                         const cellName = `grid-cell-${daySet[dayIndex]}-${hourIndex}`
                         let cellColor = "#ffffff";
                         const checked = times[dayIndex][hourIndex];
@@ -234,6 +305,13 @@ function getTimeRange(timeRange) {
 function getStartHour(timeRange) {
     const startHour = Number.parseInt(timeRange.slice(0, 4));
     return (startHour / 100);
+}
+
+function getEndHour(timeRange) {
+    const endHour = Number.parseInt(timeRange.slice(4, 8));
+    console.log('getendHour', endHour)
+    console.log('getendHour', endHour / 100)
+    return (endHour / 100);
 }
 
 TimeGrid.propTypes = {

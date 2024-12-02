@@ -11,6 +11,7 @@ const GroupTimeGrid = ({days, timeRange, memberCount}) => {
 
     const [hourCount, setHourCount] = useState(16);
     const [startHour, setStartHour] = useState(9);
+    const [endHour, setEndHour] = useState(24);
 
     const daySet = daySets(days);
     const dayLabel = dayLabelSet(days);
@@ -23,6 +24,7 @@ const GroupTimeGrid = ({days, timeRange, memberCount}) => {
     useEffect(() => {
         setHourCount(getTimeRange(timeRange));
         setStartHour(getStartHour(timeRange));
+        setEndHour(getEndHour(timeRange));
     }, [timeRange]);
 
     // useEffect(() => {
@@ -42,7 +44,7 @@ const GroupTimeGrid = ({days, timeRange, memberCount}) => {
                 ))}
             </div>
             <div className="grid-content">
-                <GroupTimeScale hourCount={hourCount} startHour={startHour}/>
+                <GroupTimeScale hourCount={hourCount} startHour={startHour} endHour={endHour}/>
                 {/*{console.log('grid에서는',times)}*/}
                 <GroupGridCells
                     days={days} //굳이 days를 통으로 줄 필요가 없는 듯
@@ -51,6 +53,7 @@ const GroupTimeGrid = ({days, timeRange, memberCount}) => {
                     daySet={daySet}
                     groupColorArray={showGroupColor(startColor, endColor, memberCount)}
                     startHour={startHour}
+                    endHour={endHour}
                 />
 
             </div>
@@ -58,30 +61,58 @@ const GroupTimeGrid = ({days, timeRange, memberCount}) => {
     );
 };
 
-const GroupTimeScale = ({hourCount, startHour}) => {
-    const hours = Array.from({length: hourCount}, (_, i) => i + startHour);
+const GroupTimeScale = ({hourCount, startHour, endHour }) => {
+    const hours = [];
+    let currentHour = Math.floor(startHour); // 시작 시간의 시간 부분
+    let currentMinutes = startHour % 1 === 0.3 ? 30 : 0; // 시작 시간의 분 부분 (30분 단위)
+
+// 반복문: 현재 시간이 끝 시간을 초과하지 않을 때까지 진행
+    while (currentHour < endHour ||
+    (currentHour === Math.floor(endHour) &&
+        currentMinutes <= (endHour % 1 === 0.3 ? 30 : 0))) {
+        // 시작 시간의 첫 시간에 대해 30분만 포함
+        if ((currentHour === Math.floor(startHour) && currentMinutes === 30) ||
+            (currentHour > Math.floor(startHour))) {
+            const hourString = currentHour.toString().padStart(2, '0');
+            const minuteString = currentMinutes.toString().padStart(2, '0');
+            hours.push(`${hourString}:${minuteString}`);
+        }
+
+        // 30분 단위로 증가
+        currentMinutes += 30;
+        if (currentMinutes === 60) {
+            currentMinutes = 0;
+            currentHour += 1;
+        }
+    }
+
+    // console.log('hours', hours)
 
     return (
         <div className="time-scale">
-            {hours.map(hour => (
-                <div key={hour} className="time-slot">
-                    {hour}:00
-                </div>
-            ))}
+            {hours.map((hour, index) =>
+                (
+                        (hour.toString().slice(3,4) !== '3' || index === 0 || index === hours.length-1) ? (
+                                <div key={hour} className="time-slot-half">
+                                    {hour}
+                                </div>
+                            ) :
+                            (
+                                <div key={hour} className="time-slot-half">
+                                    {/*{hour}*/}
+                                </div>
+                            )
+                )
+                )
+            }
+
         </div>
-    );
+    )
+        ;
 };
 
-const GroupGridCells = ({days, hourCount, timeSet, groupColorArray, startHour}) => {
-    // const [times, setTimes] = useState([]);
-    // console.log('timeSet', timeSet)
-    // console.log('days', days)
-
+const GroupGridCells = ({days, hourCount, timeSet, groupColorArray, startHour, endHour}) => {
     const [times, setTimes] = useState(timeSet);
-
-    // console.log('times',times)
-    // console.log('timeSEt prop',timeSet)
-
     const daySet = daySets(days);
     const dispatch = useDispatch();
 
@@ -90,13 +121,23 @@ const GroupGridCells = ({days, hourCount, timeSet, groupColorArray, startHour}) 
             setTimes([...timeSet]);
     }, [timeSet]);
 
+    // let hourCellCount = (hourCount * 2);
+    let hourCellCount = Math.floor(endHour - startHour) * 2;
+
+    if (!Number.isInteger(startHour)) {//시작시간이 1시간 단위가 아닌 경우
+        hourCellCount += 1;
+    }
+    if (!Number.isInteger(hourCount)) {//시간구간이 1시간 단위가 아닌 경우
+        hourCellCount += 1;
+    }
+
     return (
         <div className="grid-cells" style={{
             borderRadius: '5px',
             display: 'grid',
             gridTemplateColumns: `repeat(${daySet.length}, 1fr)`,
             gridAutoFlow: 'column', //세로(시간 순)부터 셀 채우기
-            gridTemplateRows: `repeat(${hourCount * 2}, 1fr)`
+            gridTemplateRows: `repeat(${hourCellCount}, 1fr)`
         }}>
 
             {
@@ -104,7 +145,8 @@ const GroupGridCells = ({days, hourCount, timeSet, groupColorArray, startHour}) 
                     (
                         Array.from({length: daySet.length}).map((_, dayIndex) => (
                             // 각 날짜마다 세로로 30분 단위 셀 생성
-                            Array.from({length: hourCount * 2}).map((_, hourIndex) => {
+                            Array.from({length: hourCellCount}).map((_, hourIndex) => {
+                            // Array.from({length: hourCount * 2}).map((_, hourIndex) => {
                                     const cellName = `grid-cell-${daySet[dayIndex]}-${hourIndex}`
                                     let cellColor = "#ffffff";
                                     const checked = times[dayIndex][hourIndex];
@@ -225,12 +267,21 @@ function getTimeRange(timeRange) {
     const startHour = Number.parseInt(timeRange.slice(0, 4));
     const endHour = Number.parseInt(timeRange.slice(4));
     const hourRange = endHour - startHour;
+
+
     return (hourRange / 100);
 }
 
 function getStartHour(timeRange) {
     const startHour = Number.parseInt(timeRange.slice(0, 4));
+
     return (startHour / 100);
+}
+
+function getEndHour(timeRange) {
+    const endHour = Number.parseInt(timeRange.slice(4, 8));
+
+    return (endHour / 100);
 }
 
 GroupTimeGrid.propTypes = {

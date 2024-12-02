@@ -4,6 +4,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 const accessToken = localStorage.getItem("accessToken");
 const refreshToken = localStorage.getItem("refreshToken");
+const ip = localStorage.getItem("ip");
 
 const InviteModal = ({ isOpen, onClose }) => {
   const [inviteCode, setInviteCode] = useState(""); // 사용자 입력 값
@@ -15,7 +16,7 @@ const InviteModal = ({ isOpen, onClose }) => {
   const handleSubmit = async () => {
     try {
       const response = await axios.post(
-        `http://192.168.233.218:8080/group/invited/${inviteCode}`,
+        `http://${ip}:8080/group/invited/${inviteCode}`,
         {}, // POST 요청 본문이 없을 경우 빈 객체 전달
         {
           headers: {
