@@ -116,7 +116,7 @@ const TimetableContent = ({isPlaceConfirmed, meetType, setMeetType}) => {
             code: 200,
             message: "요청에 성공하였습니다.",
             requestId: "9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d",
-            groupTimes: "11002330", //오전 7시 - 오전 9시
+            groupTimes: "11302330", //오전 7시 - 오전 9시
             type: "OFFLINE",
             users: [
                 {
@@ -272,8 +272,9 @@ const TimetableContent = ({isPlaceConfirmed, meetType, setMeetType}) => {
 
         newPersonalTimeData.forEach((eachDay) => {
             res.forEach((calenderDay) => {
+                // console.log('로드데이터 날짜비교', eachDay.date,calenderDay.date)
                 if (eachDay.date === calenderDay.date) {
-                    console.log('일치 적용', eachDay.time, calenderDay.time);
+                    // console.log('일치 적용', eachDay.time, calenderDay.time);
                     eachDay.time = calenderDay.time;
                     eachDay.rank = calenderDay.rank;
                 }
@@ -310,6 +311,7 @@ const TimetableContent = ({isPlaceConfirmed, meetType, setMeetType}) => {
                 loadPersonalTime ? <div className="calender-priority-btn">
                     <button
                         className={`load-calender-btn ${isEdited === false ? '' : 'editedBlock'}`} onClick={() => {
+
                         if (!isEdited) {
                             console.log("캘린더 불러오기 시작")
                             ///group/{groupId}/when/{title}/{type}/load
@@ -320,7 +322,6 @@ const TimetableContent = ({isPlaceConfirmed, meetType, setMeetType}) => {
                                 title: meetTitle,
                             }
 
-                            // `${testip}/group/${groupId}/meet/${meetTitle}/add`
                             axios.post(
                                 // `http://172.20.10.4:8080/group/${groupId}/when/${meetTitle}/${meetType}/load`, postData,
                                 `http://192.168.12.218:8080/group/${groupId}/when/${meetTitle}/${meetType}/load`, null,
@@ -344,23 +345,23 @@ const TimetableContent = ({isPlaceConfirmed, meetType, setMeetType}) => {
                                     requestId: "9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d",
                                     data: {
                                         groupTableDTO: {
-                                            groupTimes: "07000900",  // 오전 7시 - 오전 9시
+                                            groupTimes: "11302330",  // 오전 7시 - 오전 9시
                                             type: "online",
                                             days: [
                                                 {
-                                                    date: "2024-11-13",
+                                                    date: "2024-12-25",
                                                     day: "수요일",
                                                     time: "101011101010101010101010",  // 15분 단위이므로 2시간일때 8개
                                                     rank: "000022201010101010101010"
                                                 },
                                                 {
-                                                    date: "2024-11-14",
+                                                    date: "2024-12-26",
                                                     day: "목요일",
                                                     time: "111000001010101010101010",
                                                     rank: "222000001010101010101010"
                                                 },
                                                 {
-                                                    date: "2024-11-15",
+                                                    date: "2024-12-27",
                                                     day: "금요일",
                                                     time: "101100001010101010101010",
                                                     rank: "002200001010101010101010"
@@ -369,7 +370,6 @@ const TimetableContent = ({isPlaceConfirmed, meetType, setMeetType}) => {
                                         }
                                     }
                                 }
-                                // loadCalender(resData.data.users);
                                 loadCalender(resData.data.groupTableDTO.days);
                                 //dummy 끝
                             })
@@ -413,16 +413,7 @@ const TimetableContent = ({isPlaceConfirmed, meetType, setMeetType}) => {
                         }).catch((err) => {
                             console.log(`timeTableContent에서 내 시간표 update 요청실패 ${err}`);
                         })
-                    }}>저장하기</p> : (
-                        isAdded ? <p onClick={
-                        // isExistPersonal ? <p onClick={
-                            () => {
-                                console.log('내 시간표 수정하기 클릭 - 개인 시간표 on')
-                                setLoadPersonalTime(true);
-                                dispatch(updatePersonalTimeData(days)); //개인시간표 store state에 저장
-                            }
-
-                        }>내 시간표 수정하기</p> : <p onClick={() => {
+                    }}>저장하기</p> : <p onClick={() => {
                             if (!loadPersonalTime) {//'내 시간표 추가하기' 누른 경우
                                 console.log("내 시간표 추가하기 버튼 클릭")
                                 setLoadPersonalTime(true);
@@ -446,9 +437,7 @@ const TimetableContent = ({isPlaceConfirmed, meetType, setMeetType}) => {
                                     console.log(`timeTableContent에서 내 시간표 생성 요청실패 ${err}`);
                                 })
                             }
-                        }}>내 시간표 추가하기</p>
-
-                    )
+                        }}>내 시간표 수정하기</p>
                 }
             </button>
 

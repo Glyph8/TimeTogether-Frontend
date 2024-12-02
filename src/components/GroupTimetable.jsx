@@ -120,28 +120,7 @@ const GroupTimetable = ({timetableData, timeRange, meetType, setMeetType}) => {
                         const newUrl = `${location.pathname}?${params.toString()}`;
                         navigate(newUrl, {replace: true}); // URL 업데이트
                     }
-                    
-                    
-                    // if (onOffline === '온라인') {
-                    //     setOnOffline("오프라인");
-                    //     const params = new URLSearchParams(location.search);
-                    //     params.set("type", "OFFLINE"); // 쿼리 파라미터 type의 값을 ONLINE으로 설정
-                    //     const newUrl = `${location.pathname}?${params.toString()}`;
-                    //     // navigate(newUrl, { replace: true }); // URL 업데이트
-                    //     setMeetType('OFFLINE')
-                    //     navigate(newUrl, {replace: true}); // URL 업데이트
-                    // }
-                    // if (onOffline === '오프라인') {
-                    //     setOnOffline("온라인");
-                    //     const params = new URLSearchParams(location.search);
-                    //     params.set("type", "ONLINE"); // 쿼리 파라미터 type의 값을 ONLINE으로 설정
-                    //     const newUrl = `${location.pathname}?${params.toString()}`;
-                    //     setMeetType('ONLINE')
-                    //     navigate(newUrl, {replace: true}); // URL 업데이트
-                    //     // navigate(newUrl, { replace: true }); // URL 업데이트
-                    // }
 
-                // }}>{onOffline}</div>
                 }}>{meetType === 'OFFLINE' ? (<p>오프라인</p>) : (<p>온라인</p>)}</div>
                 <h3 className="section-title">그룹 시간표</h3>
                 <p className="section-description">

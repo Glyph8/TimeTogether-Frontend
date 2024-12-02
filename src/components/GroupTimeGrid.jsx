@@ -11,6 +11,7 @@ const GroupTimeGrid = ({days, timeRange, memberCount}) => {
 
     const [hourCount, setHourCount] = useState(16);
     const [startHour, setStartHour] = useState(9);
+    const [endHour, setEndHour] = useState(24);
 
     const daySet = daySets(days);
     const dayLabel = dayLabelSet(days);
@@ -23,6 +24,7 @@ const GroupTimeGrid = ({days, timeRange, memberCount}) => {
     useEffect(() => {
         setHourCount(getTimeRange(timeRange));
         setStartHour(getStartHour(timeRange));
+        setEndHour(getEndHour(timeRange));
     }, [timeRange]);
 
     // useEffect(() => {
@@ -42,7 +44,7 @@ const GroupTimeGrid = ({days, timeRange, memberCount}) => {
                 ))}
             </div>
             <div className="grid-content">
-                <GroupTimeScale hourCount={hourCount} startHour={startHour}/>
+                <GroupTimeScale hourCount={hourCount} startHour={startHour} endHour={endHour}/>
                 {/*{console.log('grid에서는',times)}*/}
                 <GroupGridCells
                     days={days} //굳이 days를 통으로 줄 필요가 없는 듯
@@ -51,6 +53,7 @@ const GroupTimeGrid = ({days, timeRange, memberCount}) => {
                     daySet={daySet}
                     groupColorArray={showGroupColor(startColor, endColor, memberCount)}
                     startHour={startHour}
+                    endHour={endHour}
                 />
 
             </div>
@@ -58,82 +61,48 @@ const GroupTimeGrid = ({days, timeRange, memberCount}) => {
     );
 };
 
-const GroupTimeScale = ({hourCount, startHour}) => {
-    const [newHourCount, setNewHourCount] = useState(0)
-    // let newHourCount = Number.parseInt(hourCount);
-    // let newStartHour = 0;
-    const [newStartHour, setNewStartHour] = useState(0);
+const GroupTimeScale = ({hourCount, startHour, endHour }) => {
+    const hours = [];
+    let currentHour = Math.floor(startHour); // 시작 시간의 시간 부분
+    let currentMinutes = startHour % 1 === 0.3 ? 30 : 0; // 시작 시간의 분 부분 (30분 단위)
 
-    console.log('gtscale hourCount', hourCount)
-    console.log('gtscale startHour', startHour)
-
-    useEffect(() => {
-        if (Number.isInteger(startHour)) {
-            console.log('시작시간이 1시간 단위임 : ', startHour)
-            setNewStartHour(startHour)
-        } else if(!Number.isNaN(startHour) && !Number.isInteger(startHour)){
-            //시작시간이 1시간 단위가 아닌 경우
-            console.log('시작시간이 1시간 단위아님 : ', startHour)
-            setNewStartHour(Number.parseInt(startHour))
-            console.log('수정된 시작시간', newStartHour)
-        }
-        else{
-            console.log('그럼 뭐임 startHour: ', startHour)
+// 반복문: 현재 시간이 끝 시간을 초과하지 않을 때까지 진행
+    while (currentHour < endHour ||
+    (currentHour === Math.floor(endHour) &&
+        currentMinutes <= (endHour % 1 === 0.3 ? 30 : 0))) {
+        // 시작 시간의 첫 시간에 대해 30분만 포함
+        if ((currentHour === Math.floor(startHour) && currentMinutes === 30) ||
+            (currentHour > Math.floor(startHour))) {
+            const hourString = currentHour.toString().padStart(2, '0');
+            const minuteString = currentMinutes.toString().padStart(2, '0');
+            hours.push(`${hourString}:${minuteString}`);
         }
 
-        if (Number.isInteger(hourCount)) {
-            console.log('시간구간이 1시간 단위임 : ',hourCount)
-            setNewHourCount(hourCount)
-        } else if(!Number.isNaN(hourCount) && !Number.isInteger(hourCount)){
-            //시작시간이 1시간 단위가 아닌 경우
-            console.log('시간구간이 1시간 단위아님 : ', hourCount)
-            setNewHourCount(Number.parseInt(hourCount) + 1)
-            console.log('수정된 시간단위', newHourCount)
+        // 30분 단위로 증가
+        currentMinutes += 30;
+        if (currentMinutes === 60) {
+            currentMinutes = 0;
+            currentHour += 1;
         }
-        else{
-            console.log('그럼 시간구간 뭐임 hourCount: ', hourCount)
-        }
-
-    }, [hourCount, startHour]);
-
-
-    const hours = Array.from({length: newHourCount}, (_, i) => i + newStartHour);
-    // const hours = Array.from({length: hourCount}, (_, i) => i + startHour);
-
-    if (!Number.isInteger(startHour)) {
-        //시작시간이 1시간 단위가 아닌 경우
-        console.log(`앞에 ${newStartHour}:30`)
-        hours.unshift(`${newStartHour}:30`);
     }
 
-    if (!Number.isInteger(hourCount)) {
-        //종료시간이 1시간 단위가 아닌 경우
-        console.log(hours)
-        console.log(`뒤에 ${newStartHour + newHourCount - 1}:30`)
-        hours.push(`${newStartHour + newHourCount - 1}:30`);
-    }
-
-    console.log('hours', hours)
+    // console.log('hours', hours)
 
     return (
         <div className="time-scale">
-            {hours.map((hour) =>
+            {hours.map((hour, index) =>
                 (
-                        (hour.toString().length < 4) ? (
+                        (hour.toString().slice(3,4) !== '3' || index === 0 || index === hours.length-1) ? (
                                 <div key={hour} className="time-slot-half">
-                                    {hour}:00
+                                    {hour}
                                 </div>
                             ) :
                             (
                                 <div key={hour} className="time-slot-half">
-                                    {hour}
+                                    {/*{hour}*/}
                                 </div>
                             )
                 )
-                    //         <div key={hour} className="time-slot">
-                    //     {hour.toString().length < 4 ? hour + ':00' : hour}
-                    //     {/*{hour}:00*/}
-                    // </div>
                 )
             }
 
@@ -142,16 +111,8 @@ const GroupTimeScale = ({hourCount, startHour}) => {
         ;
 };
 
-const GroupGridCells = ({days, hourCount, timeSet, groupColorArray, startHour}) => {
-    // const [times, setTimes] = useState([]);
-    // console.log('timeSet', timeSet)
-    // console.log('days', days)
-
+const GroupGridCells = ({days, hourCount, timeSet, groupColorArray, startHour, endHour}) => {
     const [times, setTimes] = useState(timeSet);
-
-    // console.log('times',times)
-    // console.log('timeSEt prop',timeSet)
-
     const daySet = daySets(days);
     const dispatch = useDispatch();
 
@@ -160,19 +121,12 @@ const GroupGridCells = ({days, hourCount, timeSet, groupColorArray, startHour}) 
             setTimes([...timeSet]);
     }, [timeSet]);
 
-
     let hourCellCount = (hourCount * 2);
-
-    let newHourCount;
-    let newStartHour;
-    console.log('gtCell hourCount', hourCount)
-    console.log('gtCell startHour', startHour)
 
     if (!Number.isInteger(startHour)) {//시작시간이 1시간 단위가 아닌 경우
         hourCellCount += 1;
     }
-
-    if (!Number.isInteger(hourCount)) {//시작시간이 1시간 단위가 아닌 경우
+    if (!Number.isInteger(hourCount)) {//시간구간이 1시간 단위가 아닌 경우
         hourCellCount += 1;
     }
 
@@ -313,19 +267,20 @@ function getTimeRange(timeRange) {
     const endHour = Number.parseInt(timeRange.slice(4));
     const hourRange = endHour - startHour;
 
-    console.log('getTimeRange start hour', startHour)
-    console.log('getTimeRange end hour', endHour)
-    console.log('getTimeRange', hourRange)
-    console.log('getTimeRange', hourRange / 100)
 
     return (hourRange / 100);
 }
 
 function getStartHour(timeRange) {
     const startHour = Number.parseInt(timeRange.slice(0, 4));
-    console.log('getStartHour', startHour)
-    console.log('getStartHour', startHour / 100)
+
     return (startHour / 100);
+}
+
+function getEndHour(timeRange) {
+    const endHour = Number.parseInt(timeRange.slice(4, 8));
+
+    return (endHour / 100);
 }
 
 GroupTimeGrid.propTypes = {
