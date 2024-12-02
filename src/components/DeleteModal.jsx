@@ -40,11 +40,12 @@ const DeleteModal = ({
       }
     } catch (error) {
       // if (error.response && error.response.data.message) {
-      if (response.data.httpStatus === "NOT_FOUND") {
-        setErrorMessage(error.response.data.message); // 에러 메시지 표시
-      } else {
+      // if (error.response.data.httpStatus === "NOT_FOUND") {
+      // if (response.data.httpStatus === "NOT_FOUND") {
+      //   setErrorMessage(error.response.data.message); // 에러 메시지 표시
+      // } else {
         setErrorMessage("알 수 없는 오류가 발생했습니다."); // 기타 오류 처리
-      }
+      // }
     }
   };
 

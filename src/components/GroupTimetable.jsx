@@ -14,12 +14,12 @@ import {
 } from "../store.js";
 
 
-const GroupTimetable = ({timetableData, timeRange, setMeetType}) => {
+const GroupTimetable = ({timetableData, timeRange, meetType, setMeetType}) => {
     // console.log('timetable data props', timetableData);
 
     const [memberCount, setMemberCount] = useState(5);
     // const memberCount = members;
-    const [onOffline, setOnOffline] = useState("오프라인");
+    const searchParams = new URLSearchParams(location.search);
 
     const [days, setDays] = useState([]);
 
@@ -106,26 +106,22 @@ const GroupTimetable = ({timetableData, timeRange, setMeetType}) => {
             <div className="group-timetable-header">
                 <div className="on-offline" onClick={() => {
                     //type변경 요청 API가 필요?
-                    if (onOffline === '온라인') {
-                        setOnOffline("오프라인");
+                    if(meetType === 'ONLINE') {
+                        setMeetType('OFFLINE')
                         const params = new URLSearchParams(location.search);
                         params.set("type", "OFFLINE"); // 쿼리 파라미터 type의 값을 ONLINE으로 설정
                         const newUrl = `${location.pathname}?${params.toString()}`;
-                        // navigate(newUrl, { replace: true }); // URL 업데이트
-                        setMeetType('OFFLINE')
                         navigate(newUrl, {replace: true}); // URL 업데이트
                     }
-                    if (onOffline === '오프라인') {
-                        setOnOffline("온라인");
+                    if(meetType === 'OFFLINE') {
+                        setMeetType('ONLINE')
                         const params = new URLSearchParams(location.search);
                         params.set("type", "ONLINE"); // 쿼리 파라미터 type의 값을 ONLINE으로 설정
                         const newUrl = `${location.pathname}?${params.toString()}`;
-                        setMeetType('ONLINE')
                         navigate(newUrl, {replace: true}); // URL 업데이트
-                        // navigate(newUrl, { replace: true }); // URL 업데이트
                     }
 
-                }}>{onOffline}</div>
+                }}>{meetType === 'OFFLINE' ? (<p>오프라인</p>) : (<p>온라인</p>)}</div>
                 <h3 className="section-title">그룹 시간표</h3>
                 <p className="section-description">
                     시간을 클릭하면 누가 체크했는지 볼 수 있어요.

@@ -35,7 +35,8 @@ function MeetingsPage() {
   const totalNumber = searchParams.get("totalNumber") || 1;
   const meetingTitle = searchParams.get("meetTitle") || "";
 
-  const meetType = searchParams.get("meetType") || 'OFFLINE';
+  const [meetType, setMeetType] = useState(searchParams.get("meetType") || 'OFFLINE');
+  // const meetType = searchParams.get("meetType") || 'OFFLINE';
 
   const [isGroupModalOpen, setIsGroupModalOpen] = useState(false); // Group modal state
   const handleOpenGroupModal = () => setIsGroupModalOpen(true); // Open modal
@@ -43,6 +44,11 @@ function MeetingsPage() {
   const { groupName, groupMembers, groupImg, isMgr } = location.state || {};
   // const [groupName, setGroupName] = useState(passedGroupName || ""); // 네비게이션으로 받은 groupName을 기본값으로 사용
 
+  useEffect(() => {
+    console.log('온오프라인 변경', searchParams.get("type"));
+    setMeetType(searchParams.get("type"))
+  }, [searchParams]);
+  
   useEffect(() => {
     setIsHost(isMgr);
   }, [isMgr]);
@@ -116,7 +122,7 @@ function MeetingsPage() {
     // 주기적으로 fetchMeetingLocations 실행
 
 
-    intervalId = setInterval(fetchMeetingLocations, 100000); // 1초마다 호출
+    intervalId = setInterval(fetchMeetingLocations, 3000); // 1초마다 호출
 
 
     // 클린업 함수
@@ -149,26 +155,27 @@ function MeetingsPage() {
       // 서버와 동기화
       await syncVoteWithServer(locationId, isSelected ? 0 : 1);
     } catch (error) {
-      console.error("투표 요청 실패:", error.message);
-
-      // 서버 요청 실패 시 로컬 상태 복구
-      setSelectedLocationIds(
-        (prevSelected) =>
-          isSelected
-            ? [...prevSelected, locationId] // 복구: 선택 복원
-            : prevSelected.filter((id) => id !== locationId) // 복구: 선택 해제
-      );
-
-      setLocations((prevLocations) =>
-        prevLocations.map((location) =>
-          location.groupWhereId === locationId
-            ? {
-                ...location,
-                count: isSelected ? location.count + 1 : location.count - 1, // 복구: count 원래대로
-              }
-            : location
-        )
-      );
+      // console.error("투표 요청 실패:", error.message);
+      //
+      // console.log()
+      // // 서버 요청 실패 시 로컬 상태 복구
+      // setSelectedLocationIds(
+      //   (prevSelected) =>
+      //     isSelected
+      //       ? [...prevSelected, locationId] // 복구: 선택 복원
+      //       : prevSelected.filter((id) => id !== locationId) // 복구: 선택 해제
+      // );
+      //
+      // setLocations((prevLocations) =>
+      //   prevLocations.map((location) =>
+      //     location.groupWhereId === locationId
+      //       ? {
+      //           ...location,
+      //           count: isSelected ? location.count + 1 : location.count - 1, // 복구: count 원래대로
+      //         }
+      //       : location
+      //   )
+      // );
     }
   };
 
@@ -222,30 +229,43 @@ function MeetingsPage() {
         }
       ).then((res)=>{
         console.log('confrimLo Response',res.data)
+        if (res.data.httpStatus === "OK") {
+          alert("장소가 확정되었습니다!");
+          setConfirmLocationId(confirmLocationId); // 성공한 whereId 저장
+          setIsPlaceConfirmed(false);
+        } else {
+          throw new Error(data.message || "장소 확정에 실패했습니다.");
+        }
       })
           .catch((err)=>{
         console.log(`${err}`)
       });
 
-      const data = response.data;
 
-      if (data.httpStatus === "OK") {
-        alert("장소가 확정되었습니다!");
-        setConfirmLocationId(confirmLocationId); // 성공한 whereId 저장
-        setIsPlaceConfirmed(false);
-      } else {
-        throw new Error(data.message || "장소 확정에 실패했습니다.");
-      }
-    } catch (error) {
+      const data = response.data;
+      // if (data.httpStatus === "OK") {
+      //   alert("장소가 확정되었습니다!");
+      //   setConfirmLocationId(confirmLocationId); // 성공한 whereId 저장
+      //   setIsPlaceConfirmed(false);
+      // } else {
+      //   throw new Error(data.message || "장소 확정에 실패했습니다.");
+      // }
+
+
+
+    }
+
+
+    catch (error) {
       // 에러 처리
       if (error.response && error.response.data) {
-        alert(
-          error.response.data.message || "API 요청 중 오류가 발생했습니다."
-        );
+        // alert(error.response.data.message || "API 요청 중 오류가 발생했습니다.");
       } else {
-        alert("알 수 없는 오류가 발생했습니다.");
+        // alert("알 수 없는 오류가 발생했습니다.");
       }
     }
+
+
   };
 
   // 모달 열기
@@ -377,11 +397,13 @@ function MeetingsPage() {
       <TabSelector
         selectedOption={activeTab}
         onSelect={(option) => setActiveTab(option)}
+        meetType={meetType}
       />
       <div className="tab-content">
         {activeTab === "언제" && ( //해당 그룹의 모임 리스트 출력
           <>
-            <TimetableContent isPlaceConfirmed={isPlaceConfirmed}></TimetableContent>
+            <TimetableContent isPlaceConfirmed={confirmLocationId} meetType={meetType} setMeetType={setMeetType}></TimetableContent>
+            {/*<TimetableContent isPlaceConfirmed={isPlaceConfirmed}></TimetableContent>*/}
           </>
         )}
         {activeTab === "어디서" && (

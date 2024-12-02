@@ -82,58 +82,57 @@ function GroupPage() {
       })
       .catch((err) => {
         console.log(`groupPage에서 view요청 실패 ${err}`);
+
+        const exampleResponse = {
+          message: "요청에 성공했습니다.",
+          httpStatus: "OK",
+          data: [
+            {
+              groupId: 2,
+              groupName: "hello-world",
+              groupIntro: "헬로우 월드",
+              groupImg:
+              // "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTL0mWBDKPR964fHPZTXR6e1Ul5QzsFpyPrBA&s",
+                  "https://img.freepik.com/premium-vector/crying-laptop-computer-isolated-emoticon_263753-2202.jpg",
+              groupMembers: "김OO, 이OO, 박OO",
+              groupMgrId: "118042957275397174302",
+              mgr: true,
+              url: "abcd-efg",
+            },
+            {
+              groupId: 3,
+              groupName: "미야옹",
+              groupIntro: "미야옹 월드",
+              groupImg:
+                  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSJDsEehUFFYoZno3N0UGUrInuTXBK4adOXPw&s",
+              groupMembers: "Alice, Bob",
+              groupMgrId: "100682045992698191363",
+              mgr: false,
+              url: "hijklmnop",
+            },
+            {
+              groupId: 4,
+              groupName: "미야옹",
+              groupIntro: "미야옹 월드",
+              groupImg:
+                  "https://image.utoimage.com/preview/cp872722/2021/10/202110001984_500.jpg",
+              groupMembers: "김OO",
+              groupMgrId: "100682045992698191363",
+            },
+            {
+              groupId: 5,
+              groupName: "강아지",
+              groupIntro: "강아지 월드",
+              groupImg:
+                  "https://img.freepik.com/premium-vector/happy-laptop-computer-isolated-emoticon_263753-1622.jpg",
+              groupMembers: null,
+              groupMgrId: "100682045992698191363",
+            },
+          ],
+        };
+        setGroups(exampleResponse.data); //### 더미코드 주석처리필요
       });
 
-    const exampleResponse = {
-      message: "요청에 성공했습니다.",
-      httpStatus: "OK",
-      data: [
-        {
-          groupId: 2,
-          groupName: "hello-world",
-          groupIntro: "헬로우 월드",
-          groupImg:
-            // "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTL0mWBDKPR964fHPZTXR6e1Ul5QzsFpyPrBA&s",
-            "https://img.freepik.com/premium-vector/crying-laptop-computer-isolated-emoticon_263753-2202.jpg",
-          groupMembers: "김OO, 이OO, 박OO",
-          groupMgrId: "118042957275397174302",
-          mgr: true,
-          url: "abcd-efg",
-        },
-        {
-          groupId: 3,
-          groupName: "미야옹",
-          groupIntro: "미야옹 월드",
-          groupImg:
-            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSJDsEehUFFYoZno3N0UGUrInuTXBK4adOXPw&s",
-          groupMembers: "Alice, Bob",
-          groupMgrId: "100682045992698191363",
-          mgr: false,
-          url: "hijklmnop",
-        },
-        {
-          groupId: 4,
-          groupName: "미야옹",
-          groupIntro: "미야옹 월드",
-          groupImg:
-            "https://image.utoimage.com/preview/cp872722/2021/10/202110001984_500.jpg",
-          groupMembers: "김OO",
-          groupMgrId: "100682045992698191363",
-        },
-        {
-          groupId: 5,
-          groupName: "강아지",
-          groupIntro: "강아지 월드",
-          groupImg:
-            "https://img.freepik.com/premium-vector/happy-laptop-computer-isolated-emoticon_263753-1622.jpg",
-          groupMembers: null,
-          groupMgrId: "100682045992698191363",
-        },
-      ],
-    };
-
-    // 더미 데이터를 상태에 설정
-    //setGroups(exampleResponse.data);
   }, []);
 
   const openInviteModal = () => setIsInviteModalOpen(true);

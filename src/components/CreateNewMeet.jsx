@@ -108,64 +108,6 @@ function CreateNewMeet({groupId, setMakeNewMeeting}) {
     const calendarDays = getDaysInMonth(currentDate);
 
     //빈 시간표 생성함수 백엔드 처리로 안쓸듯
-    const createNewMeeting = (formatedDate, weekDays) => {
-        console.log("createNewMeeting");
-        const usersSet = new Array(0);
-        const daysSet = new Array(0);
-        const groupTimes = selectedGroupTimes;
-        function getTimeRange(groupTimes) {
-            const startHour = Number.parseInt(groupTimes.slice(0, 4));
-            const endHour = Number.parseInt(groupTimes.slice(4));
-            const hourRange = endHour - startHour;
-            return (hourRange / 100);
-        }
-        formatedDate.map((date, index)=>{
-            daysSet.push({
-                date: date,
-                day: weekDays[index],
-                time: '0'.repeat(getTimeRange(groupTimes)),
-                rank: '0'.repeat(getTimeRange(groupTimes)),
-            });
-        })
-        console.log("formatedDAta", daysSet);
-        usersSet.push({
-            groupTimes: "00000000",
-        })
-        //입력한 날짜 정보, 시간 정보 전달, 나머지는 빈 상태로 시간표 사용
-        const data = {
-            groupTimes: "07002100   ", //오전 7시 - 오전 9시 생성 시 입력한 시간
-            users: [
-                {
-                    userName: "emptyTable",
-                    // userId: "emptyTable",
-                    days: [
-                        {
-                            date: "2024-10-09", //입력한 날짜
-                            day: "수요일",
-                            time: "00000000", //빈 시간표
-                            rank: "00000000"
-                        },
-                        {
-                            date: "2024-10-10",
-                            day: "목요일",
-                            time: "00000000",
-                            rank: "00000000"
-                        },
-                        {
-                            date: "2024-10-11",
-                            day: "금요일",
-                            time: "00000000",
-                            rank: "00000000"
-                        }
-                    ]
-                }
-            ]
-        }
-        console.log("미팅리스트에서 createNewMEeting : ", data);
-        navigate("/meetings/:id/when/type", {
-            state: {timetableData: data} //timetablecontent로
-        });
-    }
 
     useEffect(() => {
 
@@ -234,6 +176,8 @@ function CreateNewMeet({groupId, setMakeNewMeeting}) {
                             ).then((res)=>{
                                 console.log('요청성공_응답 : ',res.data);
                                 setMakeNewMeeting(false);
+
+                                window.reload
                                 // navigate(-1);
                             }).catch((err)=>{
                                 console.log(`CreateNewMeet에서 회의 리스트 요청실패 ${err}`);
@@ -242,9 +186,7 @@ function CreateNewMeet({groupId, setMakeNewMeeting}) {
 
                             //createNewMeeting(formatedDate, weekDays);
                         }
-                        else{
-                            //날짜 추가선택, 회의 이름 입력 안내 -> 팝업? 입력창 border red로?
-                        }
+
                     }
                     }>
                         회의 생성하기
