@@ -38,12 +38,13 @@ const GroupCard = ({ group, onDelete }) => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
-
-  const totalNumber = group.userNameResponseList
-    // ? group.userNameResponseList.split(",").length + 1
-    ? group.userNameResponseList.length + 1
-    : 1;
-
+  console.log("----------------------------------------------");
+  console.log(group);
+  console.log(group.groupMembers);
+  const totalNumber = group.groupMembers
+    .split(",")
+    .map((item) => item.trim()).length;
+  console.log(totalNumber);
   // const totalNumber = 4;
 
   return (

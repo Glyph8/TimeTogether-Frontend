@@ -72,6 +72,9 @@ function CalendarPage() {
         const isAllDay = meeting.meetDTstart.endsWith("T00:00:00");
         const startDate = format(new Date(meeting.meetDTstart), "yyyy-MM-dd");
         const endDate = format(new Date(meeting.meetDTend), "yyyy-MM-dd");
+        // 시간 추출
+        const startTime = meeting.meetDTstart.split("T")[1].substring(0, 5); // "HH:MM"
+        const endTime = meeting.meetDTend.split("T")[1].substring(0, 5); // "HH:MM"
         const colors = [
           "#FDBAAB",
           "#FEA666",
@@ -110,6 +113,8 @@ function CalendarPage() {
             isAllDay,
             startDate,
             endDate,
+            startTime, // 시간 추가
+            endTime, // 시간 추가
             // color:
             //   meeting.color ||
             //   [

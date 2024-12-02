@@ -52,31 +52,30 @@ const TimetableContent = ({ isPlaceConfirmed, meetType, setMeetType }) => {
   // const myUserName = localStorage.getItem("userName");
   // console.log('my name: ', myUserName)
 
-  const myUserName = "강동윤";
+  // const myUserName = "강동윤";
 
-  // const [myUserName, setMyUserName] = useState('강동윤');
-  // useEffect(() => {
-  //     axios.get(`http://192.168.12.218:8080/user/history/name`
-  //         , {
-  //             headers:
-  //                 {
-  //                     Authorization: `Bearer ${accessToken}`
-  //                 }
-  //         }
-  //     ).then((res) => {
-  //         if (res.data) {
-  //             console.log('timetableData에서 사용자 이름 요청 성공 : ', res.data);
-  //
-  //             setMyUserName(res.data.data)
-  //         } else {
-  //             console.log('응답이 비어 있습니다.', res);
-  //         }
-  //         //시간표 값 전달
-  //     }).catch((err) => {
-  //         console.log(`timetableData에서 이름 요청실패 ${err}`);
-  //     })
-  // }, []);
-  //
+  const [myUserName, setMyUserName] = useState("강동윤");
+  useEffect(() => {
+    axios
+      .get(`http://${ip}:8080/user/history/name`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      })
+      .then((res) => {
+        if (res.data) {
+          console.log("timetableData에서 사용자 이름 요청 성공 : ", res.data);
+
+          setMyUserName(res.data.data);
+        } else {
+          console.log("응답이 비어 있습니다.", res);
+        }
+        //시간표 값 전달
+      })
+      .catch((err) => {
+        console.log(`timetableData에서 이름 요청실패 ${err}`);
+      });
+  }, []);
 
   const [loadPersonalTime, setLoadPersonalTime] = useState(false);
 
@@ -114,11 +113,11 @@ const TimetableContent = ({ isPlaceConfirmed, meetType, setMeetType }) => {
     //     console.log('all defined')
     // }
 
-    console.log(
-      `groupId : ${groupId}\ntype : ${meetType}\ntitle : ${meetTitle}`
-    );
     // axios.post(`${testip}/group/${groupId}/when/${meetTitle}/${meetType}`, {
     // const getTables = axios.get(`kkkkk`
+    console.log(
+      `시간표 불러오기 요청 http://${ip}:8080/group/${groupId}/when/${meetTitle}/${meetType}`
+    );
     axios
       .get(`http://${ip}:8080/group/${groupId}/when/${meetTitle}/${meetType}`, {
         headers: {
@@ -226,13 +225,10 @@ const TimetableContent = ({ isPlaceConfirmed, meetType, setMeetType }) => {
         };
         setTimetableData(dummy);
       }); //로 request 보내고, 받아온 결과로 시간표 출력.
-
-    console.log("요청 시퀀스 후");
   }, [groupId, meetTitle, meetType]);
   // 여기까지 연결
 
   useEffect(() => {
-    console.log("timetableData가 업데이트되었습니다:", timetableData);
     // console.log('timetableData length : ', timetableData.users.length)
     // if (!timetableData && timetableData.users.length > 0) {
     // if (timetableData) {
@@ -240,12 +236,10 @@ const TimetableContent = ({ isPlaceConfirmed, meetType, setMeetType }) => {
       setStableTimetableData(structuredClone(timetableData));
       setStableTimetableData2(structuredClone(timetableData));
       setStableTimetableData3(structuredClone(timetableData));
-      console.log("stable2", stableTimetableData2);
     }
   }, [timetableData]);
 
   useEffect(() => {
-    console.log("stableData 업데이트", stableTimetableData);
     // if (stableTimetableData3) {
     if (Object.keys(stableTimetableData).length !== 0) {
       // if (!stableTimetableData && stableTimetableData.users.length > 0) {
@@ -253,7 +247,6 @@ const TimetableContent = ({ isPlaceConfirmed, meetType, setMeetType }) => {
       // setDays(returnMyTimeTable(stableTimetableData3, myUserId));
       setIsExistPersonal(checkPersonalTime(stableTimetableData, myUserName));
       // setIsExistPersonal(checkPersonalTime(stableTimetableData, myUserId))
-      console.log("days", days);
     }
   }, [stableTimetableData]);
 
@@ -287,9 +280,7 @@ const TimetableContent = ({ isPlaceConfirmed, meetType, setMeetType }) => {
     setIsEdited(true);
   };
 
-  useEffect(() => {
-    console.log("변경된 days useEffect : ", days);
-  }, [days]);
+  useEffect(() => {}, [days]);
 
   useEffect(() => {
     if (timetableData?.groupTimes) {

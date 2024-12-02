@@ -6,6 +6,7 @@ import searchIcon from "../assets/search-icon.png";
 import GroupItemList from "../components/GroupItemList";
 import MeetingScheduleItemList from "../components/MeetingScheduleItemList";
 import BackButton from "../components/BackButton";
+import MeetingHistoryList from "../components/MeetingHistoryList";
 
 const MyHistoryPage = () => {
   const [searchText, setSearchText] = useState("");
@@ -24,7 +25,7 @@ const MyHistoryPage = () => {
         iconSrc={searchIcon}
       />
       <div className="main-container">
-        <MeetingScheduleItemList groupId={-1} searchText={searchText} />
+        <MeetingHistoryList groupId={-1} searchText={searchText} />
       </div>
     </div>
   );

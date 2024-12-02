@@ -281,7 +281,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
-localStoage.setItem("ip", "192.168.12.205");
+localStorage.setItem("ip", "192.168.12.205");
 const ip = localStorage.getItem("ip");
 
 // 로컬 스토리지에 토큰 저장
