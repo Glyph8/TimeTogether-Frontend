@@ -1,8 +1,8 @@
 // import React, { useState, useEffect } from "react";
 // import { format } from "date-fns";
 // import "./CalendarAddModal.css";
-// import { FaTrash } from "react-icons/fa";
 
+// import { FaTrash } from "react-icons/fa";
 // function CalendarAddModal({
 //   date,
 //   addEvent,
@@ -16,13 +16,11 @@
 //   const [content, setContent] = useState("");
 //   const [color, setColor] = useState("#f5a623");
 //   const [isColorPickerOpen, setIsColorPickerOpen] = useState(false);
-
 //   const [isTimeEnabled, setIsTimeEnabled] = useState(false); // 시간 설정 여부
 //   const [startDate, setStartDate] = useState(format(date, "yyyy-MM-dd")); // 시작 날짜
 //   const [endDate, setEndDate] = useState(format(date, "yyyy-MM-dd")); // 종료 날짜
 //   const [startTime, setStartTime] = useState("00:00"); // 시작 시간
 //   const [endTime, setEndTime] = useState("23:59"); // 종료 시간
-
 //   // editEvent가 있을 때 초기값을 설정
 //   useEffect(() => {
 //     // if (editEvent) {
@@ -42,14 +40,11 @@
 //       setLocation(editEvent.location || ""); // 장소 초기화
 //       setContent(editEvent.content || ""); // 내용 초기화
 //       setColor(editEvent.color || "#FFC553"); // 색상 초기화
-
 //       // 날짜 초기화
 //       setStartDate(editEvent.startDate || format(new Date(), "yyyy-MM-dd"));
 //       setEndDate(editEvent.endDate || format(new Date(), "yyyy-MM-dd"));
-
 //       // 시간 설정 여부 초기화
 //       setIsTimeEnabled(!!editEvent.time); // time이 있으면 true, 없으면 false
-
 //       // 시간 초기화
 //       if (editEvent.time) {
 //         const [start, end] = editEvent.time.split(" - "); // "HH:mm - HH:mm" 형식 분리
@@ -72,14 +67,11 @@
 //       setEndTime("23:00");
 //     }
 //   }, [editEvent]);
-
 //   const handleSubmit = (e) => {
 //     e.preventDefault();
-
 //     const eventTitle = title.trim() === "" ? "새로운 일정" : title;
 //     const eventLocation = location.trim() === "" ? "장소없음" : location;
 //     const eventContent = content.trim() === "" ? "내용 없음" : content;
-
 //     const updatedEvent = {
 //       title: eventTitle,
 //       location: eventLocation,
@@ -89,7 +81,6 @@
 //       startDate,
 //       endDate,
 //     };
-
 //     if (editEvent) {
 //       // 수정 이벤트 처리
 //       updateEvent(updatedEvent);
@@ -100,7 +91,6 @@
 //       } else {
 //         let current = new Date(startDate);
 //         const end = new Date(endDate);
-
 //         while (current <= end) {
 //           addEvent(format(current, "yyyy-MM-dd"), updatedEvent);
 //           current.setDate(current.getDate() + 1);
@@ -109,7 +99,6 @@
 //     }
 //     closeModal();
 //   };
-
 //   const colors = [
 // "#FDBAAB",
 // "#FEA666",
@@ -119,7 +108,6 @@
 // "#9747FF",
 // "#3B4FFF",
 //   ];
-
 //   return (
 //     <div className="cm-modal-overlay" onClick={closeModal}>
 //       <div className="cm-modal-content" onClick={(e) => e.stopPropagation()}>
@@ -131,7 +119,6 @@
 //           ></span>
 //           {format(date, "MM월 dd일")}
 //         </h2>
-
 //         <form onSubmit={handleSubmit}>
 //           {isColorPickerOpen && (
 //             <div className="cm-color-picker">
@@ -205,7 +192,6 @@
 //                   />
 //                 </div>
 //               </div>
-
 //               {isTimeEnabled && (
 //                 <div className="inline-inputs">
 //                   <div>
@@ -242,7 +228,6 @@
 //             value={content}
 //             onChange={(e) => setContent(e.target.value)}
 //           /> */}
-
 //           <button className="cm-button" type="submit">
 //             {editEvent ? "수정" : "일정 추가"}
 //           </button>
@@ -272,7 +257,6 @@
 //     </div>
 //   );
 // }
-
 // export default CalendarAddModal;
 
 //토글을 시간설정 말고, 하루종일로 바꿈.
@@ -280,7 +264,6 @@
 // import { format } from "date-fns";
 // import "./CalendarAddModal.css";
 // import { FaTrash } from "react-icons/fa";
-
 // function CalendarAddModal({
 //   date,
 //   addEvent,
@@ -294,27 +277,22 @@
 //   const [content, setContent] = useState("");
 //   const [color, setColor] = useState("#f5a623");
 //   const [isColorPickerOpen, setIsColorPickerOpen] = useState(false);
-
 //   const [isAllDay, setIsAllDay] = useState(false); // '하루 종일' 여부
 //   const [startDate, setStartDate] = useState(format(date, "yyyy-MM-dd")); // 시작 날짜
 //   const [endDate, setEndDate] = useState(format(date, "yyyy-MM-dd")); // 종료 날짜
 //   const [startTime, setStartTime] = useState("11:00"); // 시작 시간
 //   const [endTime, setEndTime] = useState("23:00"); // 종료 시간
-
 //   useEffect(() => {
 //     if (editEvent) {
 //       setTitle(editEvent.title || ""); // 제목 초기화
 //       setLocation(editEvent.location || ""); // 장소 초기화
 //       setContent(editEvent.content || ""); // 내용 초기화
 //       setColor(editEvent.color || "#FFC553"); // 색상 초기화
-
 //       // 날짜 초기화
 //       setStartDate(editEvent.startDate || format(new Date(), "yyyy-MM-dd"));
 //       setEndDate(editEvent.endDate || format(new Date(), "yyyy-MM-dd"));
-
 //       // 하루 종일 여부 초기화
 //       setIsAllDay(editEvent.isAllDay || false);
-
 //       // 시간 초기화
 //       if (editEvent.time) {
 //         const [start, end] = editEvent.time.split(" - "); // "HH:mm - HH:mm" 형식 분리
@@ -337,14 +315,11 @@
 //       setEndTime("23:00");
 //     }
 //   }, [editEvent]);
-
 //   const handleSubmit = (e) => {
 //     e.preventDefault();
-
 //     const eventTitle = title.trim() === "" ? "새로운 일정" : title;
 //     const eventLocation = location.trim() === "" ? "장소없음" : location;
 //     const eventContent = content.trim() === "" ? "내용 없음" : content;
-
 //     const updatedEvent = {
 //       title: eventTitle,
 //       location: eventLocation,
@@ -355,7 +330,6 @@
 //       startDate,
 //       endDate,
 //     };
-
 //     if (editEvent) {
 //       updateEvent(updatedEvent);
 //     } else {
@@ -364,7 +338,6 @@
 //       } else {
 //         let current = new Date(startDate);
 //         const end = new Date(endDate);
-
 //         while (current <= end) {
 //           addEvent(format(current, "yyyy-MM-dd"), updatedEvent);
 //           current.setDate(current.getDate() + 1);
@@ -373,7 +346,6 @@
 //     }
 //     closeModal();
 //   };
-
 //   const colors = [
 //     "#FDBAAB",
 //     "#FEA666",
@@ -382,7 +354,6 @@
 //     "#9747FF",
 //     "#3B4FFF",
 //   ];
-
 //   return (
 //     <div className="cm-modal-overlay" onClick={closeModal}>
 //       <div className="cm-modal-content" onClick={(e) => e.stopPropagation()}>
@@ -394,7 +365,6 @@
 //           ></span>
 //           {format(date, "MM월 dd일")}
 //         </h2>
-
 //         <form onSubmit={handleSubmit}>
 //           {isColorPickerOpen && (
 //             <div className="cm-color-picker">
@@ -446,7 +416,6 @@
 //                 />
 //               </label>
 //             </div>
-
 //             <div className="date-time-settings">
 //               <div className="inline-inputs">
 //                 <div>
@@ -469,7 +438,6 @@
 //                   />
 //                 </div>
 //               </div>
-
 //               {!isAllDay && (
 //                 <div className="inline-inputs">
 //                   <div>
@@ -515,7 +483,6 @@
 //     </div>
 //   );
 // }
-
 // export default CalendarAddModal;
 //백엔드 연결 전 코드 (삭제하지말기)
 
@@ -560,6 +527,7 @@ function CalendarAddModal({
   ];
 
   useEffect(() => {
+
     if (editEvent) {
       setTitle(editEvent.title || "제목없음");
       setLocation(editEvent.location || "장소없음");
@@ -569,30 +537,17 @@ function CalendarAddModal({
       setLocationUrl(editEvent.locationUrl || "");
       setMeetType(editEvent.meetType || null);
       setColor(
-        editEvent.color || colors[Math.floor(Math.random() * colors.length)]
+          editEvent.color || colors[Math.floor(Math.random() * colors.length)]
       );
       setStartDate(editEvent.startDate || format(new Date(), "yyyy-MM-dd"));
       setEndDate(editEvent.endDate || format(new Date(), "yyyy-MM-dd"));
       setIsAllDay(editEvent.isAllDay || false);
 
-
-      // `meetDTstart`의 시간 값 설정
-      if (editEvent.meetDTstart) {
-        const [, startTime] = editEvent.meetDTstart.split("T"); // T 뒤의 시간 추출
-        setStartTime(startTime.substring(0, 5)); // "HH:MM" 형식
-      } else {
-        setStartTime("11:00");
-      }
-
-      // `meetDTend`의 시간 값 설정
-      if (editEvent.meetDTend) {
-        const [, endTime] = editEvent.meetDTend.split("T"); // T 뒤의 시간 추출
-        setEndTime(endTime.substring(0, 5)); // "HH:MM" 형식
-      } else {
-        setEndTime("23:00");
-      }
-
+      // `startTime`과 `endTime` 상태 설정
+      setStartTime(editEvent.startTime || "11:00");
+      setEndTime(editEvent.endTime || "23:00");
     }
+
   }, [editEvent]);
 
   const handleSubmit = async (e) => {

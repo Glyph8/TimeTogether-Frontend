@@ -194,28 +194,30 @@ function CalendarPage() {
   };
 
   const handleEventClick = (day, event) => {
+
     setFocusedEvent(event); // 포커스된 이벤트 설정
     console.log("Selected Event for Edit:", event);
-    setEditEvent(event); // 수정할 이벤트 설정
-    setModalDate(day); // 날짜 설정
-    // 연속 일정의 모든 날짜를 포커스
-    const { startDate, endDate } = event;
-    if (startDate && endDate) {
-      let current = new Date(startDate);
-      const end = new Date(endDate);
+    // setEditEvent(event); // 수정할 이벤트 설정
 
-      while (current <= end) {
-        const formattedDate = format(current, "yyyy-MM-dd");
-        if (events[formattedDate]) {
-          events[formattedDate] = events[formattedDate].map((evt) =>
-            evt === event ? { ...evt, focused: true } : evt
-          );
-        }
-        current.setDate(current.getDate() + 1);
-      }
-      setEvents({ ...events }); // 상태 업데이트
-    }
+    // 수정 모달에서 사용될 이벤트 설정
+    const { meetDTstart, meetDTend } = event;
+
+    const startTime = meetDTstart
+        ? meetDTstart.split("T")[1].substring(0, 5)
+        : "11:00"; // "HH:MM"
+    const endTime = meetDTend
+        ? meetDTend.split("T")[1].substring(0, 5)
+        : "23:00"; // "HH:MM"
+
+    setEditEvent({
+      ...event,
+      startTime, // 시작 시간 추가
+      endTime, // 종료 시간 추가
+    });
+
+    setModalDate(day); // 날짜 설정
     setIsModalOpen(true); // 수정 모달 열기
+
   };
 
   const deleteEvent = (event) => {
