@@ -3,6 +3,7 @@ import MeetingScheduleItem from "./MeetingScheduleItem";
 import "./MeetingScheduleItemList.css";
 import axios from "axios";
 const accessToken = localStorage.getItem("accessToken");
+const ip = localStorage.getItem("ip");
 
 // const dummyData = [
 //   {
@@ -78,15 +79,18 @@ const MeetingScheduleItemList = ({ groupId, searchText }) => {
 
         if (!searchText.trim()) {
           // searchText가 비어있는 경우 기본 데이터 요청
-          response = await axios.get(`http://192.168.12.218:8080/meet/list/${groupId}/find`, {
-            headers: {
-              Authorization: `Bearer ${accessToken}`,
-            },
-          });
+          response = await axios.get(
+            `http://${ip}:8080/meet/list/${groupId}/find`,
+            {
+              headers: {
+                Authorization: `Bearer ${accessToken}`,
+              },
+            }
+          );
         } else {
           // searchText가 있는 경우 검색 결과 요청
           response = await axios.get(
-            `http://192.168.12.218:8080/meet/list/${groupId}/${searchText}/search`,
+            `http://${ip}:8080/meet/list/${groupId}/${searchText}/search`,
             {
               headers: {
                 Authorization: `Bearer ${accessToken}`,
@@ -96,7 +100,7 @@ const MeetingScheduleItemList = ({ groupId, searchText }) => {
         }
 
         // 데이터 처리
-        console.log(response.data)
+        console.log(response.data);
         setMeetings(response.data.data);
       } catch (error) {
         console.error(
@@ -115,10 +119,10 @@ const MeetingScheduleItemList = ({ groupId, searchText }) => {
     return <div>로딩 중...</div>;
   }
 
-  console.log('!!', meetings)
+  console.log("!!", meetings);
   // if (Object.keys(meetings).length === 0) {
-  if(!meetings){
-  // if (meetings.length === 0) {
+  if (!meetings) {
+    // if (meetings.length === 0) {
     return <div>미팅 일정이 없습니다.</div>;
   }
 

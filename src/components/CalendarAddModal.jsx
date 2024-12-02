@@ -493,6 +493,7 @@ import { format } from "date-fns";
 import axios from "axios";
 import "./CalendarAddModal.css";
 import { FaTrash } from "react-icons/fa";
+const ip = localStorage.getItem("ip");
 
 function CalendarAddModal({
   date,
@@ -527,7 +528,6 @@ function CalendarAddModal({
   ];
 
   useEffect(() => {
-
     if (editEvent) {
       setTitle(editEvent.title || "제목없음");
       setLocation(editEvent.location || "장소없음");
@@ -537,7 +537,7 @@ function CalendarAddModal({
       setLocationUrl(editEvent.locationUrl || "");
       setMeetType(editEvent.meetType || null);
       setColor(
-          editEvent.color || colors[Math.floor(Math.random() * colors.length)]
+        editEvent.color || colors[Math.floor(Math.random() * colors.length)]
       );
       setStartDate(editEvent.startDate || format(new Date(), "yyyy-MM-dd"));
       setEndDate(editEvent.endDate || format(new Date(), "yyyy-MM-dd"));
@@ -547,7 +547,6 @@ function CalendarAddModal({
       setStartTime(editEvent.startTime || "11:00");
       setEndTime(editEvent.endTime || "23:00");
     }
-
   }, [editEvent]);
 
   const handleSubmit = async (e) => {
@@ -596,7 +595,7 @@ function CalendarAddModal({
       const accessToken = localStorage.getItem("accessToken");
       if (editEvent) {
         const response = await axios.patch(
-          `http://192.168.12.218:8080/calendar/update/${editEvent.id}`,
+          `http://${ip}:8080/calendar/update/${editEvent.id}`,
           eventData2,
           {
             headers: {
@@ -609,7 +608,7 @@ function CalendarAddModal({
       } else {
         console.log("보낸내용: ", eventData1);
         const response = await axios.post(
-          `http://192.168.12.218:8080/calendar/create`,
+          `http://${ip}:8080/calendar/create`,
           eventData1,
           {
             headers: {
@@ -639,7 +638,7 @@ function CalendarAddModal({
     if (!editEvent?.id) return;
     try {
       const response = await axios.delete(
-        `http://192.168.12.218:8080/calendar/delete/${editEvent.id}`,
+        `http://${ip}/calendar/delete/${editEvent.id}`,
         {
           headers: {
             Authorization: `Bearer ${accessToken}`,

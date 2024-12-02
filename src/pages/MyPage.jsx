@@ -4,6 +4,7 @@ import ProfileCard from "../components/ProfileCard";
 import MyPageItem from "../components/MyPageItem";
 import axios from "axios";
 import { useNavigate } from "react-router-dom"; // useNavigate import
+const ip = localStorage.getItem("ip");
 
 function MyPage() {
   const [isLoggedOut, setIsLoggedOut] = useState(false); // 로그아웃 상태 관리
@@ -17,7 +18,7 @@ function MyPage() {
   const handleLogout = async () => {
     try {
       const response = await axios.post(
-        "http://192.168.12.218:8080/user/logout",
+        `http://${ip}:8080/user/logout`,
         {},
         {
           headers: {
@@ -49,7 +50,6 @@ function MyPage() {
       <MyPageItem title="프로필 변경" onClick={() => {}} />
       <MyPageItem title="로그아웃" onClick={() => {}} /> */}
 
-      
       {isLoggedOut ? (
         <>
           <ProfileCard name=" -  &nbsp;님" />

@@ -7,6 +7,7 @@ import GroupItemList from "../components/GroupItemList";
 import MeetingScheduleItemList from "../components/MeetingScheduleItemList";
 import axios from "axios";
 const accessToken = localStorage.getItem("accessToken");
+const ip = localStorage.getItem("ip");
 
 const SchedulePage = () => {
   const [searchText, setSearchText] = useState("");
@@ -17,11 +18,14 @@ const SchedulePage = () => {
     const fetchGroups = async () => {
       try {
         // GET 요청
-        const response = await axios.get("http://192.168.12.218:8080/group/groups/view", {
-          headers: {
-            Authorization: `Bearer ${accessToken}`, // 토큰 추가
-          },
-        });
+        const response = await axios.get(
+          `http://${ip}:8080/group/groups/view`,
+          {
+            headers: {
+              Authorization: `Bearer ${accessToken}`, // 토큰 추가
+            },
+          }
+        );
 
         // 응답 데이터에서 groups 상태로 업데이트
         if (response.data.httpStatus === "OK") {

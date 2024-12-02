@@ -7,6 +7,7 @@ import GroupCard from "../components/GroupCard";
 import InviteModal from "../components/InviteModal";
 import DeleteModal from "../components/DeleteModal"; // DeleteModal import
 import axios from "axios";
+const ip = localStorage.getItem("ip");
 
 function GroupPage() {
   // 로컬 스토리지에서 토큰 가져오기
@@ -26,8 +27,7 @@ function GroupPage() {
 
       try {
         const response = await axios.get(
-
-          "http://192.168.12.218:8080/group/groups/view",
+          `http://${ip}:8080/group/groups/view`,
 
           {
             headers: {
@@ -75,7 +75,7 @@ function GroupPage() {
     // 새로운 배열 형식의 더미 응답 데이터
     axios
 
-      .get("http://192.168.12.218:8080/header/group/groups/view")
+      .get(`http://${ip}:8080/header/group/groups/view`)
 
       .then((response) => {
         console.log(response.data);
@@ -92,8 +92,8 @@ function GroupPage() {
               groupName: "hello-world",
               groupIntro: "헬로우 월드",
               groupImg:
-              // "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTL0mWBDKPR964fHPZTXR6e1Ul5QzsFpyPrBA&s",
-                  "https://img.freepik.com/premium-vector/crying-laptop-computer-isolated-emoticon_263753-2202.jpg",
+                // "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTL0mWBDKPR964fHPZTXR6e1Ul5QzsFpyPrBA&s",
+                "https://img.freepik.com/premium-vector/crying-laptop-computer-isolated-emoticon_263753-2202.jpg",
               groupMembers: "김OO, 이OO, 박OO",
               groupMgrId: "118042957275397174302",
               mgr: true,
@@ -104,7 +104,7 @@ function GroupPage() {
               groupName: "미야옹",
               groupIntro: "미야옹 월드",
               groupImg:
-                  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSJDsEehUFFYoZno3N0UGUrInuTXBK4adOXPw&s",
+                "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSJDsEehUFFYoZno3N0UGUrInuTXBK4adOXPw&s",
               groupMembers: "Alice, Bob",
               groupMgrId: "100682045992698191363",
               mgr: false,
@@ -115,7 +115,7 @@ function GroupPage() {
               groupName: "미야옹",
               groupIntro: "미야옹 월드",
               groupImg:
-                  "https://image.utoimage.com/preview/cp872722/2021/10/202110001984_500.jpg",
+                "https://image.utoimage.com/preview/cp872722/2021/10/202110001984_500.jpg",
               groupMembers: "김OO",
               groupMgrId: "100682045992698191363",
             },
@@ -124,7 +124,7 @@ function GroupPage() {
               groupName: "강아지",
               groupIntro: "강아지 월드",
               groupImg:
-                  "https://img.freepik.com/premium-vector/happy-laptop-computer-isolated-emoticon_263753-1622.jpg",
+                "https://img.freepik.com/premium-vector/happy-laptop-computer-isolated-emoticon_263753-1622.jpg",
               groupMembers: null,
               groupMgrId: "100682045992698191363",
             },
@@ -132,7 +132,6 @@ function GroupPage() {
         };
         setGroups(exampleResponse.data); //### 더미코드 주석처리필요
       });
-
   }, []);
 
   const openInviteModal = () => setIsInviteModalOpen(true);

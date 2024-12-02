@@ -3,6 +3,7 @@ import "./DeleteModal.css";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 const accessToken = localStorage.getItem("accessToken");
+const ip = localStorage.getItem("ip");
 const DeleteModal = ({
   isOpen,
   onConfirm,
@@ -22,14 +23,11 @@ const DeleteModal = ({
         ? `/group/delete/${groupId}` // 관리자일 경우 그룹 삭제
         : `/group/${groupId}/leave`; // 일반 사용자일 경우 그룹 나가기
       console.log(endpoint);
-      const response = await axios.delete(
-        `http://192.168.12.218:8080${endpoint}`,
-        {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        }
-      );
+      const response = await axios.delete(`http://${ip}:8080${endpoint}`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
       console.log(response.data);
       if (response.data.httpStatus === "OK") {
         alert(response.data.message || "요청이 성공적으로 처리되었습니다."); // 성공 메시지
@@ -44,7 +42,7 @@ const DeleteModal = ({
       // if (response.data.httpStatus === "NOT_FOUND") {
       //   setErrorMessage(error.response.data.message); // 에러 메시지 표시
       // } else {
-        setErrorMessage("알 수 없는 오류가 발생했습니다."); // 기타 오류 처리
+      setErrorMessage("알 수 없는 오류가 발생했습니다."); // 기타 오류 처리
       // }
     }
   };
