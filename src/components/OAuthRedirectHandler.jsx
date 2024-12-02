@@ -281,9 +281,12 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
+localStoage.setItem("ip", "192.168.12.205");
+const ip = localStorage.getItem("ip");
+
 // 로컬 스토리지에 토큰 저장
 function saveTokensToLocalStorage(accessToken, refreshToken) {
-// function saveTokensToLocalStorage(accessToken, refreshToken, userName) {
+  // function saveTokensToLocalStorage(accessToken, refreshToken, userName) {
   localStorage.setItem("accessToken", accessToken);
   localStorage.setItem("refreshToken", refreshToken);
   // localStorage.setItem("userName", userName)
@@ -306,7 +309,7 @@ function sendTokenToBackend(token, isAccessToken = true) {
   console.log(`${tokenType} 토큰을 백엔드에 전송합니다.`);
 
   axios
-    .get("http://192.168.12.218:8080/header", {
+    .get(`http://${ip}:8080/header`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },

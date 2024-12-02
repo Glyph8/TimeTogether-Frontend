@@ -142,6 +142,7 @@ import { useNavigate } from "react-router-dom";
 import "./CreateGroup.css";
 import back from "../img/mini-icon/back.png";
 import axios from "axios";
+const ip = localStorage.getItem("ip");
 
 const CreateGroup = () => {
   const [groupName, setGroupName] = useState("");
@@ -229,7 +230,7 @@ const CreateGroup = () => {
 
     try {
       const response = await axios.post(
-        "http://192.168.12.218:8080/group/create",
+        `http://${ip}:8080/group/create`,
         {
           groupName: groupName,
           groupIntro: groupIntro,

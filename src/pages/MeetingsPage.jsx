@@ -16,6 +16,7 @@ import axios from "axios";
 import MeetingListPage from "./MeetingListPage.jsx";
 import { useLocation } from "react-router-dom";
 import InGroupModal from "../components/InGroupModal"; // Import the modal component
+const ip = localStorage.getItem("ip");
 
 function MeetingsPage() {
   const { groupId, meetingId } = useParams(); //groupid
@@ -35,7 +36,9 @@ function MeetingsPage() {
   const totalNumber = searchParams.get("totalNumber") || 1;
   const meetingTitle = searchParams.get("meetTitle") || "";
 
-  const [meetType, setMeetType] = useState(searchParams.get("meetType") || 'OFFLINE');
+  const [meetType, setMeetType] = useState(
+    searchParams.get("meetType") || "OFFLINE"
+  );
   // const meetType = searchParams.get("meetType") || 'OFFLINE';
 
   const [isGroupModalOpen, setIsGroupModalOpen] = useState(false); // Group modal state
@@ -45,10 +48,10 @@ function MeetingsPage() {
   // const [groupName, setGroupName] = useState(passedGroupName || ""); // 네비게이션으로 받은 groupName을 기본값으로 사용
 
   useEffect(() => {
-    console.log('온오프라인 변경', searchParams.get("type"));
-    setMeetType(searchParams.get("type"))
+    console.log("온오프라인 변경", searchParams.get("type"));
+    setMeetType(searchParams.get("type"));
   }, [searchParams]);
-  
+
   useEffect(() => {
     setIsHost(isMgr);
   }, [isMgr]);
@@ -85,10 +88,10 @@ function MeetingsPage() {
   useEffect(() => {
     let intervalId;
     const fetchMeetingLocations = async () => {
-      console.log(`http://192.168.12.218:8080/group/${groupId}/${meetingId}/where/view`)
+      console.log(`http://${ip}:8080/group/${groupId}/${meetingId}/where/view`);
       try {
         const response = await axios.get(
-          `http://192.168.12.218:8080/group/${groupId}/${meetingId}/where/view`,
+          `http://${ip}:8080/group/${groupId}/${meetingId}/where/view`,
           {
             headers: {
               Authorization: `Bearer ${accessToken}`, // 토큰 헤더 추가
@@ -121,9 +124,7 @@ function MeetingsPage() {
 
     // 주기적으로 fetchMeetingLocations 실행
 
-
     intervalId = setInterval(fetchMeetingLocations, 3000); // 1초마다 호출
-
 
     // 클린업 함수
     return () => clearInterval(intervalId); // 언마운트 시 Interval 해제
@@ -182,7 +183,7 @@ function MeetingsPage() {
   const syncVoteWithServer = async (locationId, UpAndDown) => {
     try {
       const response = await axios.post(
-        `http://192.168.12.218:8080/group/${groupId}/${meetingId}/where/vote/${locationId}/${UpAndDown}`,
+        `http://${ip}:8080/group/${groupId}/${meetingId}/where/vote/${locationId}/${UpAndDown}`,
         {}, // POST 요청 본문이 없으면 빈 객체 전달
         {
           headers: {
@@ -216,31 +217,31 @@ function MeetingsPage() {
         return;
       }
 
-
-      console.log('confrimLo',confirmLocationId)
+      console.log("confrimLo", confirmLocationId);
       // API 요청
-      const response = await axios.post(
-        `http://192.168.12.218:8080/group/${groupId}/${meetingId}/where/done/${confirmLocationId}`,
-        {}, // POST 요청 본문이 없으면 빈 객체 전달
-        {
-          headers: {
-            Authorization: `Bearer ${accessToken}`, // 인증 헤더 추가
-          },
-        }
-      ).then((res)=>{
-        console.log('confrimLo Response',res.data)
-        if (res.data.httpStatus === "OK") {
-          alert("장소가 확정되었습니다!");
-          setConfirmLocationId(confirmLocationId); // 성공한 whereId 저장
-          setIsPlaceConfirmed(false);
-        } else {
-          throw new Error(data.message || "장소 확정에 실패했습니다.");
-        }
-      })
-          .catch((err)=>{
-        console.log(`${err}`)
-      });
-
+      const response = await axios
+        .post(
+          `http://${ip}:8080/group/${groupId}/${meetingId}/where/done/${confirmLocationId}`,
+          {}, // POST 요청 본문이 없으면 빈 객체 전달
+          {
+            headers: {
+              Authorization: `Bearer ${accessToken}`, // 인증 헤더 추가
+            },
+          }
+        )
+        .then((res) => {
+          console.log("confrimLo Response", res.data);
+          if (res.data.httpStatus === "OK") {
+            alert("장소가 확정되었습니다!");
+            setConfirmLocationId(confirmLocationId); // 성공한 whereId 저장
+            setIsPlaceConfirmed(false);
+          } else {
+            throw new Error(data.message || "장소 확정에 실패했습니다.");
+          }
+        })
+        .catch((err) => {
+          console.log(`${err}`);
+        });
 
       const data = response.data;
       // if (data.httpStatus === "OK") {
@@ -250,13 +251,7 @@ function MeetingsPage() {
       // } else {
       //   throw new Error(data.message || "장소 확정에 실패했습니다.");
       // }
-
-
-
-    }
-
-
-    catch (error) {
+    } catch (error) {
       // 에러 처리
       if (error.response && error.response.data) {
         // alert(error.response.data.message || "API 요청 중 오류가 발생했습니다.");
@@ -264,8 +259,6 @@ function MeetingsPage() {
         // alert("알 수 없는 오류가 발생했습니다.");
       }
     }
-
-
   };
 
   // 모달 열기
@@ -279,7 +272,7 @@ function MeetingsPage() {
     try {
       // 서버에 삭제 요청
       const response = await axios.delete(
-        `http://192.168.12.218:8080/group/${groupId}/${meetingId}/where/delete/${groupWhereId}`,
+        `http://${ip}:8080/group/${groupId}/${meetingId}/where/delete/${groupWhereId}`,
         {
           headers: {
             Authorization: `Bearer ${accessToken}`, // 필요하면 인증 토큰 추가
@@ -327,7 +320,7 @@ function MeetingsPage() {
 
       // API 호출
       const response = await axios.post(
-        `http://192.168.12.218:8080/group/${groupId}/${meetingId}/where/create`,
+        `http://${ip}:8080/group/${groupId}/${meetingId}/where/create`,
         requestData,
         {
           headers: {
@@ -402,7 +395,11 @@ function MeetingsPage() {
       <div className="tab-content">
         {activeTab === "언제" && ( //해당 그룹의 모임 리스트 출력
           <>
-            <TimetableContent isPlaceConfirmed={confirmLocationId} meetType={meetType} setMeetType={setMeetType}></TimetableContent>
+            <TimetableContent
+              isPlaceConfirmed={confirmLocationId}
+              meetType={meetType}
+              setMeetType={setMeetType}
+            ></TimetableContent>
             {/*<TimetableContent isPlaceConfirmed={isPlaceConfirmed}></TimetableContent>*/}
           </>
         )}

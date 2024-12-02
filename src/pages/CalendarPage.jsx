@@ -17,6 +17,7 @@ import CalendarAddModal from "../components/CalendarAddModal";
 import "./CalendarPage.css";
 import axios from "axios";
 const accessToken = localStorage.getItem("accessToken");
+const ip = localStorage.getItem("ip");
 
 function CalendarPage() {
   const [currentDate, setCurrentDate] = useState(new Date());
@@ -42,7 +43,7 @@ function CalendarPage() {
 
     try {
       const response = await axios.get(
-        `http://192.168.12.218:8080/calendar/view/${year}/${month}`,
+        `http://${ip}:8080/calendar/view/${year}/${month}`,
         {
           headers: {
             Authorization: `Bearer ${accessToken}`,
@@ -194,7 +195,6 @@ function CalendarPage() {
   };
 
   const handleEventClick = (day, event) => {
-
     setFocusedEvent(event); // 포커스된 이벤트 설정
     console.log("Selected Event for Edit:", event);
     // setEditEvent(event); // 수정할 이벤트 설정
@@ -203,11 +203,11 @@ function CalendarPage() {
     const { meetDTstart, meetDTend } = event;
 
     const startTime = meetDTstart
-        ? meetDTstart.split("T")[1].substring(0, 5)
-        : "11:00"; // "HH:MM"
+      ? meetDTstart.split("T")[1].substring(0, 5)
+      : "11:00"; // "HH:MM"
     const endTime = meetDTend
-        ? meetDTend.split("T")[1].substring(0, 5)
-        : "23:00"; // "HH:MM"
+      ? meetDTend.split("T")[1].substring(0, 5)
+      : "23:00"; // "HH:MM"
 
     setEditEvent({
       ...event,
@@ -217,7 +217,6 @@ function CalendarPage() {
 
     setModalDate(day); // 날짜 설정
     setIsModalOpen(true); // 수정 모달 열기
-
   };
 
   const deleteEvent = (event) => {
@@ -446,7 +445,6 @@ function CalendarPage() {
 }
 
 export default CalendarPage;
-
 
 // import React, { useState, useEffect, useRef } from "react";
 // import {
@@ -754,4 +752,3 @@ export default CalendarPage;
 // }
 // export default CalendarPage;
 // 백엔드 연결 전 코드 (삭제하지말기)
-

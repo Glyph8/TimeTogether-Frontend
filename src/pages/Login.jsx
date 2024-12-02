@@ -6,6 +6,7 @@ import logo from "../img/logo.png";
 import kakao from "../img/kakao.png";
 import naver from "../img/naver.png";
 import google from "../img/google.png";
+const ip = localStorage.getItem("ip");
 
 function Login() {
   const navigate = useNavigate();
@@ -34,8 +35,7 @@ function Login() {
           <img className="social-button" src={kakao} alt="카카오로 시작" />
         </a> */}
         <a
-          href="http://192.168.12.218:8080/oauth2/authorization/kakao"
-
+          href={`http://${ip}:8080/oauth2/authorization/kakao`}
           target="_self"
           rel="noopener noreferrer"
         >
