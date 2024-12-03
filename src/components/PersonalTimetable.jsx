@@ -15,7 +15,7 @@ const PersonalTimetable = ({days, timeRange, priorityOn, setEdited}) => {
                             <div key={priority} className="priority-item">
                                 <button
                                     onClick={() => setSelectedPriority(priority)}//우선순위 -1로 0 1 2 처리
-                                    className={`priority-button ${selectedPriority === priority ? 'selected' : ''}`}
+                                    className={`priority-button ${selectedPriority === priority ? 'selected-${priority}' : ''}`}
                                 />
                                 <span className={`priority-text ${selectedPriority === priority ? 'selected' : ''}`}>
                                     {priority + 1}순위

@@ -534,7 +534,7 @@ function CalendarAddModal({
       setLocation(editEvent.location || "장소없음");
       setContent(editEvent.content || "내용없음");
       setGroupId(editEvent.groupId || ""); // 그룹 ID 초기화
-      setGroupName(editEvent.groupName || ""); // 그룹 이름 초기화
+      setGroupName(editEvent.groupName || null); // 그룹 이름 초기화
       setLocationUrl(editEvent.locationUrl || "");
       setMeetType(editEvent.meetType || null);
       setColor(
@@ -563,7 +563,7 @@ function CalendarAddModal({
       meetType: "ONLINE",
       meetDTstart: `${startDate}${formattedStartTime}`,
       meetDTend: `${endDate}${formattedEndTime}`,
-      groupName: editEvent?.groupName || "", // 개인일정에서는 그룹이름 없음.(사용자는 수정불가)
+      groupName: editEvent?.groupName || null, // 개인일정에서는 그룹이름 없음.(사용자는 수정불가)
       locationName: location.trim() || "장소없음",
       locationUrl: locationUrl.trim() || "url 없음",
       // groupId: groupId.trim() || "미설정",

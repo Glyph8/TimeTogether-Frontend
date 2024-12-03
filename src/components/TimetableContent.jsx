@@ -394,7 +394,7 @@ const TimetableContent = ({ isPlaceConfirmed, meetType, setMeetType }) => {
               setPriorityOn(!priorityOn);
             }}
           >
-            우선순위 선택하기
+            {priorityOn ? '우선순위 해제하기' : '우선순위 선택하기'}
           </button>
         </div>
       ) : null}

@@ -88,6 +88,7 @@ const MeetingScheduleItemList = ({ groupId, searchText }) => {
             }
           );
         } else {
+          console.log(`회의일정 키워드 검색 http://${ip}:8080/meet/list/${groupId}/${searchText}/search`)
           // searchText가 있는 경우 검색 결과 요청
           response = await axios.get(
             `http://${ip}:8080/meet/list/${groupId}/${searchText}/search`,
@@ -119,7 +120,6 @@ const MeetingScheduleItemList = ({ groupId, searchText }) => {
     return <div>로딩 중...</div>;
   }
 
-  console.log("!!", meetings);
   // if (Object.keys(meetings).length === 0) {
   if (!meetings) {
     // if (meetings.length === 0) {
