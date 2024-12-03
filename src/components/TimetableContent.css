@@ -128,12 +128,28 @@
     transition: all 0.2s ease;
 }
 
-.priority-button.selected {
-    border-color: #ff9800;
+.priority-button.selected-0 {
+    border-color: #FFC553;
 }
 
-.priority-button.selected::after {
-    background-color: #ff9800;
+.priority-button.selected-1 {
+    border-color: #FEA666;
+}
+
+.priority-button.selected-2 {
+    border-color: #FDBAAB;
+}
+
+.priority-button.selected-0::after {
+    background-color: #FFC553;
+}
+
+.priority-button.selected-1::after {
+    background-color: #FEA666;
+}
+
+.priority-button.selected-2::after {
+    background-color: #FDBAAB;
 }
 
 .priority-text {

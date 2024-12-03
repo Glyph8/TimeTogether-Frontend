@@ -98,8 +98,8 @@ const MeetingHistoryList = ({ groupId, searchText }) => {
 
         // 데이터 처리
         console.log(response.data);
-        console.log(response.data.result);
-        setMeetings(response.data.result);
+        console.log(response.data.data);
+        setMeetings(response.data.data);
       } catch (error) {
         console.error(
           "데이터 로드 실패:",
