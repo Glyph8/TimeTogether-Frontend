@@ -84,7 +84,7 @@ const TimeScale = ({hourCount, startHour, endHour}) => {
         }
     }
 
-    console.log('hours', hours)
+    // console.log('hours', hours)
 
     return (
         <div className="time-scale">
@@ -144,9 +144,11 @@ const GridCells = ({days, startHour, endHour, hourCount, timeSet, rankSet, selec
 
 
     const [isDragging, setIsDragging] = useState(false); // 드래그 상태
+    const [isMove, setIsMove] = useState(false);
     const [checkingRule, setCheckingRule] = useState(true);
 
     const handleCellClickOne = (dayIndex, hourIndex) => {
+        console.log(`handleCellClickOne 발생 isDraaging : ${isDragging}`)
         setEdited(true);
         let newTimes = [...times];
         let newRanks = [...ranks];
@@ -165,6 +167,7 @@ const GridCells = ({days, startHour, endHour, hourCount, timeSet, rankSet, selec
     };
 
     const handleCellClick = (dayIndex, hourIndex) => {
+
         setEdited(true);
         let newTimes = [...times];
         let newRanks = [...ranks];
@@ -180,26 +183,39 @@ const GridCells = ({days, startHour, endHour, hourCount, timeSet, rankSet, selec
 
         dispatch(updateTimeOnly(newTimes));
         dispatch(updateRankOnly(newRanks));
+
+        console.log(`handleCellClick 발생 isDraaging : ${isDragging}`)
     };
     const handleMouseDown = (dayIndex, hourIndex) => {
+        // setIsMove(true);
         setIsDragging(true);
         if (times[dayIndex][hourIndex] === '1') {
             setCheckingRule(true);
         } else {
             setCheckingRule(false);
         }
-        handleCellClick(dayIndex, hourIndex);
+        console.log(`handleMouseDown 발생 isDraaging : ${isDragging}, checkingRule : ${checkingRule}`)
+        handleCellClickOne(dayIndex, hourIndex);
+        // handleCellClick(dayIndex, hourIndex);
+
     };
     const handleMouseEnter = (dayIndex, hourIndex) => {
+        console.log(`handleMouseEnter 발생 isDraaging : ${isDragging}`)
         if (isDragging) {
             handleCellClick(dayIndex, hourIndex);
         }
     };
     const handleMouseUp = () => {
         setIsDragging(false);
+        console.log(`handleMouseUp 발생 isDraaging : ${isDragging}`)
         setCheckingRule(!checkingRule);
     }
 
+    const handleMouseMove = () => {
+        // console.log("mouse move 발생")
+        // if(isMove)
+        //     setIsDragging(true);
+    }
 
     // let hourCellCount = (hourCount * 2);
     let hourCellCount = Math.floor(endHour - startHour) * 2;
@@ -247,7 +263,8 @@ const GridCells = ({days, startHour, endHour, hourCount, timeSet, rankSet, selec
                                 key={`${dayIndex}-${hourIndex}`}
                                 className={cellName}
                                 style={{backgroundColor: cellColor, border: '1px dotted #c6c6c6'}}
-                                onClick={()=> handleCellClickOne(dayIndex, hourIndex)}
+                                // onClick={()=> handleCellClickOne(dayIndex, hourIndex)}
+                                onMouseMove={()=> handleMouseMove()}
                                 onMouseDown={() => handleMouseDown(dayIndex, hourIndex)} // 드래그 시작
                                 onMouseEnter={() => handleMouseEnter(dayIndex, hourIndex)} // 드래그 중
                             >

@@ -41,9 +41,14 @@ const GroupCard = ({ group, onDelete }) => {
   console.log("----------------------------------------------");
   console.log(group);
   console.log(group.groupMembers);
-  const totalNumber = group.groupMembers
-    .split(",")
-    .map((item) => item.trim()).length;
+
+
+  let totalNumber = 0;
+  if(group.groupMembers !== null){
+    totalNumber = group.groupMembers
+        .split(",")
+        .map((item) => item.trim()).length;
+  }
   console.log(totalNumber);
   // const totalNumber = 4;
 

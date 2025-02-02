@@ -29,7 +29,6 @@ groupName: "와쿠와쿠",
 */
 
 const TimetableContent = ({ isPlaceConfirmed, meetType, setMeetType }) => {
-  // const TimetableContent = ({isPlaceConfirmed}) => {
   const location = useLocation();
   const accessToken = localStorage.getItem("accessToken");
   // const accessToken = 1;
@@ -39,22 +38,13 @@ const TimetableContent = ({ isPlaceConfirmed, meetType, setMeetType }) => {
   const { groupId } = useParams(); //groupId
   const isMgr = searchParams.get("isMgr") || false;
   const meetTitle = searchParams.get("meetTitle") || "";
-  // let meetType = searchParams.get("meetType") || "OFFLINE";
-
-  // const [meetType, setMeetType] = useState("OFFLINE");
-
-  // const timetableData = location.state?.timetableData; //MeetingListPage로부터 data 받아옴.
 
   const [days, setDays] = useState([]);
   const [timeRange, setTimeRange] = useState("");
   const [btnColorChange, setBtnColorChange] = useState("add-personal-timeBtn");
 
-  // const myUserName = localStorage.getItem("userName");
-  // console.log('my name: ', myUserName)
-
-  // const myUserName = "강동윤";
-
   const [myUserName, setMyUserName] = useState("강동윤");
+
   useEffect(() => {
     axios
       .get(`http://${ip}:8080/user/history/name`, {
@@ -69,11 +59,13 @@ const TimetableContent = ({ isPlaceConfirmed, meetType, setMeetType }) => {
           setMyUserName(res.data.data);
         } else {
           console.log("응답이 비어 있습니다.", res);
+          setMyUserName("Empty Response");
         }
         //시간표 값 전달
       })
       .catch((err) => {
         console.log(`timetableData에서 이름 요청실패 ${err}`);
+        setMyUserName("Fail to load");
       });
   }, []);
 
@@ -142,6 +134,8 @@ const TimetableContent = ({ isPlaceConfirmed, meetType, setMeetType }) => {
       })
       .catch((err) => {
         console.log(`timetableData에서 시간표 요청실패 ${err}`);
+
+      });
         const dummy = {
           code: 200,
           message: "요청에 성공하였습니다.",
@@ -156,20 +150,20 @@ const TimetableContent = ({ isPlaceConfirmed, meetType, setMeetType }) => {
                 {
                   date: "2024-12-25",
                   day: "수요일",
-                  time: "1010101001",
-                  rank: "1000000001",
+                  time: "1100101010110011001110101",
+                  rank: "1100101010110011001110101",
                 },
                 {
                   date: "2024-12-26",
                   day: "목요일",
-                  time: "0101010101",
-                  rank: "0100000001",
+                  time: "0011011101001010110001110",
+                  rank: "0011011101001010110001110",
                 },
                 {
                   date: "2024-12-27",
                   day: "금요일",
-                  time: "1110001101",
-                  rank: "0010000001",
+                  time: "1010001110110100101101010",
+                  rank: "1010001110110100101101010",
                 },
               ],
             },
@@ -180,20 +174,20 @@ const TimetableContent = ({ isPlaceConfirmed, meetType, setMeetType }) => {
                 {
                   date: "2024-12-25",
                   day: "수요일",
-                  time: "1100110000",
-                  rank: "0000010000",
+                  time: "1101010010110110101000110",
+                  rank: "1101010010110110101000110",
                 },
                 {
                   date: "2024-12-26",
                   day: "목요일",
-                  time: "0011001100",
-                  rank: "0000001000",
+                  time: "0011101101010001110110101",
+                  rank: "0011101101010001110110101",
                 },
                 {
                   date: "2024-12-27",
                   day: "금요일",
-                  time: "1111000000",
-                  rank: "0000000100",
+                  time: "1010011100101011011001001",
+                  rank: "1010011100101011011001001",
                 },
               ],
             },
@@ -204,27 +198,27 @@ const TimetableContent = ({ isPlaceConfirmed, meetType, setMeetType }) => {
                 {
                   date: "2024-12-25",
                   day: "수요일",
-                  time: "1000110011",
-                  rank: "1000010011",
+                  time: "0101110001011100110101110",
+                  rank: "0101110001011100110101110",
                 },
                 {
                   date: "2024-12-26",
                   day: "목요일",
-                  time: "0111011111",
-                  rank: "0000001011",
+                  time: "1110001101000111010010101",
+                  rank: "1110001101000111010010101",
                 },
                 {
                   date: "2024-12-27",
                   day: "금요일",
-                  time: "0000000111",
-                  rank: "0000000111",
+                  time: "0001010111100101100111010",
+                  rank: "0001010111100101100111010",
                 },
               ],
             },
           ],
         };
         setTimetableData(dummy);
-      }); //로 request 보내고, 받아온 결과로 시간표 출력.
+      // }); //로 request 보내고, 받아온 결과로 시간표 출력.
   }, [groupId, meetTitle, meetType]);
   // 여기까지 연결
 
