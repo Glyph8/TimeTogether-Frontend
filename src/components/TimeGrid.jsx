@@ -90,7 +90,7 @@ const TimeScale = ({hourCount, startHour, endHour}) => {
         <div className="time-scale">
             {hours.map((hour, index) =>
                     (
-                        (hour.toString().slice(3,4) !== '3' || index === 0 || index === hours.length-1) ? (
+                        (hour.toString().slice(3, 4) !== '3' || index === 0 || index === hours.length - 1) ? (
                                 <div key={hour} className="time-slot-half">
                                     {hour}
                                 </div>
@@ -152,7 +152,7 @@ const GridCells = ({days, startHour, endHour, hourCount, timeSet, rankSet, selec
         setEdited(true);
         let newTimes = [...times];
         let newRanks = [...ranks];
-        if (newTimes[dayIndex][hourIndex === '1']) {
+        if (newTimes[dayIndex][hourIndex] === '1') {
             newTimes[dayIndex] = newTimes[dayIndex].substring(0, hourIndex) + '0' + newTimes[dayIndex].substring(hourIndex + 1);
             newRanks[dayIndex] = newRanks[dayIndex].substring(0, hourIndex) + '0' + newRanks[dayIndex].substring(hourIndex + 1);
         } else {//false면 check
@@ -167,7 +167,6 @@ const GridCells = ({days, startHour, endHour, hourCount, timeSet, rankSet, selec
     };
 
     const handleCellClick = (dayIndex, hourIndex) => {
-
         setEdited(true);
         let newTimes = [...times];
         let newRanks = [...ranks];
@@ -188,6 +187,7 @@ const GridCells = ({days, startHour, endHour, hourCount, timeSet, rankSet, selec
     };
     const handleMouseDown = (dayIndex, hourIndex) => {
         // setIsMove(true);
+        event.preventDefault()
         setIsDragging(true);
         if (times[dayIndex][hourIndex] === '1') {
             setCheckingRule(true);
@@ -197,7 +197,6 @@ const GridCells = ({days, startHour, endHour, hourCount, timeSet, rankSet, selec
         console.log(`handleMouseDown 발생 isDraaging : ${isDragging}, checkingRule : ${checkingRule}`)
         handleCellClickOne(dayIndex, hourIndex);
         // handleCellClick(dayIndex, hourIndex);
-
     };
     const handleMouseEnter = (dayIndex, hourIndex) => {
         console.log(`handleMouseEnter 발생 isDraaging : ${isDragging}`)
@@ -228,8 +227,6 @@ const GridCells = ({days, startHour, endHour, hourCount, timeSet, rankSet, selec
     }
 
 
-
-
     return (
         <div className="grid-cells" style={{
             borderRadius: '5px',
@@ -243,7 +240,7 @@ const GridCells = ({days, startHour, endHour, hourCount, timeSet, rankSet, selec
             {Array.from({length: daySet.length}).map((_, dayIndex) => (
                 // 각 날짜마다 세로로 30분 단위 셀 생성
                 Array.from({length: hourCellCount}).map((_, hourIndex) => {
-                // Array.from({length: hourCount * 2}).map((_, hourIndex) => {
+                        // Array.from({length: hourCount * 2}).map((_, hourIndex) => {
                         const cellName = `grid-cell-${daySet[dayIndex]}-${hourIndex}`
                         let cellColor = "#ffffff";
                         const checked = times[dayIndex][hourIndex];
@@ -264,7 +261,7 @@ const GridCells = ({days, startHour, endHour, hourCount, timeSet, rankSet, selec
                                 className={cellName}
                                 style={{backgroundColor: cellColor, border: '1px dotted #c6c6c6'}}
                                 // onClick={()=> handleCellClickOne(dayIndex, hourIndex)}
-                                onMouseMove={()=> handleMouseMove()}
+                                onMouseMove={() => handleMouseMove()}
                                 onMouseDown={() => handleMouseDown(dayIndex, hourIndex)} // 드래그 시작
                                 onMouseEnter={() => handleMouseEnter(dayIndex, hourIndex)} // 드래그 중
                             >
